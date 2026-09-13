@@ -1,0 +1,63 @@
+import Foundation
+
+enum ImportError: Error {
+    case emptyInput
+    case noCodesFound
+    case malformedJSON
+}
+
+/// 统一导入入口：自动识别三种来源
+/// 1. Google Authenticator 迁移二维码内容（otpauth-migration://…）
+/// 2. 本 App 导出的 JSON 备份
+/// 3. 一行一个 otpauth:// URL 的纯文本
+enum ImportService {
+    static func importCodes(from text: String) throws -> [OTPCode] {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { throw ImportError.emptyInput }
+
+        if trimmed.hasPrefix("otpauth-migration://") {
+            return try GoogleMigrationParser.parse(trimmed)
+        }
+
+        if trimmed.hasPrefix("{") {
+            return try importJSON(Data(trimmed.utf8))
+        }
+
+        var codes: [OTPCode] = []
+        for line in trimmed.components(separatedBy: .newlines) {
+            let candidate = line.trimmingCharacters(in: .whitespaces)
+            guard candidate.hasPrefix("otpauth://") else { continue }
+            if let code = try? OTPAuthURLParser.parse(candidate) {
+                codes.append(code)
+            }
+        }
+        guard !codes.isEmpty else { throw ImportError.noCodesFound }
+        return codes
+    }
+
+    private static func importJSON(_ data: Data) throws -> [OTPCode] {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        guard let file = try? decoder.decode(AuthExportFile.self, from: data) else {
+            throw ImportError.malformedJSON
+        }
+        let codes = file.codes.compactMap { exported -> OTPCode? in
+            let secret = OTPAuthURLParser.sanitizeSecret(exported.secret)
+            guard (try? Base32.decode(secret)) != nil else { return nil }
+            return OTPCode(
+                issuer: exported.issuer,
+                accountName: exported.accountName,
+                secret: secret,
+                algorithm: OTPAlgorithm(rawValue: exported.algorithm.lowercased()) ?? .sha1,
+                digits: exported.digits,
+                period: exported.period,
+                counter: exported.counter,
+                type: OTPType(rawValue: exported.type.lowercased()) ?? .totp,
+                note: exported.note,
+                pinned: exported.pinned
+            )
+        }
+        guard !codes.isEmpty else { throw ImportError.noCodesFound }
+        return codes
+    }
+}
