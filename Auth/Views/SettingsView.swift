@@ -110,10 +110,16 @@ struct SettingsView: View {
         do {
             let text = try String(contentsOf: url, encoding: .utf8)
             let codes = try ImportService.importCodes(from: text)
-            for code in codes {
+            let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
+            let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
+            for code in unique {
                 modelContext.insert(CodeEntry(code: code))
             }
-            importResultMessage = "成功导入 \(codes.count) 条验证码。"
+            if skipped > 0 {
+                importResultMessage = "成功导入 \(unique.count) 条，跳过 \(skipped) 条已存在的。"
+            } else {
+                importResultMessage = "成功导入 \(unique.count) 条验证码。"
+            }
         } catch {
             importResultMessage = "导入失败：文件内容不是支持的格式。"
         }

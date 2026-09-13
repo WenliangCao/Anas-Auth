@@ -137,3 +137,26 @@ struct ImportExportTests {
         #expect(imported.map(\.secret) == codes.map(\.secret))
     }
 }
+
+extension ImportExportTests {
+    @Test func deduplicatesAgainstExistingAndWithinBatch() {
+        let existing = [CodeEntry(code: OTPCode(
+            issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP"
+        ))]
+        let batch = [
+            // 与现有条目重复
+            OTPCode(issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP"),
+            // 新条目
+            OTPCode(issuer: "GitLab", accountName: "alice", secret: "ABCDEF234567"),
+            // 批次内重复
+            OTPCode(issuer: "GitLab", accountName: "alice", secret: "ABCDEF234567"),
+            // 密钥相同但账号不同 → 不算重复
+            OTPCode(issuer: "GitHub", accountName: "bob", secret: "JBSWY3DPEHPK3PXP"),
+        ]
+        let (unique, skipped) = ImportService.filteringExisting(batch, in: existing)
+        #expect(unique.count == 2)
+        #expect(skipped == 2)
+        #expect(unique[0].issuer == "GitLab")
+        #expect(unique[1].accountName == "bob")
+    }
+}

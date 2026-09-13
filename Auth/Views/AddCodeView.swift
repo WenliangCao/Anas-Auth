@@ -66,11 +66,17 @@ struct AddCodeView: View {
         do {
             // 同时兼容 otpauth:// 单条与 otpauth-migration:// 批量迁移
             let codes = try ImportService.importCodes(from: payload)
-            for code in codes {
+            let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
+            let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
+            for code in unique {
                 modelContext.insert(CodeEntry(code: code))
             }
             showingScanner = false
-            dismiss()
+            if unique.isEmpty && skipped > 0 {
+                importError = "这些验证码都已存在，没有新内容可添加。"
+            } else {
+                dismiss()
+            }
         } catch {
             showingScanner = false
             importError = "二维码内容不是有效的验证码格式。"

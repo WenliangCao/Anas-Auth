@@ -6,6 +6,19 @@ enum ImportError: Error {
     case malformedJSON
 }
 
+extension OTPCode {
+    /// issuer + 账号 + 密钥相同即视为同一条验证码
+    var dedupeKey: String {
+        "\(issuer)\u{1F}\(accountName)\u{1F}\(secret)"
+    }
+}
+
+extension CodeEntry {
+    var dedupeKey: String {
+        "\(issuer)\u{1F}\(accountName)\u{1F}\(secret)"
+    }
+}
+
 /// 统一导入入口：自动识别三种来源
 /// 1. Google Authenticator 迁移二维码内容（otpauth-migration://…）
 /// 2. 本 App 导出的 JSON 备份
@@ -59,5 +72,18 @@ enum ImportService {
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }
         return codes
+    }
+
+    /// 过滤掉已存在的条目（含导入内容自身的重复），返回新条目与被跳过的数量
+    static func filteringExisting(
+        _ codes: [OTPCode],
+        in existing: [CodeEntry]
+    ) -> (unique: [OTPCode], skipped: Int) {
+        var seen = Set(existing.map(\.dedupeKey))
+        var unique: [OTPCode] = []
+        for code in codes where seen.insert(code.dedupeKey).inserted {
+            unique.append(code)
+        }
+        return (unique, codes.count - unique.count)
     }
 }
