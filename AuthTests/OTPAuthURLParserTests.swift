@@ -114,3 +114,25 @@ struct OTPAuthURLParserTests {
         #expect(try code.generateNextCode(at: date) == OTPGenerator.totp(secret: secretData, at: date.addingTimeInterval(30), digits: 8))
     }
 }
+
+extension OTPAuthURLParserTests {
+    // 真实 Steam 二维码：host 是 totp，issuer 是 Steam —— 必须识别为 Steam 类型
+    @Test func steamDisguisedAsTOTP() throws {
+        let code = try OTPAuthURLParser.parse(
+            "otpauth://totp/Steam:gaben?secret=JBSWY3DPEHPK3PXP&issuer=Steam"
+        )
+        #expect(code.type == .steam)
+        #expect(code.digits == 5)
+        let generated = try code.generateCode(at: Date(timeIntervalSince1970: 1234567890))
+        #expect(generated.count == 5)
+        #expect(generated.allSatisfy { "23456789BCDFGHJKMNPQRTVWXY".contains($0) })
+    }
+
+    // 手动输入时 issuer 写成 steam、类型选 TOTP，生成时也要按 Steam 算
+    @Test func manualSteamEntryGeneratesSteamCode() throws {
+        let code = OTPCode(issuer: "steam", accountName: "gaben",
+                           secret: "JBSWY3DPEHPK3PXP", type: .totp)
+        let generated = try code.generateCode(at: Date(timeIntervalSince1970: 1234567890))
+        #expect(generated.count == 5)
+    }
+}

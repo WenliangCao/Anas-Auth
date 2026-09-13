@@ -15,6 +15,7 @@ enum OTPGenerator {
         digits: Int = defaultDigits,
         algorithm: OTPAlgorithm = .sha1
     ) -> String {
+        let digits = max(1, min(digits, 10))
         let value = hotpValue(secret: secret, counter: counter, algorithm: algorithm)
         let modulus = UInt64(pow(10, Double(digits)))
         let digitsString = String(value % modulus)

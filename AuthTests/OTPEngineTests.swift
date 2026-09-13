@@ -81,3 +81,11 @@ struct OTPEngineTests {
         #expect(OTPGenerator.remainingSeconds(at: date, period: period) == expected)
     }
 }
+
+extension OTPEngineTests {
+    @Test func hotpClampsInvalidDigits() {
+        let secret = Data("12345678901234567890".utf8)
+        #expect(OTPGenerator.hotp(secret: secret, counter: 0, digits: 0).count == 1)
+        #expect(OTPGenerator.hotp(secret: secret, counter: 0, digits: 99).count == 10)
+    }
+}

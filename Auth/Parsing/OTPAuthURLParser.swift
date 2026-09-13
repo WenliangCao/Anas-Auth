@@ -45,7 +45,13 @@ enum OTPAuthURLParser {
         let issuer = parseIssuer(queryItems: queryItems, label: labelWithoutSlash)
         let accountName = parseAccount(label: labelWithoutSlash, issuer: issuer, hasIssuerParam: queryItems["issuer"] != nil)
 
-        let digits = Int(queryItems["digits"] ?? "") ?? (type == .steam ? OTPGenerator.steamDigits : OTPGenerator.defaultDigits)
+        // Steam 的二维码经常伪装成普通 TOTP（host=totp、issuer=Steam），
+        // 但算法完全不同（5 位自定义字母表），这里统一纠正
+        let effectiveType = issuer.lowercased() == "steam" ? OTPType.steam : type
+
+        let digits = effectiveType == .steam
+            ? OTPGenerator.steamDigits
+            : (Int(queryItems["digits"] ?? "") ?? OTPGenerator.defaultDigits)
         let period = Int(queryItems["period"] ?? "") ?? OTPGenerator.defaultPeriod
         let counter = Int(queryItems["counter"] ?? "") ?? 0
         let algorithm = OTPAlgorithm(rawValue: (queryItems["algorithm"] ?? "sha1").lowercased()) ?? .sha1
@@ -58,7 +64,7 @@ enum OTPAuthURLParser {
             digits: digits,
             period: period,
             counter: counter,
-            type: type
+            type: effectiveType
         )
     }
 
