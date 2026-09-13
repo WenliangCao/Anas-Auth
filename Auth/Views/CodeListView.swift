@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UniformTypeIdentifiers
 
 struct CodeListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -124,7 +125,11 @@ struct CodeListView: View {
 
     private func copyCode(of entry: CodeEntry) {
         guard let code = try? entry.generateCode() else { return }
-        UIPasteboard.general.string = code
+        // 验证码是敏感数据：不 Handoff 到其他设备，60 秒后自动过期
+        UIPasteboard.general.setItems(
+            [[UTType.plainText.identifier: code]],
+            options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(60)]
+        )
         copiedEntryID = entry.id
         if entry.type == .hotp {
             // HOTP 按计数器推进：复制当前码后自增，下次显示下一个
