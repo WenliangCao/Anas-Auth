@@ -36,8 +36,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AA0000000000000000000008 /* Auth */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			explicitFileTypes = {};
-			explicitFolders = ();
+			exceptions = (
+				AA0000000000000000000100 /* Exceptions for "Auth" folder in "Auth" target */,
+			);
 			path = Auth;
 			sourceTree = "<group>";
 		};
@@ -49,6 +50,16 @@
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		AA0000000000000000000100 /* Exceptions for "Auth" folder in "Auth" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AA0000000000000000000006 /* Auth */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		AA000000000000000000000B /* Frameworks */ = {
@@ -349,13 +360,13 @@
 				DEVELOPMENT_TEAM = 95765392HF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Auth/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Auth;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -381,13 +392,13 @@
 				DEVELOPMENT_TEAM = 95765392HF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Auth/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Auth;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				"INFOPLIST_KEY_UISupportedInterfaceOrientations~ipad" = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				LD_RUNPATH_SEARCH_PATHS = (
