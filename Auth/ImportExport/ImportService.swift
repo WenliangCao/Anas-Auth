@@ -19,10 +19,11 @@ extension CodeEntry {
     }
 }
 
-/// 统一导入入口：自动识别三种来源
+/// 统一导入入口：自动识别四种来源
 /// 1. Google Authenticator 迁移二维码内容（otpauth-migration://…）
-/// 2. 本 App 导出的 JSON 备份
+/// 2. 本 App 导出的 JSON 备份（明文或加密）
 /// 3. 一行一个 otpauth:// URL 的纯文本
+/// 4. 加密备份文件内容（AUTHENCRYPTED1 magic 开头）
 enum ImportService {
     static func importCodes(from text: String) throws -> [OTPCode] {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -46,6 +47,22 @@ enum ImportService {
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }
         return codes
+    }
+
+    /// 从文件导入：自动识别明文 JSON / 加密备份 / otpauth 文本
+    static func importCodes(fromFileContents data: Data, password: String?) throws -> [OTPCode] {
+        if BackupCrypto.isEncryptedFile(data) {
+            let plaintext = try BackupCrypto.decrypt(data, password: password ?? "")
+            return try importJSON(plaintext)
+        }
+        guard let text = String(data: data, encoding: .utf8) else {
+            throw ImportError.malformedJSON
+        }
+        return try importCodes(from: text)
+    }
+
+    static func isEncryptedBackup(_ data: Data) -> Bool {
+        BackupCrypto.isEncryptedFile(data)
     }
 
     private static func importJSON(_ data: Data) throws -> [OTPCode] {
