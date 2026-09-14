@@ -15,6 +15,7 @@ struct CodeListView: View {
     @State private var copiedEntryID: UUID?
     @State private var copiedCode: String?
     @State private var copyFeedbackTask: Task<Void, Never>?
+    @State private var entryToDelete: CodeEntry?
 
 
     private var filteredEntries: [CodeEntry] {
@@ -98,7 +99,32 @@ struct CodeListView: View {
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }
+            .alert(
+                "删除验证码",
+                isPresented: showDeleteConfirmation
+            ) {
+                Button("删除", role: .destructive) {
+                    if let entryToDelete {
+                        delete(entryToDelete)
+                    }
+                    self.entryToDelete = nil
+                }
+                Button("取消", role: .cancel) {
+                    entryToDelete = nil
+                }
+            } message: {
+                if let entry = entryToDelete {
+                    Text("确定删除 \(entry.displayName)？如果这是唯一的验证凭证，删除后可能无法登录该服务。此操作无法撤销。")
+                }
+            }
         }
+    }
+
+    private var showDeleteConfirmation: Binding<Bool> {
+        Binding(
+            get: { entryToDelete != nil },
+            set: { if !$0 { entryToDelete = nil } }
+        )
     }
 
     /// 复制成功 toast：显示已复制的码，与剪贴板内容一致
@@ -143,14 +169,14 @@ struct CodeListView: View {
                         }
                         Divider()
                         Button(role: .destructive) {
-                            delete(entry)
+                            entryToDelete = entry
                         } label: {
                             Label("删除", systemImage: "trash")
                         }
                     }
                     .swipeActions(edge: .trailing) {
                         Button(role: .destructive) {
-                            delete(entry)
+                            entryToDelete = entry
                         } label: {
                             Label("删除", systemImage: "trash")
                         }
