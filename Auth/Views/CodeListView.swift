@@ -24,11 +24,30 @@ struct CodeListView: View {
                 $0.issuer.localizedCaseInsensitiveContains(searchText)
                     || $0.accountName.localizedCaseInsensitiveContains(searchText)
             }
-        // 置顶的排前面，其余按创建时间（Bool 不满足 Comparable，无法写进 SortDescriptor）
+        guard !searchText.isEmpty else {
+            // 非搜索态：置顶的排前面，其余按创建时间
+            // （Bool 不满足 Comparable，无法写进 SortDescriptor）
+            return filtered.sorted { lhs, rhs in
+                if lhs.pinned != rhs.pinned { return lhs.pinned }
+                return lhs.createdAt < rhs.createdAt
+            }
+        }
+        // 搜索态：按相关度排序（命中位置靠前的在前），置顶仅作次级权重
         return filtered.sorted { lhs, rhs in
+            let lhsScore = relevanceScore(of: lhs)
+            let rhsScore = relevanceScore(of: rhs)
+            if lhsScore != rhsScore { return lhsScore < rhsScore }
             if lhs.pinned != rhs.pinned { return lhs.pinned }
             return lhs.createdAt < rhs.createdAt
         }
+    }
+
+    /// 0 = issuer 前缀命中（最相关），数值越大越不相关
+    private func relevanceScore(of entry: CodeEntry) -> Int {
+        if entry.issuer.lowercased().hasPrefix(searchText.lowercased()) { return 0 }
+        if entry.accountName.lowercased().hasPrefix(searchText.lowercased()) { return 1 }
+        if entry.issuer.localizedCaseInsensitiveContains(searchText) { return 2 }
+        return 3
     }
 
     var body: some View {
