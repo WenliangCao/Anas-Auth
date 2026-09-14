@@ -46,8 +46,12 @@ enum OTPAuthURLParser {
         let accountName = parseAccount(label: labelWithoutSlash, issuer: issuer, hasIssuerParam: queryItems["issuer"] != nil)
 
         // Steam 的二维码经常伪装成普通 TOTP（host=totp、issuer=Steam），
-        // 但算法完全不同（5 位自定义字母表），这里统一纠正
-        let effectiveType = issuer.lowercased() == "steam" ? OTPType.steam : type
+        // 但算法完全不同（5 位自定义字母表），识别规则只认：
+        // host=steam，或 issuer 精确等于 "Steam"（大小写不敏感）。
+        // 不做子串匹配：避免 "Steam市场"、"SteamSupport" 等普通条目被误伤
+        let isSteam = type == .steam
+            || issuer.compare("Steam", options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
+        let effectiveType: OTPType = isSteam ? .steam : type
 
         let digits = effectiveType == .steam
             ? OTPGenerator.steamDigits

@@ -128,11 +128,19 @@ extension OTPAuthURLParserTests {
         #expect(generated.allSatisfy { "23456789BCDFGHJKMNPQRTVWXY".contains($0) })
     }
 
-    // 手动输入时 issuer 写成 steam、类型选 TOTP，生成时也要按 Steam 算
+    // 手动输入时选 Steam 类型（issuer 随意），生成时按 Steam 算法
     @Test func manualSteamEntryGeneratesSteamCode() throws {
         let code = OTPCode(issuer: "steam", accountName: "gaben",
-                           secret: "JBSWY3DPEHPK3PXP", type: .totp)
+                           secret: "JBSWY3DPEHPK3PXP", type: .steam)
         let generated = try code.generateCode(at: Date(timeIntervalSince1970: 1234567890))
         #expect(generated.count == 5)
+    }
+
+    // issuer 包含 "Steam" 但不等于 "Steam" 的普通条目：不被误判为 Steam 类型
+    @Test func steamMarketAccountIsRegularTOTP() throws {
+        let code = OTPCode(issuer: "Steam市场", accountName: "trader",
+                           secret: "JBSWY3DPEHPK3PXP", type: .totp)
+        let generated = try code.generateCode(at: Date(timeIntervalSince1970: 1234567890))
+        #expect(generated.count == 6)
     }
 }

@@ -20,15 +20,10 @@ struct OTPCode: Identifiable, Hashable, Sendable {
         accountName.isEmpty ? issuer : "\(issuer) (\(accountName))"
     }
 
-    /// Steam 条目可能以普通 TOTP 的身份进来（手动输入时），生成时统一按 Steam 处理
-    var effectiveType: OTPType {
-        issuer.lowercased() == "steam" ? .steam : type
-    }
-
     /// 当前时刻的验证码
     func generateCode(at date: Date = .now) throws -> String {
         let secretData = try Base32.decode(secret)
-        switch effectiveType {
+        switch type {
         case .totp:
             return OTPGenerator.totp(secret: secretData, at: date, period: period, digits: digits, algorithm: algorithm)
         case .hotp:
@@ -41,7 +36,7 @@ struct OTPCode: Identifiable, Hashable, Sendable {
     /// 当前周期的下一个验证码（用于临近到期时提前展示）
     func generateNextCode(at date: Date = .now) throws -> String {
         let secretData = try Base32.decode(secret)
-        switch effectiveType {
+        switch type {
         case .totp:
             let next = date.addingTimeInterval(TimeInterval(period))
             return OTPGenerator.totp(secret: secretData, at: next, period: period, digits: digits, algorithm: algorithm)
