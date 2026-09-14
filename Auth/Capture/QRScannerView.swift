@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 import VisionKit
 
 /// 系统原生扫码视图（VisionKit DataScanner），自带取景指引与高亮。
@@ -19,7 +20,7 @@ struct QRScannerView: UIViewControllerRepresentable {
             isHighlightingEnabled: true
         )
         scanner.delegate = context.coordinator
-        try? scanner.startScanning()
+        context.coordinator.parent = scanner
         return scanner
     }
 
@@ -33,6 +34,7 @@ struct QRScannerView: UIViewControllerRepresentable {
     final class Coordinator: NSObject, DataScannerViewControllerDelegate {
         private let onCodeScanned: (String) -> Void
         private var hasDelivered = false
+        weak var parent: DataScannerViewController?
 
         init(onCodeScanned: @escaping (String) -> Void) {
             self.onCodeScanned = onCodeScanned
@@ -53,6 +55,16 @@ struct QRScannerView: UIViewControllerRepresentable {
             deliver(items: [item])
         }
 
+        /// 相机不可用（常见于权限被拒）：上抛错误让外层引导用户去设置
+        func dataScanner(
+            _ dataScanner: DataScannerViewController,
+            didFailWithError error: Error
+        ) {
+            guard !hasDelivered else { return }
+            hasDelivered = true
+            onCodeScanned("\u{0}SCANNER_ERROR:\(error.localizedDescription)")
+        }
+
         private func deliver(items: [RecognizedItem]) {
             guard !hasDelivered else { return }
             for item in items {
@@ -68,6 +80,54 @@ struct QRScannerView: UIViewControllerRepresentable {
 
         private func dataScannerHaptic() {
             UINotificationFeedbackGenerator().notificationOccurred(.success)
+        }
+    }
+}
+
+/// 全屏扫码页：处理权限拒绝引导、关闭按钮
+struct ScannerScreen: View {
+    let onPayload: (String) -> Void
+    let onCancel: () -> Void
+
+    @State private var cameraDenied = false
+
+    var body: some View {
+        ZStack {
+            if QRScannerView.isAvailable && !cameraDenied {
+                QRScannerView { payload in
+                    // 扫码器内部错误（多为相机权限被拒）→ 展示引导页
+                    if payload.hasPrefix("\u{0}SCANNER_ERROR:") {
+                        cameraDenied = true
+                    } else {
+                        onPayload(payload)
+                    }
+                }
+                .ignoresSafeArea()
+            } else {
+                deniedView
+            }
+        }
+        .navigationTitle("对准二维码")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("取消") { onCancel() }
+            }
+        }
+    }
+
+    private var deniedView: some View {
+        ContentUnavailableView {
+            Label("无法访问相机", systemImage: "camera.badge.ellipsis")
+        } description: {
+            Text("请到系统设置中允许 Auth 使用相机，然后返回重试。")
+        } actions: {
+            Button("打开系统设置") {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
 }

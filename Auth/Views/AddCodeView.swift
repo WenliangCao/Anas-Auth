@@ -55,17 +55,12 @@ struct AddCodeView: View {
 
     private var scannerScreen: some View {
         NavigationStack {
-            QRScannerView { payload in
-                handleScanned(payload)
-            }
-            .ignoresSafeArea()
-            .navigationTitle("对准二维码")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { showingScanner = false }
-                }
-            }
+            ScannerScreen(
+                onPayload: { payload in
+                    handleScanned(payload)
+                },
+                onCancel: { showingScanner = false }
+            )
         }
     }
 
