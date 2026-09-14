@@ -21,6 +21,13 @@ struct QRScannerView: UIViewControllerRepresentable {
         )
         scanner.delegate = context.coordinator
         context.coordinator.parent = scanner
+        // 启动失败（相机权限被拒/相机被占用等）不静默吞掉，
+        // 交给 delegate 的 didFailWithError 上抛到引导页
+        do {
+            try scanner.startScanning()
+        } catch {
+            context.coordinator.reportScannerError(error)
+        }
         return scanner
     }
 
@@ -60,6 +67,11 @@ struct QRScannerView: UIViewControllerRepresentable {
             _ dataScanner: DataScannerViewController,
             didFailWithError error: Error
         ) {
+            reportScannerError(error)
+        }
+
+        /// 统一错误出口：保证只上报一次，之后进入引导页
+        func reportScannerError(_ error: Error) {
             guard !hasDelivered else { return }
             hasDelivered = true
             onCodeScanned("\u{0}SCANNER_ERROR:\(error.localizedDescription)")
