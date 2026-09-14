@@ -54,6 +54,10 @@ struct CodeRowView: View {
                     .foregroundStyle(.primary)
                     .id(entry.counter)
                     .transaction { $0.animation = nil }
+            } else if let reason = CodeFormatter.invalidReason(entry: entry) {
+                Text(reason)
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
             } else {
                 Text(String(localized: "无效密钥"))
                     .font(.title3.monospacedDigit())
@@ -85,9 +89,18 @@ private struct PeriodBoundaryCodeText: View {
             by: TimeInterval(max(entry.period, 1))
         )) { context in
             let code = CodeFormatter.formatted(entry: entry, at: context.date)
-            Text(code ?? String(localized: "无效密钥"))
-                .font(.title3.monospacedDigit())
-                .foregroundStyle(code == nil ? .red : .primary)
+            if let code {
+                Text(code)
+                    .font(.title3.monospacedDigit())
+            } else if let reason = CodeFormatter.invalidReason(entry: entry) {
+                Text(reason)
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            } else {
+                Text(String(localized: "无效密钥"))
+                    .font(.title3.monospacedDigit())
+                    .foregroundStyle(.red)
+            }
         }
     }
 
@@ -134,12 +147,33 @@ enum CodeFormatter {
     /// 当前验证码，格式化为每 3 位一组，便于阅读
     static func formatted(entry: CodeEntry, at date: Date) -> String? {
         guard let code = try? entry.generateCode(at: date) else { return nil }
-        guard entry.type != .steam else { return code }
+        return format(code: code, type: entry.type)
+    }
+
+    static func format(code: String, type: OTPType) -> String {
+        guard type != .steam else { return code }
         var result = ""
         for (index, character) in code.enumerated() {
             if index > 0 && index % 3 == 0 { result.append(" ") }
             result.append(character)
         }
         return result
+    }
+
+    /// 无效密钥的具体原因，供 UI 展示（返回 nil 表示密钥有效）
+    static func invalidReason(entry: CodeEntry) -> String? {
+        do {
+            _ = try Base32.decode(entry.secret)
+        } catch let error as Base32Error {
+            switch error {
+            case .invalidCharacter:
+                return "密钥包含非法字符（同步或迁移时可能损坏）"
+            }
+        } catch {
+            return "密钥无法解析"
+        }
+        // Base32 合法但 HMAC 失败：长度为 0
+        if entry.secret.isEmpty { return "密钥为空" }
+        return nil
     }
 }
