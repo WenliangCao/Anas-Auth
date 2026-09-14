@@ -38,12 +38,19 @@ struct AddCodeView: View {
             .sheet(isPresented: $showingManualEntry) {
                 ManualEntryView()
             }
-            .alert("无法识别", isPresented: .constant(importError != nil)) {
+            .alert("无法识别", isPresented: showErrorAlert) {
                 Button("好") { importError = nil }
             } message: {
                 Text(importError ?? "")
             }
         }
+    }
+
+    private var showErrorAlert: Binding<Bool> {
+        Binding(
+            get: { importError != nil },
+            set: { if !$0 { importError = nil } }
+        )
     }
 
     private var scannerScreen: some View {
