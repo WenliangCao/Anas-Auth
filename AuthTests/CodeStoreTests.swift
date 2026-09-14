@@ -4,6 +4,7 @@ import Testing
 @testable import Auth
 
 struct CodeStoreTests {
+    @MainActor
     @Test func insertFetchDelete() throws {
         // ModelContext 不持有 ModelContainer，必须自己保活，否则 fetch 时容器已释放 → 崩溃
         let container = try CodeStore.makeContainer(inMemoryOnly: true)
