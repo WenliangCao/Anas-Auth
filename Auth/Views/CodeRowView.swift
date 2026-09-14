@@ -6,6 +6,8 @@ import SwiftUI
 /// - 倒计时是一个独立的自绘圆环，每秒重画但没有隐式动画
 struct CodeRowView: View {
     let entry: CodeEntry
+    /// 当前刚被复制的条目 ID（用于行内淡出反馈）
+    var copiedEntryID: UUID?
 
     var body: some View {
         HStack(spacing: 12) {
@@ -31,15 +33,32 @@ struct CodeRowView: View {
             Spacer(minLength: 8)
             trailingView
         }
+        .opacity(isCopied ? 0.35 : 1)
+        .animation(.snappy(duration: 0.25), value: isCopied)
         .accessibilityElement(children: .combine)
+        .accessibilityHint("轻点复制验证码，长按查看更多操作")
+    }
+
+    private var isCopied: Bool {
+        copiedEntryID == entry.id
     }
 
     @ViewBuilder
     private var codeText: some View {
         if entry.type == .hotp {
-            Text(CodeFormatter.formatted(entry: entry, at: .now) ?? String(localized: "无效密钥"))
-                .font(.title3.monospacedDigit())
-                .foregroundStyle(.primary)
+            // counter 是行内容的唯一输入：复制推进计数器后，SwiftData 变更
+            // 触发本行重新求值，新 counter 生成新码，显示永远与剪贴板一致
+            if let code = CodeFormatter.formatted(entry: entry, at: .now) {
+                Text(code)
+                    .font(.title3.monospacedDigit())
+                    .foregroundStyle(.primary)
+                    .id(entry.counter)
+                    .transaction { $0.animation = nil }
+            } else {
+                Text(String(localized: "无效密钥"))
+                    .font(.title3.monospacedDigit())
+                    .foregroundStyle(.red)
+            }
         } else {
             PeriodBoundaryCodeText(entry: entry)
         }

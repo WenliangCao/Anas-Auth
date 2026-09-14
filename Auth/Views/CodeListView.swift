@@ -13,6 +13,9 @@ struct CodeListView: View {
     @State private var showingSettings = false
     @State private var entryToEdit: CodeEntry?
     @State private var copiedEntryID: UUID?
+    @State private var copiedCode: String?
+    @State private var copyFeedbackTask: Task<Void, Never>?
+
 
     private var filteredEntries: [CodeEntry] {
         let filtered = searchText.isEmpty
@@ -69,13 +72,35 @@ struct CodeListView: View {
                 SettingsView()
             }
             .sensoryFeedback(.success, trigger: copiedEntryID)
+            .overlay(alignment: .top) {
+                if let copiedCode {
+                    copiedToast(code: copiedCode)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
         }
+    }
+
+    /// 复制成功 toast：显示已复制的码，与剪贴板内容一致
+    private func copiedToast(code: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: "doc.on.doc.fill")
+                .foregroundStyle(.secondary)
+            Text("已复制 \(code)")
+                .font(.subheadline.monospacedDigit())
+                .lineLimit(1)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(.regularMaterial, in: Capsule())
+        .accessibilityLabel("已复制验证码 \(code)")
     }
 
     private var codeList: some View {
         List {
             ForEach(filteredEntries) { entry in
-                CodeRowView(entry: entry)
+                CodeRowView(entry: entry, copiedEntryID: copiedEntryID)
                     .contentShape(Rectangle())
                     .onTapGesture {
                         copyCode(of: entry)
@@ -130,7 +155,20 @@ struct CodeListView: View {
             [[UTType.plainText.identifier: code]],
             options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(60)]
         )
-        copiedEntryID = entry.id
+        // 行内淡出反馈 + 顶部 toast，1.5 秒后消失
+        withAnimation(.snappy(duration: 0.25)) {
+            copiedEntryID = entry.id
+            copiedCode = code
+        }
+        copyFeedbackTask?.cancel()
+        copyFeedbackTask = Task {
+            try? await Task.sleep(for: .seconds(1.5))
+            guard !Task.isCancelled else { return }
+            withAnimation(.snappy(duration: 0.25)) {
+                copiedEntryID = nil
+                copiedCode = nil
+            }
+        }
         if entry.type == .hotp {
             // HOTP 按计数器推进：复制当前码后自增，下次显示下一个
             entry.counter += 1

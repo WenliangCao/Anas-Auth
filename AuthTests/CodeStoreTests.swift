@@ -4,14 +4,10 @@ import Testing
 @testable import Auth
 
 struct CodeStoreTests {
-    @MainActor
-    private func makeContext() throws -> ModelContext {
-        ModelContext(try CodeStore.makeContainer(inMemoryOnly: true))
-    }
-
-    @MainActor
     @Test func insertFetchDelete() throws {
-        let context = try makeContext()
+        // ModelContext 不持有 ModelContainer，必须自己保活，否则 fetch 时容器已释放 → 崩溃
+        let container = try CodeStore.makeContainer(inMemoryOnly: true)
+        let context = ModelContext(container)
         let entry = CodeEntry(code: OTPCode(
             issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP"
         ))
