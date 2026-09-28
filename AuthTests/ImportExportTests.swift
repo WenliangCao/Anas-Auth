@@ -112,7 +112,7 @@ struct ImportExportTests {
         let originals = [
             OTPCode(issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP",
                     algorithm: .sha256, digits: 8, period: 45, note: "工作号", pinned: true,
-                    tags: ["工作", "开发"]),
+                    tags: ["工作", "开发"], iconID: "github"),
             OTPCode(issuer: "Steam", accountName: "gaben", secret: "ABCDEF234567",
                     type: .steam),
         ]
@@ -125,6 +125,7 @@ struct ImportExportTests {
         #expect(imported[0].note == "工作号")
         #expect(imported[0].pinned)
         #expect(imported[0].tags == ["工作", "开发"])
+        #expect(imported[0].iconID == "github")
         #expect(imported[1].type == .steam)
     }
 
@@ -138,6 +139,7 @@ struct ImportExportTests {
         let imported = try ImportService.importCodes(from: legacy)
         #expect(imported.count == 1)
         #expect(imported[0].tags.isEmpty)
+        #expect(imported[0].iconID.isEmpty)
     }
 
     @Test func otpAuthTextExportParses() throws {
