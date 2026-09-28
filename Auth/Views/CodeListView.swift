@@ -126,7 +126,7 @@ struct CodeListView: View {
         }
         ToolbarItem(placement: .principal) {
             if isSearching {
-                searchField
+                TopBarSearchField(text: $searchText, focused: $searchFieldFocused)
             } else {
                 Text("Auth")
                     .font(.title2.weight(.heavy))
@@ -149,28 +149,11 @@ struct CodeListView: View {
                 toggleSearch()
             } label: {
                 Image(systemName: isSearching ? "xmark" : "magnifyingglass")
+                    .contentTransition(.symbolEffect(.replace))
+                    .animation(.smooth(duration: 0.25), value: isSearching)
             }
             .accessibilityLabel(isSearching ? "关闭搜索" : "搜索")
         }
-    }
-
-    /// 顶栏搜索框：玻璃胶囊，高度与两侧玻璃按钮一致。
-    /// principal 位置按理想宽度排版（maxWidth 无效），给一个偏大的 idealWidth，
-    /// 导航栏会把它压到两侧按钮之间的剩余空间，从而撑满且不压住设置按钮
-    private var searchField: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
-            TextField("搜索", text: $searchText)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .focused($searchFieldFocused)
-                .submitLabel(.search)
-        }
-        .padding(.horizontal, 14)
-        .frame(idealWidth: 600, maxWidth: .infinity, minHeight: 44)
-        .glassEffect(in: .capsule)
-        .padding(.horizontal, 8)
     }
 
     private func toggleSearch() {
@@ -314,5 +297,45 @@ struct CodeListView: View {
 
     private func delete(_ entry: CodeEntry) {
         modelContext.delete(entry)
+    }
+}
+
+/// 顶栏搜索框：与系统搜索栏一致的灰色填充胶囊（不用玻璃，避免像多出一个悬浮按钮）。
+/// principal 位置按理想宽度排版（maxWidth 无效），给一个偏大的 idealWidth，
+/// 导航栏会把它压到两侧按钮之间的剩余空间，从而撑满且不压住设置按钮。
+/// 出现动画只在框内部做（遮罩从右侧展开）：切换本身不能包在 withAnimation 里，
+/// 否则导航栏会把标题区尺寸变化做成从左侧滑入
+private struct TopBarSearchField: View {
+    @Binding var text: String
+    var focused: FocusState<Bool>.Binding
+    @State private var expanded = false
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("搜索", text: $text)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused(focused)
+                .submitLabel(.search)
+        }
+        .padding(.horizontal, 12)
+        .frame(idealWidth: 600, maxWidth: .infinity, minHeight: 36)
+        .background(.fill.tertiary, in: .capsule)
+        .mask {
+            GeometryReader { geometry in
+                Capsule()
+                    .frame(width: expanded ? geometry.size.width : geometry.size.height)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+        }
+        .opacity(expanded ? 1 : 0)
+        .padding(.horizontal, 8)
+        .onAppear {
+            withAnimation(.smooth(duration: 0.3)) {
+                expanded = true
+            }
+        }
     }
 }
