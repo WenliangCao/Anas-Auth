@@ -17,7 +17,7 @@ struct CodeListView: View {
     @State private var copiedCode: String?
     @State private var copyFeedbackTask: Task<Void, Never>?
     @State private var entryToDelete: CodeEntry?
-
+    @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
 
     private var filteredEntries: [CodeEntry] {
         let filtered = searchText.isEmpty
@@ -27,12 +27,7 @@ struct CodeListView: View {
                     || $0.accountName.localizedCaseInsensitiveContains(searchText)
             }
         guard !searchText.isEmpty else {
-            // 非搜索态：置顶的排前面，其余按创建时间
-            // （Bool 不满足 Comparable，无法写进 SortDescriptor）
-            return filtered.sorted { lhs, rhs in
-                if lhs.pinned != rhs.pinned { return lhs.pinned }
-                return lhs.createdAt < rhs.createdAt
-            }
+            return sortKey.sorted(filtered)
         }
         // 搜索态：按相关度排序（命中位置靠前的在前），置顶仅作次级权重
         return filtered.sorted { lhs, rhs in
@@ -105,7 +100,7 @@ struct CodeListView: View {
         }
     }
 
-    /// 顶栏对齐 ente：左侧菜单（设置），中间标题/搜索框，右侧搜索开关
+    /// 顶栏对齐 ente：左侧菜单（设置），中间标题/搜索框，右侧排序与搜索开关
     @ToolbarContentBuilder
     private var topBar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -128,6 +123,18 @@ struct CodeListView: View {
                 Text("Auth")
                     .font(.title2.weight(.heavy))
             }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Menu {
+                Picker("排序方式", selection: $sortKey) {
+                    ForEach(CodeSortKey.allCases) { key in
+                        Text(key.title).tag(key)
+                    }
+                }
+            } label: {
+                Image(systemName: "line.3.horizontal.decrease")
+            }
+            .accessibilityLabel("排序方式")
         }
         ToolbarItem(placement: .topBarTrailing) {
             Button {
@@ -245,6 +252,8 @@ struct CodeListView: View {
     }
 
     private func copyToPasteboard(_ code: String, entry: CodeEntry) {
+        entry.tapCount += 1
+        entry.lastUsedAt = .now
         // 验证码是敏感数据：不 Handoff 到其他设备，60 秒后自动过期
         UIPasteboard.general.setItems(
             [[UTType.plainText.identifier: code]],

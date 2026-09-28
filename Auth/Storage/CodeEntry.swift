@@ -17,6 +17,9 @@ final class CodeEntry {
     var note: String = ""
     var pinned: Bool = false
     var createdAt: Date = Date()
+    /// 复制次数与最近复制时间，用于"最常用/最近使用"排序
+    var tapCount: Int = 0
+    var lastUsedAt: Date = Date.distantPast
 
     init(
         id: UUID = UUID(),
