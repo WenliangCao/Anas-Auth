@@ -2785,6 +2785,22 @@
         }
       }
     },
+    "This code already exists.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已存在相同的验证码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已存在相同的驗證碼。"
+          }
+        }
+      }
+    },
     "This QR code belongs to a different Google Authenticator export.": {
       "localizations": {
         "zh-Hans": {

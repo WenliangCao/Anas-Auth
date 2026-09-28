@@ -119,9 +119,13 @@ struct ManualEntryView: View {
             counter: type == .hotp ? counter : 0,
             type: type
         )
-        modelContext.insert(CodeEntry(code: code))
+        // 与导入一致：发行方、账号、密钥都相同的条目不重复添加
         do {
-            try modelContext.saveOrRollback()
+            let (added, _) = try modelContext.addCodes([code])
+            guard added > 0 else {
+                saveError = String(localized: "This code already exists.")
+                return
+            }
             dismiss()
         } catch {
             saveError = CodeStore.saveFailureMessage(error)

@@ -170,9 +170,23 @@ struct EditCodeView: View {
 
     private func save() {
         addTag()
-        entry.issuer = issuer.trimmingCharacters(in: .whitespaces)
+        // 改成与另一条完全相同（发行方、账号、密钥）时拒绝，与导入的去重规则一致
+        let issuer = issuer.trimmingCharacters(in: .whitespaces)
+        let accountName = accountName.trimmingCharacters(in: .whitespaces)
+        let key = ImportService.dedupeKey(issuer: issuer, accountName: accountName, secret: sanitizedSecret)
+        do {
+            let others = try modelContext.fetch(FetchDescriptor<CodeEntry>()).filter { $0.id != entry.id }
+            if others.contains(where: { $0.dedupeKey == key }) {
+                saveError = String(localized: "This code already exists.")
+                return
+            }
+        } catch {
+            saveError = CodeStore.saveFailureMessage(error)
+            return
+        }
+        entry.issuer = issuer
         entry.secret = sanitizedSecret
-        entry.accountName = accountName.trimmingCharacters(in: .whitespaces)
+        entry.accountName = accountName
         entry.note = note
         entry.tags = tags
         entry.iconID = iconID

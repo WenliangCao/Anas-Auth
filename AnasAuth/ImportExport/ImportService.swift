@@ -8,16 +8,11 @@ enum ImportError: Error {
 }
 
 extension OTPCode {
-    /// issuer + 账号 + 密钥相同即视为同一条验证码
-    var dedupeKey: String {
-        "\(issuer)\u{1F}\(accountName)\u{1F}\(secret)"
-    }
+    var dedupeKey: String { ImportService.dedupeKey(issuer: issuer, accountName: accountName, secret: secret) }
 }
 
 extension CodeEntry {
-    var dedupeKey: String {
-        "\(issuer)\u{1F}\(accountName)\u{1F}\(secret)"
-    }
+    var dedupeKey: String { ImportService.dedupeKey(issuer: issuer, accountName: accountName, secret: secret) }
 }
 
 /// 统一导入入口：自动识别四种来源
@@ -107,6 +102,11 @@ enum ImportService {
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }
         return codes
+    }
+
+    /// issuer + 账号 + 密钥相同即视为同一条验证码
+    static func dedupeKey(issuer: String, accountName: String, secret: String) -> String {
+        "\(issuer)\u{1F}\(accountName)\u{1F}\(secret)"
     }
 
     /// 过滤掉已存在的条目（含导入内容自身的重复），返回新条目与被跳过的数量
