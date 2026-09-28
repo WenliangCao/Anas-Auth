@@ -125,6 +125,22 @@ struct ImportersTests {
         }
     }
 
+    /// Bitwarden 隐藏字段（type 1）、备注等不在白名单里，出错时不展示
+    @Test func bitwardenInvalidEntryHidesHiddenFieldsAndNotes() {
+        let json = """
+        {"items": [{"name": "Site", "notes": "backup NOTE-SECRET",
+                    "login": {"username": "me", "totp": "A"},
+                    "fields": [{"name": "Recovery", "value": "RECOVERY-CODE-123", "type": 1}]}]}
+        """
+        #expect {
+            try BitwardenImporter.parse(data(json))
+        } throws: { error in
+            guard case .invalidEntry(let entry, _) = error as? ImportProviderError else { return false }
+            return entry.contains("Site") && entry.contains("Recovery")
+                && !entry.contains("RECOVERY-CODE-123") && !entry.contains("NOTE-SECRET")
+        }
+    }
+
     /// 展示给用户的出错条目不带密钥
     @Test func invalidEntryDescriptionRedactsSecrets() {
         let entry: [String: Any] = ["login": ["totp": "otpauth://totp/x?secret=JBSWY3DPEHPK3PXP"], "name": "Site"]

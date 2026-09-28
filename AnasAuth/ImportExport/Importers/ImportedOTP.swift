@@ -131,22 +131,42 @@ enum ImportEntry {
         return String(describing: entry)
     }
 
-    /// 出错条目会展示给用户（可能被截图分享），密钥类字段与 URL 里的 secret 参数一律打码
-    private static let sensitiveKeys = ["secret", "totp", "seed", "key", "password", "token"]
+    /// 出错条目会展示给用户（可能被截图分享）。只保留定位问题需要的字段（白名单），
+    /// 密钥、备注、自定义字段的值等一律不展示：各家格式里敏感内容的位置无法穷举
+    /// （如 Bitwarden 的隐藏字段是 fields 里 type 为 1 的 value）
+    private static let displayableKeys: Set<String> = [
+        "type", "kind", "tokentype",
+        "issuer", "issuername", "originalissuername",
+        "name", "label", "account", "accountname", "username", "originalusername",
+        "algorithm", "algo", "digits", "period", "timer", "timestep", "counter",
+    ]
 
     static func redact(_ value: Any) -> Any {
         switch value {
         case let dictionary as [String: Any]:
             dictionary.reduce(into: [String: Any]()) { result, pair in
-                let key = pair.key.lowercased()
-                result[pair.key] = sensitiveKeys.contains(where: key.contains) ? "•••" : redact(pair.value)
+                switch pair.value {
+                case is [String: Any], is [Any]:
+                    let nested = redact(pair.value)
+                    if !isEmpty(nested) { result[pair.key] = nested }
+                default:
+                    if displayableKeys.contains(pair.key.lowercased()) { result[pair.key] = pair.value }
+                }
             }
         case let array as [Any]:
-            array.map(redact)
+            array.map(redact).filter { !isEmpty($0) }
         case let string as String:
             string.replacingOccurrences(of: #"(?i)(secret=)[^&\s]*"#, with: "$1•••", options: .regularExpression)
         default:
             value
+        }
+    }
+
+    private static func isEmpty(_ value: Any) -> Bool {
+        switch value {
+        case let dictionary as [String: Any]: dictionary.isEmpty
+        case let array as [Any]: array.isEmpty
+        default: false
         }
     }
 }
