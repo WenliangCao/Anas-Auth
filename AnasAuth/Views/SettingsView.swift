@@ -34,6 +34,8 @@ struct SettingsView: View {
     @State private var importResultMessage: String?
     @State private var importPasswordQuery: ImportPasswordQuery?
     @State private var showingPasscodeRequired = false
+    @State private var showingExportPasswordPrompt = false
+    @State private var exportChoice: ExportChoice?
 
     /// 待导入文件的内容与是否加密
     private struct ImportPasswordQuery: Identifiable {
@@ -126,16 +128,9 @@ struct SettingsView: View {
                     importPasswordQuery = nil
                 }
             }
-            .sheet(isPresented: $showingExportPasswordPrompt) {
-                ExportPasswordView { password in
-                    showingExportPasswordPrompt = false
-                    exportJSON(password: password)
-                } onCancel: { password in
-                    showingExportPasswordPrompt = false
-                    if let password {
-                        exportJSON(password: password) // 用户明确选择不加密
-                    }
-                }
+            // 密码页完全收起后再弹保存面板：两个弹出层同时动画时保存面板可能弹不出来
+            .sheet(isPresented: $showingExportPasswordPrompt, onDismiss: startExport) {
+                ExportPasswordView { exportChoice = $0 }
             }
             .alert("Set a Device Passcode", isPresented: $showingPasscodeRequired) {
                 Button("OK", role: .cancel) {}
@@ -149,8 +144,6 @@ struct SettingsView: View {
             }
         }
     }
-
-    @State private var showingExportPasswordPrompt = false
 
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
@@ -181,13 +174,16 @@ struct SettingsView: View {
         )
     }
 
-    private func exportJSON(password: String?) {
+    private func startExport() {
+        guard let choice = exportChoice else { return }
+        exportChoice = nil
         let codes = entries.map { $0.toOTPCode() }
         do {
             let data: Data
-            if let password, !password.isEmpty {
+            switch choice {
+            case .encrypted(let password):
                 data = try ExportService.makeEncryptedJSON(from: codes, password: password)
-            } else {
+            case .plain:
                 data = try ExportService.makeJSON(from: codes)
             }
             exportDocument = ExportDocument(data: data)
@@ -235,10 +231,15 @@ struct SettingsView: View {
     }
 }
 
-/// 导出时的密码询问：输入密码加密导出，或明确选择"不加密"
+/// 导出方式：加密，或用户明确选择不加密
+private enum ExportChoice {
+    case encrypted(password: String)
+    case plain
+}
+
+/// 导出时的密码询问：输入密码加密导出，或明确选择"不加密"；取消则什么都不选
 private struct ExportPasswordView: View {
-    let onEncrypt: (String) -> Void
-    let onCancel: (String?) -> Void
+    let onChoose: (ExportChoice) -> Void
 
     @State private var password = ""
     @State private var confirmation = ""
@@ -266,7 +267,7 @@ private struct ExportPasswordView: View {
                 }
                 Section {
                     Button("Export Without Encryption", role: .destructive) {
-                        onCancel(password.isEmpty ? nil : "___skip___")
+                        onChoose(.plain)
                         dismiss()
                     }
                 }
@@ -275,14 +276,11 @@ private struct ExportPasswordView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        onCancel(nil)
-                        dismiss()
-                    }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Export Encrypted") {
-                        onEncrypt(password)
+                        onChoose(.encrypted(password: password))
                         dismiss()
                     }
                     .disabled(!passwordsMatch)
