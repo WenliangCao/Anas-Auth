@@ -190,7 +190,8 @@ private final class ProgressBarView: UIView {
     }
 
     private let bar = CALayer()
-    private var animatedWidth: CGFloat = 0
+    /// 上次挂动画时的尺寸：宽度或高度（标准/紧凑布局切换）变了都要重挂
+    private var animatedSize = CGSize.zero
 
     init() {
         super.init(frame: .zero)
@@ -213,7 +214,7 @@ private final class ProgressBarView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        guard bounds.width != animatedWidth else { return }
+        guard bounds.size != animatedSize else { return }
         restart()
     }
 
@@ -226,7 +227,7 @@ private final class ProgressBarView: UIView {
     /// 起点对齐 Unix 时间的周期边界（与验证码切换同相位）
     @objc private func restart() {
         bar.removeAllAnimations()
-        animatedWidth = bounds.width
+        animatedSize = bounds.size
         guard window != nil, bounds.width > 0 else { return }
 
         CATransaction.begin()
