@@ -6,8 +6,10 @@ import SwiftUI
 /// - 卡片主体静态，不随时间重渲染（滚动/搜索动画不被打断）
 /// - 验证码文本只在周期边界那一刻刷新
 /// - 进度条是独立的 Canvas，只有它按帧重画
+/// 紧凑模式的尺寸取自 ente 的 isCompactMode。
 struct CodeRowView: View {
     let entry: CodeEntry
+    var compact = false
     /// 当前刚被复制的条目 ID（用于卡片淡出反馈）
     var copiedEntryID: UUID?
     /// 轻点"下一个"：TOTP 复制下一个码
@@ -18,21 +20,21 @@ struct CodeRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if entry.type == .hotp {
-                Color.clear.frame(height: 3)
+                Color.clear.frame(height: compact ? 1 : 3)
             } else {
                 CodeProgressBar(period: entry.period)
-                    .frame(height: 3)
+                    .frame(height: compact ? 1 : 3)
             }
             header
-                .padding(.top, 28)
+                .padding(.top, compact ? 4 : 28)
             codes
-                .padding(.top, 4)
-                .padding(.bottom, 32)
+                .padding(.top, compact ? 0 : 4)
+                .padding(.bottom, compact ? 4 : 32)
         }
         .background(Color.codeCardBackground)
         .overlay(alignment: .topTrailing) {
             if entry.pinned {
-                PinnedCorner()
+                PinnedCorner(compact: compact)
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -57,9 +59,9 @@ struct CodeRowView: View {
 
     private var header: some View {
         HStack(alignment: .top, spacing: 8) {
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: compact ? 0 : 2) {
                 Text(title)
-                    .font(.title3.weight(.medium))
+                    .font(compact ? .subheadline.weight(.medium) : .title3.weight(.medium))
                     .lineLimit(1)
                 // 账号为空也占一行，保证所有卡片等高
                 Text(subtitle.isEmpty ? " " : subtitle)
@@ -78,14 +80,14 @@ struct CodeRowView: View {
         Group {
             if entry.type == .hotp {
                 // counter 是 HOTP 码的唯一输入：计数器变更触发重新求值
-                CodePair(entry: entry, date: .now, trailing: .advance(onAdvanceCounter))
+                CodePair(entry: entry, date: .now, compact: compact, trailing: .advance(onAdvanceCounter))
                     .id(entry.counter)
             } else {
                 TimelineView(.periodic(
                     from: Self.nextBoundary(period: entry.period),
                     by: TimeInterval(max(entry.period, 1))
                 )) { context in
-                    CodePair(entry: entry, date: context.date, trailing: .nextCode(onCopyNext))
+                    CodePair(entry: entry, date: context.date, compact: compact, trailing: .nextCode(onCopyNext))
                 }
             }
         }
@@ -109,13 +111,14 @@ private struct CodePair: View {
 
     let entry: CodeEntry
     let date: Date
+    let compact: Bool
     let trailing: Trailing
 
     var body: some View {
         if let code = CodeFormatter.formatted(entry: entry, at: date) {
             HStack(alignment: .bottom, spacing: 8) {
                 Text(code)
-                    .font(.system(size: 26).monospacedDigit())
+                    .font(.system(size: compact ? 16 : 26).monospacedDigit())
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .transaction { $0.animation = nil }
@@ -138,7 +141,7 @@ private struct CodePair: View {
             switch trailing {
             case .nextCode(let onTap):
                 Text(CodeFormatter.formattedNext(entry: entry, at: date) ?? "")
-                    .font(.system(size: 20).monospacedDigit())
+                    .font(.system(size: compact ? 13 : 20).monospacedDigit())
                     .foregroundStyle(.gray)
                     .lineLimit(1)
                     .contentShape(Rectangle())
@@ -148,7 +151,7 @@ private struct CodePair: View {
                 // borderless：不带按钮底色，和旁边的文字一致
                 Button(action: onTap) {
                     Image(systemName: "arrow.forward")
-                        .font(.title2)
+                        .font(compact ? .body : .title2)
                         .foregroundStyle(.gray)
                 }
                 .buttonStyle(.borderless)
@@ -181,16 +184,18 @@ private struct CodeProgressBar: View {
 
 /// 置顶标记：右上角三角 + 图钉
 private struct PinnedCorner: View {
+    let compact: Bool
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Triangle()
                 .fill(Color.pinnedCorner)
-                .frame(width: 39, height: 39)
+                .frame(width: compact ? 24 : 39, height: compact ? 24 : 39)
             Image(systemName: "pin.fill")
-                .font(.system(size: 10))
+                .font(.system(size: compact ? 7 : 10))
                 .foregroundStyle(Color.entePurple)
                 .rotationEffect(.degrees(45))
-                .padding(6)
+                .padding(compact ? 4 : 6)
         }
         .accessibilityLabel("已置顶")
     }

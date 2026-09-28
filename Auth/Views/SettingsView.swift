@@ -27,6 +27,7 @@ struct SettingsView: View {
     @Query private var entries: [CodeEntry]
 
     @State private var lockManager = AppLockManager.shared
+    @AppStorage("codeLayout") private var layout: CodeLayout = .standard
     @State private var exportDocument: ExportDocument?
     @State private var showingExporter = false
     @State private var showingImporter = false
@@ -44,6 +45,18 @@ struct SettingsView: View {
             Form {
                 Section("安全") {
                     Toggle("应用锁", isOn: $lockManager.isEnabled)
+                }
+
+                Section {
+                    Picker("布局", selection: $layout) {
+                        ForEach(CodeLayout.allCases) { layout in
+                            Text(layout.title).tag(layout)
+                        }
+                    }
+                } header: {
+                    Text("外观")
+                } footer: {
+                    Text("紧凑模式下卡片更矮、字号更小，一屏能看到更多验证码。")
                 }
 
                 Section {

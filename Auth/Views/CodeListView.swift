@@ -18,6 +18,7 @@ struct CodeListView: View {
     @State private var copyFeedbackTask: Task<Void, Never>?
     @State private var entryToDelete: CodeEntry?
     @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
+    @AppStorage("codeLayout") private var layout: CodeLayout = .standard
     @State private var selectedTag: String?
 
     /// 所有条目出现过的标签，按自然顺序
@@ -194,11 +195,17 @@ struct CodeListView: View {
     /// 标签条是滚动内容的一部分，上滑时跟卡片一起滑到顶栏下方，
     /// 顶部用 soft 边缘效果逐渐模糊消失，而不是 hard 的分界线。
     /// 不用 List：List 的行会带来滑动删除和整行高亮，和卡片样式不符
+    /// 紧凑模式卡片间距更小、列宽阈值更低（宽屏能放下更多列）
     private var codeList: some View {
-        ScrollView {
+        let compact = layout == .compact
+        let spacing: CGFloat = compact ? 12 : 16
+        return ScrollView {
             VStack(spacing: 8) {
                 TagFilterBar(tags: allTags, selectedTag: $selectedTag)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: compact ? 280 : 340), spacing: spacing)],
+                    spacing: spacing
+                ) {
                     ForEach(filteredEntries) { entry in
                         codeCard(entry)
                     }
@@ -215,6 +222,7 @@ struct CodeListView: View {
     private func codeCard(_ entry: CodeEntry) -> some View {
         CodeRowView(
             entry: entry,
+            compact: layout == .compact,
             copiedEntryID: copiedEntryID,
             onCopyNext: { copyNextCode(of: entry) },
             onAdvanceCounter: { entry.counter += 1 }
