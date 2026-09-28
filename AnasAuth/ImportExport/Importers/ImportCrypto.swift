@@ -34,7 +34,7 @@ enum ImportCrypto {
         static let maxPBKDF2Rounds = 1_000_000
         /// scrypt 内存约 128·N·r 字节（Aegis 默认 N=2^15、r=8，即 32 MiB）
         static let maxScryptMemory: UInt64 = 256 * 1024 * 1024
-        /// scrypt 计算量 N·r·p（Aegis 默认的 16 倍）
+        /// scrypt 计算量 N·r·p（Aegis 默认的 16 倍）；也是一个文件里所有密码槽的总预算
         static let maxScryptWork: UInt64 = 1 << 22
         /// ente 最高档：1 GiB 内存 × 4 次；内存不够时 ente 减半内存、加倍次数，乘积不变
         static let maxArgon2Memory = 1024 * 1024 * 1024
@@ -64,11 +64,17 @@ enum ImportCrypto {
         return key
     }
 
+    /// scrypt 参数的计算量 N·r·p；参数非法或超出上限时为 nil
+    static func scryptWork(n: UInt64, r: UInt32, p: UInt32) -> UInt64? {
+        guard n > 1, n & (n - 1) == 0, r > 0, p > 0,
+              n <= Limits.maxScryptMemory / 128 / UInt64(r) else { return nil }
+        let work = n * UInt64(r) * UInt64(p)
+        return work <= Limits.maxScryptWork ? work : nil
+    }
+
     /// 通用 scrypt（Aegis 使用 N=32768, r=8, p=1）
     static func scrypt(password: String, salt: Data, n: UInt64, r: UInt32, p: UInt32, keyLength: Int) throws -> Data {
-        guard n > 1, n & (n - 1) == 0, r > 0, p > 0,
-              n <= Limits.maxScryptMemory / 128 / UInt64(r),
-              n * UInt64(r) * UInt64(p) <= Limits.maxScryptWork else {
+        guard scryptWork(n: n, r: r, p: p) != nil else {
             throw CryptoError.invalidInput("scrypt parameters out of range")
         }
         try ensureSodium()

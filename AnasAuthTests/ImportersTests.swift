@@ -115,6 +115,17 @@ struct ImportersTests {
         #expect(throws: ImportProviderError.incorrectPassword) { try AegisImporter.parse(vault, password: "nope") }
     }
 
+    /// 堆很多密码槽也不会逐个跑 scrypt：整个文件的总计算量超预算直接拒绝
+    @Test func aegisRejectsTooManyPasswordSlots() throws {
+        var vault = try AegisImporter.decode(data(ImportFixtures.aegisEncrypted))
+        var header = try #require(vault["header"] as? [String: Any])
+        let slots = try #require(header["slots"] as? [[String: Any]])
+        let passwordSlot = try #require(slots.first { ImportedOTP.integer($0["type"]) == 1 })
+        header["slots"] = Array(repeating: passwordSlot, count: 32)
+        vault["header"] = header
+        #expect(throws: ImportCrypto.CryptoError.self) { try AegisImporter.parse(vault, password: "nope") }
+    }
+
     @Test func aegisUnsupportedTypeFailsWithEntry() throws {
         let db: [String: Any] = ["entries": [["type": "yandex", "name": "x", "issuer": "Y", "info": ["secret": "JBSWY3DPEHPK3PXP"]]]]
         #expect {

@@ -71,20 +71,22 @@ enum AegisImporter {
             throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an Aegis vault export."))
         }
         // type 1 = 密码 slot（其余是生物识别等，无法在别的设备上解开）
+        let passwordSlots = slots.filter { ImportedOTP.integer($0["type"]) == 1 }.compactMap(PasswordSlot.init)
+        // 每个槽都要跑一次 scrypt：按整个文件的总计算量设上限，堆很多槽也算不了多久
+        var totalWork: UInt64 = 0
+        for slot in passwordSlots {
+            guard let work = ImportCrypto.scryptWork(n: slot.n, r: slot.r, p: slot.p),
+                  work <= ImportCrypto.Limits.maxScryptWork - totalWork else {
+                throw ImportCrypto.CryptoError.invalidInput("scrypt work over budget")
+            }
+            totalWork += work
+        }
         var masterKey: Data?
-        for slot in slots where ImportedOTP.integer(slot["type"]) == 1 {
-            guard let salt = Data(hexString: JSONInput.string(slot["salt"]) ?? ""),
-                  let n = ImportedOTP.integer(slot["n"]).flatMap(UInt64.init(exactly:)), n > 0,
-                  let r = ImportedOTP.integer(slot["r"]).flatMap(UInt32.init(exactly:)), r > 0,
-                  let p = ImportedOTP.integer(slot["p"]).flatMap(UInt32.init(exactly:)), p > 0,
-                  let keyParams = slot["key_params"] as? [String: Any],
-                  let nonce = Data(hexString: JSONInput.string(keyParams["nonce"]) ?? ""),
-                  let tag = Data(hexString: JSONInput.string(keyParams["tag"]) ?? ""),
-                  let encryptedKey = Data(hexString: JSONInput.string(slot["key"]) ?? "") else { continue }
+        for slot in passwordSlots {
             let derived = try ImportCrypto.scrypt(
-                password: password, salt: salt, n: n, r: r, p: p, keyLength: 32
+                password: password, salt: slot.salt, n: slot.n, r: slot.r, p: slot.p, keyLength: 32
             )
-            if let key = try? ImportCrypto.aesGCMOpen(key: derived, nonce: nonce, ciphertextAndTag: encryptedKey + tag) {
+            if let key = try? ImportCrypto.aesGCMOpen(key: derived, nonce: slot.nonce, ciphertextAndTag: slot.encryptedKey + slot.tag) {
                 masterKey = key
                 break
             }
@@ -95,5 +97,28 @@ enum AegisImporter {
             throw ImportProviderError.invalidFile(String(localized: "The decrypted vault is invalid."))
         }
         return decoded
+    }
+
+    private struct PasswordSlot {
+        let salt: Data
+        let n: UInt64
+        let r: UInt32
+        let p: UInt32
+        let nonce: Data
+        let tag: Data
+        let encryptedKey: Data
+
+        init?(_ slot: [String: Any]) {
+            guard let salt = Data(hexString: JSONInput.string(slot["salt"]) ?? ""),
+                  let n = ImportedOTP.integer(slot["n"]).flatMap(UInt64.init(exactly:)),
+                  let r = ImportedOTP.integer(slot["r"]).flatMap(UInt32.init(exactly:)),
+                  let p = ImportedOTP.integer(slot["p"]).flatMap(UInt32.init(exactly:)),
+                  let keyParams = slot["key_params"] as? [String: Any],
+                  let nonce = Data(hexString: JSONInput.string(keyParams["nonce"]) ?? ""),
+                  let tag = Data(hexString: JSONInput.string(keyParams["tag"]) ?? ""),
+                  let encryptedKey = Data(hexString: JSONInput.string(slot["key"]) ?? "") else { return nil }
+            (self.salt, self.n, self.r, self.p) = (salt, n, r, p)
+            (self.nonce, self.tag, self.encryptedKey) = (nonce, tag, encryptedKey)
+        }
     }
 }
