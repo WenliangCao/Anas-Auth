@@ -2545,6 +2545,22 @@
         }
       }
     },
+    "The secret is incomplete (it may have been truncated)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥不完整（可能被截断了）"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密鑰不完整（可能被截斷了）"
+          }
+        }
+      }
+    },
     "The secret isn’t valid Base32": {
       "localizations": {
         "zh-Hans": {

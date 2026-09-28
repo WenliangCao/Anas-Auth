@@ -319,12 +319,14 @@ enum CodeFormatter {
             switch error {
             case .invalidCharacter:
                 return String(localized: "The secret contains invalid characters (it may have been damaged during sync or migration)")
+            case .invalidLength:
+                return entry.secret.isEmpty
+                    ? String(localized: "The secret is empty")
+                    : String(localized: "The secret is incomplete (it may have been truncated)")
             }
         } catch {
             return String(localized: "The secret can’t be parsed")
         }
-        // Base32 合法但 HMAC 失败：长度为 0
-        if entry.secret.isEmpty { return String(localized: "The secret is empty") }
         return nil
     }
 }

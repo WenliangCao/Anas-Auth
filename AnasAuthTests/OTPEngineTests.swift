@@ -74,6 +74,28 @@ struct OTPEngineTests {
         }
     }
 
+    /// 空内容与截断的长度（模 8 余 1、3、6）不能当作有效密钥
+    @Test(arguments: ["", "====", " - ", "A", "JBS", "JBSWY3", "JBSWY3DPE"])
+    func base32RejectsEmptyAndTruncated(_ input: String) {
+        #expect(throws: Base32Error.invalidLength) { try Base32.decode(input) }
+    }
+
+    @Test func base32AcceptsEveryWholeByteLength() throws {
+        for count in 1...10 {
+            let data = Data((0..<count).map { UInt8($0 + 1) })
+            #expect(try Base32.decode(Base32.encode(data)) == data)
+        }
+    }
+
+    @Test func importedOTPRejectsTruncatedSecret() {
+        #expect(throws: (any Error).self) {
+            try ImportedOTP.make(kind: "totp", issuer: "E", account: "a", secret: "A", algorithm: nil, digits: 6)
+        }
+        #expect(throws: (any Error).self) {
+            try OTPAuthURLParser.parse("otpauth://totp/E:a?secret=A&issuer=E")
+        }
+    }
+
     @Test func remainingSeconds() {
         let date = Date(timeIntervalSince1970: 1234567890) // 1234567890 % 30 == 0… 验证边界
         let period = 30
