@@ -13,8 +13,9 @@ struct AuthExportFile: Codable {
         var type: String
         var note: String
         var pinned: Bool
-        /// 可选：兼容加标签功能之前导出的文件
+        /// 以下可选字段兼容旧版本导出的文件
         var tags: [String]?
+        var iconID: String?
     }
 
     var version: Int
@@ -39,7 +40,8 @@ enum ExportService {
                     type: code.type.rawValue,
                     note: code.note,
                     pinned: code.pinned,
-                    tags: code.tags
+                    tags: code.tags,
+                    iconID: code.iconID
                 )
             }
         )

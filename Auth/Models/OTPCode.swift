@@ -16,6 +16,8 @@ struct OTPCode: Identifiable, Hashable, Sendable {
     var note: String = ""
     var pinned: Bool = false
     var tags: [String] = []
+    /// 手动选择的品牌图标 slug，空串表示按发行方自动匹配
+    var iconID: String = ""
 
     var displayName: String {
         accountName.isEmpty ? issuer : "\(issuer) (\(accountName))"

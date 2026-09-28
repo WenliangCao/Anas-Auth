@@ -85,7 +85,8 @@ enum ImportService {
                 type: OTPType(rawValue: exported.type.lowercased()) ?? .totp,
                 note: exported.note,
                 pinned: exported.pinned,
-                tags: exported.tags ?? []
+                tags: exported.tags ?? [],
+                iconID: exported.iconID ?? ""
             )
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }

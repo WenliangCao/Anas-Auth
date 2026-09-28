@@ -18,6 +18,8 @@ final class CodeEntry {
     var pinned: Bool = false
     /// 首页标签筛选用（对齐 ente 的 tags）
     var tags: [String] = []
+    /// 手动选择的品牌图标 slug，空串表示按发行方自动匹配
+    var iconID: String = ""
     var createdAt: Date = Date()
     /// 复制次数与最近复制时间，用于"最常用/最近使用"排序
     var tapCount: Int = 0
@@ -36,6 +38,7 @@ final class CodeEntry {
         note: String = "",
         pinned: Bool = false,
         tags: [String] = [],
+        iconID: String = "",
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -50,6 +53,7 @@ final class CodeEntry {
         self.note = note
         self.pinned = pinned
         self.tags = tags
+        self.iconID = iconID
         self.createdAt = createdAt
     }
 
@@ -66,7 +70,8 @@ final class CodeEntry {
             type: code.type,
             note: code.note,
             pinned: code.pinned,
-            tags: code.tags
+            tags: code.tags,
+            iconID: code.iconID
         )
     }
 
@@ -105,7 +110,8 @@ final class CodeEntry {
             type: type,
             note: note,
             pinned: pinned,
-            tags: tags
+            tags: tags,
+            iconID: iconID
         )
     }
 }

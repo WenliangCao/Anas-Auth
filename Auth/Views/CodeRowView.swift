@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// 验证码卡片，布局对齐 ente auth 的 CodeWidget：
-/// 顶部倒计时进度条 → 发行方/账号 + 图标 → 当前码 + 下一个码。
+/// 顶部倒计时进度条 → 发行方/账号 + 品牌图标 → 当前码 + 下一个码。
 /// 性能关键设计：
 /// - 卡片主体静态，不随时间重渲染（滚动/搜索动画不被打断）
 /// - 验证码文本只在周期边界那一刻刷新
@@ -68,7 +68,7 @@ struct CodeRowView: View {
                     .lineLimit(1)
             }
             Spacer(minLength: 8)
-            IssuerAvatar(name: title)
+            IssuerIconView(issuer: title, iconID: entry.iconID)
         }
         .padding(.horizontal, 16)
     }
@@ -204,40 +204,6 @@ private struct PinnedCorner: View {
                 path.closeSubpath()
             }
         }
-    }
-}
-
-/// 发行方图标。暂无品牌图标库，按 ente 的兜底样式显示首字母圆形头像
-struct IssuerAvatar: View {
-    let name: String
-    var size: CGFloat = 24
-
-    var body: some View {
-        if let initial {
-            Circle()
-                .fill(color)
-                .frame(width: size, height: size)
-                .overlay {
-                    Text(initial)
-                        .font(.system(size: size * 0.6))
-                        .foregroundStyle(.white)
-                }
-                .accessibilityHidden(true)
-        }
-    }
-
-    /// 首个字母或数字（跳过引号等符号）
-    private var initial: String? {
-        name.first { $0.isLetter || $0.isNumber }.map { String($0).uppercased() }
-    }
-
-    /// 稳定哈希取色：Swift 的 hashValue 每次启动随机，不能用
-    private var color: Color {
-        var hash: UInt32 = 0
-        for scalar in name.lowercased().unicodeScalars {
-            hash = hash &* 31 &+ scalar.value
-        }
-        return Color.avatarPalette[Int(hash % UInt32(Color.avatarPalette.count))]
     }
 }
 
