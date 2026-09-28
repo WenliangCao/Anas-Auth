@@ -118,14 +118,14 @@ struct CodeListView: View {
         }
     }
 
-    /// 顶栏对齐 ente：左侧菜单（设置），中间标题/搜索框，右侧排序与搜索开关
+    /// 顶栏：左侧设置，中间标题/搜索框，右侧排序与搜索开关
     @ToolbarContentBuilder
     private var topBar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button {
                 showingSettings = true
             } label: {
-                Image(systemName: "line.3.horizontal")
+                Image(systemName: "gearshape")
             }
             .accessibilityLabel("设置")
         }
