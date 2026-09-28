@@ -37,14 +37,13 @@ The full list of third-party material and its licenses is in [THIRD_PARTY_NOTICE
 
 ## License
 
-Copyright © 2026 Wenliang ([@WenliangCao](https://github.com/WenliangCao))
+Copyright © 2026 [WenliangCao](https://github.com/WenliangCao)
 
 Anas Auth is free software, licensed under the **GNU Affero General Public License v3.0** ([LICENSE](LICENSE)), the same license as ente. The whole app is released under AGPL-3.0 because it includes AGPL-3.0 material from ente.
 
 Our AGPL-3.0 commitments:
 
 - **The complete source is public.** Everything needed to build the app is in this repository.
-- **Every App Store release matches a tag.** Each version we ship is built from a git tag in this repository (`vX.Y.Z`), so the exact source of any build you install can be found here.
 - **No additional restrictions.** You may use, study, modify and redistribute this code under AGPL-3.0. If you distribute a modified version, it must also be under AGPL-3.0 and its source must be made available.
 - **Notices are kept.** Copyright and license notices from ente and from all other third-party material are preserved.
 
@@ -79,7 +78,6 @@ Anas Auth 是一个用 SwiftUI 原生编写的 iOS 两步验证 App。
 **许可证**：因为包含 ente 的 AGPL-3.0 内容，整个 App 以 **AGPL-3.0** 开源，与 ente 相同。我们承诺：
 
 - 构建 App 所需的完整源代码都公开在本仓库。
-- App Store 上的每个版本都对应本仓库的一个 git 标签（`vX.Y.Z`）。
 - 不附加任何额外限制。
 - 保留 ente 及其他第三方资源的版权与许可声明。
 
