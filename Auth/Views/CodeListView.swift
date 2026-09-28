@@ -206,6 +206,8 @@ struct CodeListView: View {
                     onAdvanceCounter: { entry.counter += 1 }
                 )
                     .contentShape(Rectangle())
+                    // 长按预览只截卡片本身，不带列表行的白底
+                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
