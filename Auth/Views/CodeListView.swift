@@ -9,7 +9,6 @@ struct CodeListView: View {
     private var entries: [CodeEntry]
 
     @State private var searchText = ""
-    @State private var showingAddSheet = false
     @State private var showingSettings = false
     @State private var entryToEdit: CodeEntry?
     @State private var copiedEntryID: UUID?
@@ -58,7 +57,7 @@ struct CodeListView: View {
                     ContentUnavailableView {
                         Label("还没有验证码", systemImage: "lock.shield")
                     } description: {
-                        Text("点右上角 + 扫码或手动添加你的第一个两步验证码")
+                        Text("点右下角 + 扫码、手动输入或从相册导入你的第一个两步验证码")
                     }
                 } else {
                     codeList
@@ -74,16 +73,6 @@ struct CodeListView: View {
                         Image(systemName: "gearshape")
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingAddSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
-            .sheet(isPresented: $showingAddSheet) {
-                AddCodeView()
             }
             .sheet(item: $entryToEdit) { entry in
                 EditCodeView(entry: entry)
@@ -117,6 +106,9 @@ struct CodeListView: View {
                     Text("确定删除 \(entry.displayName)？如果这是唯一的验证凭证，删除后可能无法登录该服务。此操作无法撤销。")
                 }
             }
+        }
+        .overlay {
+            AddCodeMenu()
         }
     }
 
@@ -200,6 +192,8 @@ struct CodeListView: View {
             }
         }
         .listStyle(.plain)
+        // 底部留白，最后一张卡片不被悬浮按钮挡住
+        .contentMargins(.bottom, 80, for: .scrollContent)
     }
 
     private func copyCode(of entry: CodeEntry) {
