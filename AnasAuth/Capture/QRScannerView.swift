@@ -24,7 +24,7 @@ struct QRScannerView: UIViewControllerRepresentable {
         scanner.delegate = context.coordinator
         context.coordinator.parent = scanner
         // 启动失败（相机权限被拒/相机被占用等）不静默吞掉，
-        // 交给 delegate 的 didFailWithError 上抛到引导页
+        // 与 delegate 的 becameUnavailableWithError 走同一出口，上抛到引导页
         do {
             try scanner.startScanning()
         } catch {
@@ -66,10 +66,10 @@ struct QRScannerView: UIViewControllerRepresentable {
             deliver(items: [item])
         }
 
-        /// 相机不可用（常见于权限被拒）：上抛错误让外层引导用户去设置
+        /// 相机不可用（权限被拒、相机被占用等）：上抛错误让外层引导用户去设置
         func dataScanner(
             _ dataScanner: DataScannerViewController,
-            didFailWithError error: Error
+            becameUnavailableWithError error: DataScannerViewController.ScanningUnavailable
         ) {
             reportScannerError(error)
         }
@@ -106,6 +106,7 @@ struct ScannerScreen: View {
     let onCancel: () -> Void
 
     @State private var cameraDenied = false
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         ZStack {
@@ -115,6 +116,12 @@ struct ScannerScreen: View {
                     .ignoresSafeArea()
             } else {
                 deniedView
+            }
+        }
+        // 从设置里授权/相机被释放后回到前台：重新尝试扫码
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active, cameraDenied, QRScannerView.isAvailable {
+                cameraDenied = false
             }
         }
         .navigationTitle("Point Camera at QR Code")
