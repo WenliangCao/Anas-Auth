@@ -23,7 +23,7 @@ extension CodeEntry {
 /// 1. Google Authenticator 迁移二维码内容（otpauth-migration://…）
 /// 2. 本 App 导出的 JSON 备份（明文或加密）
 /// 3. 一行一个 otpauth:// URL 的纯文本
-/// 4. 加密备份文件内容（AUTHENCRYPTED1 magic 开头）
+/// 4. 加密备份文件内容（AUTHENCRYPTED magic 开头）
 enum ImportService {
     static func importCodes(from text: String) throws -> [OTPCode] {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -36,8 +36,11 @@ struct SettingsView: View {
     @State private var showingPasscodeRequired = false
     @State private var showingExportPasswordPrompt = false
     @State private var exportChoice: ExportChoice?
+    @State private var isExporting = false
+    /// 密码页里导入完成后的结果，等密码页收起后再弹
+    @State private var pendingImportMessage: String?
 
-    /// 待导入文件的内容与是否加密
+    /// 待输入密码的加密备份
     private struct ImportPasswordQuery: Identifiable {
         let id = UUID()
         let data: Data
@@ -120,18 +123,27 @@ struct SettingsView: View {
             ) { result in
                 handleImport(result)
             }
-            .sheet(item: $importPasswordQuery) { query in
-                ImportPasswordView(data: query.data) { password in
-                    importPasswordQuery = nil
-                    performImport(data: query.data, password: password)
-                } onCancel: {
-                    importPasswordQuery = nil
+            .sheet(item: $importPasswordQuery, onDismiss: showPendingImportResult) { query in
+                ImportPasswordView { password in
+                    // nil = 密码错误，留在密码页重试
+                    guard let message = await importBackup(query.data, password: password) else { return false }
+                    pendingImportMessage = message
+                    return true
                 }
             }
             // 密码页完全收起后再弹保存面板：两个弹出层同时动画时保存面板可能弹不出来
             .sheet(isPresented: $showingExportPasswordPrompt, onDismiss: startExport) {
                 ExportPasswordView { exportChoice = $0 }
             }
+            .overlay {
+                if isExporting {
+                    ProgressView()
+                        .controlSize(.large)
+                        .padding(24)
+                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+                }
+            }
+            .disabled(isExporting)
             .alert("Set a Device Passcode", isPresented: $showingPasscodeRequired) {
                 Button("OK", role: .cancel) {}
             } message: {
@@ -174,22 +186,29 @@ struct SettingsView: View {
         )
     }
 
+    /// 加密要跑 Argon2（零点几秒），放到后台，期间显示进度
     private func startExport() {
         guard let choice = exportChoice else { return }
         exportChoice = nil
         let codes = entries.map { $0.toOTPCode() }
-        do {
-            let data: Data
-            switch choice {
-            case .encrypted(let password):
-                data = try ExportService.makeEncryptedJSON(from: codes, password: password)
-            case .plain:
-                data = try ExportService.makeJSON(from: codes)
+        isExporting = true
+        Task {
+            let result = await Task.detached {
+                Result {
+                    switch choice {
+                    case .encrypted(let password): try ExportService.makeEncryptedJSON(from: codes, password: password)
+                    case .plain: try ExportService.makeJSON(from: codes)
+                    }
+                }
+            }.value
+            isExporting = false
+            switch result {
+            case .success(let data):
+                exportDocument = ExportDocument(data: data)
+                showingExporter = true
+            case .failure(let error):
+                importResultMessage = String(localized: "Export failed: \(error.localizedDescription)")
             }
-            exportDocument = ExportDocument(data: data)
-            showingExporter = true
-        } catch {
-            importResultMessage = String(localized: "Export failed: \(error.localizedDescription)")
         }
     }
 
@@ -206,27 +225,37 @@ struct SettingsView: View {
         if ImportService.isEncryptedBackup(data) {
             importPasswordQuery = ImportPasswordQuery(data: data)
         } else {
-            performImport(data: data, password: nil)
+            Task { importResultMessage = await importBackup(data, password: nil) }
         }
     }
 
-    private func performImport(data: Data, password: String?) {
-        do {
-            let codes = try ImportService.importCodes(fromFileContents: data, password: password)
+    private func showPendingImportResult() {
+        importResultMessage = pendingImportMessage
+        pendingImportMessage = nil
+    }
+
+    /// 解密与解析放后台（加密备份要跑 Argon2），写库回到主线程。
+    /// 返回给用户看的结果；密码错误返回 nil
+    private func importBackup(_ data: Data, password: String?) async -> String? {
+        let result = await Task.detached {
+            Result { try ImportService.importCodes(fromFileContents: data, password: password) }
+        }.value
+        switch result {
+        case .success(let codes):
             let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
             let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
             for code in unique {
                 modelContext.insert(CodeEntry(code: code))
             }
-            if skipped > 0 {
-                importResultMessage = String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
-            } else {
-                importResultMessage = String(localized: "Imported: \(unique.count).")
-            }
-        } catch BackupCrypto.CryptoError.wrongPassword {
-            importResultMessage = String(localized: "Incorrect password. Import failed.")
-        } catch {
-            importResultMessage = String(localized: "Import failed: the file isn’t in a supported format.")
+            return skipped > 0
+                ? String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
+                : String(localized: "Imported: \(unique.count).")
+        case .failure(BackupCrypto.CryptoError.wrongPassword):
+            return nil
+        case .failure(ImportCrypto.CryptoError.kdfFailed):
+            return String(localized: "Not enough memory to decrypt. Close other apps and try again.")
+        case .failure:
+            return String(localized: "Import failed: the file isn’t in a supported format.")
         }
     }
 }
@@ -291,14 +320,14 @@ private struct ExportPasswordView: View {
     }
 }
 
-/// 导入加密备份时的密码输入
+/// 导入加密备份时的密码输入。解密在这里等结果：密码错了留在本页提示
 private struct ImportPasswordView: View {
-    let data: Data
-    let onImport: (String) -> Void
-    let onCancel: () -> Void
+    /// 返回 false 表示密码错误
+    let onImport: (String) async -> Bool
 
     @State private var password = ""
     @State private var wrongPassword = false
+    @State private var isWorking = false
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -306,6 +335,7 @@ private struct ImportPasswordView: View {
             Form {
                 Section {
                     SecureField("Backup Password", text: $password)
+                        .onSubmit(submit)
                     if wrongPassword {
                         Text("Incorrect password")
                             .font(.caption)
@@ -317,25 +347,34 @@ private struct ImportPasswordView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        onCancel()
-                        dismiss()
-                    }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Import") {
-                        // 先验证密码，错了留在本页提示
-                        if (try? BackupCrypto.decrypt(data, password: password)) != nil {
-                            onImport(password)
-                            dismiss()
-                        } else {
-                            wrongPassword = true
-                        }
+                    if isWorking {
+                        ProgressView()
+                    } else {
+                        Button("Import", action: submit)
+                            .disabled(password.isEmpty)
                     }
-                    .disabled(password.isEmpty)
                 }
             }
+            .disabled(isWorking)
         }
         .presentationDetents([.medium])
+        .interactiveDismissDisabled(isWorking)
+    }
+
+    private func submit() {
+        guard !password.isEmpty, !isWorking else { return }
+        isWorking = true
+        wrongPassword = false
+        Task {
+            if await onImport(password) {
+                dismiss()
+            } else {
+                wrongPassword = true
+                isWorking = false
+            }
+        }
     }
 }

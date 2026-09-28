@@ -51,7 +51,7 @@ enum ExportService {
         return try encoder.encode(file)
     }
 
-    /// 加密导出：AES-GCM，密钥由密码 HKDF 派生
+    /// 加密导出：AES-GCM，密钥由密码经 Argon2id 派生
     static func makeEncryptedJSON(from codes: [OTPCode], password: String) throws -> Data {
         try BackupCrypto.encrypt(try makeJSON(from: codes), password: password)
     }

@@ -1377,22 +1377,6 @@
         }
       }
     },
-    "Incorrect password. Import failed.": {
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "密码不正确，导入失败。"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "密碼不正確，匯入失敗。"
-          }
-        }
-      }
-    },
     "Initial counter: %lld": {
       "localizations": {
         "zh-Hans": {
