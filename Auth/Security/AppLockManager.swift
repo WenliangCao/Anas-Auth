@@ -25,21 +25,6 @@ final class AppLockManager {
         self.isLocked = enabled
     }
 
-    /// 设备支持的生物识别名称，用于设置页展示
-    var biometryName: String {
-        let context = LAContext()
-        var error: NSError?
-        guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-            return String(localized: "设备密码")
-        }
-        switch context.biometryType {
-        case .faceID: return "Face ID"
-        case .touchID: return "Touch ID"
-        case .opticID: return "Optic ID"
-        default: return String(localized: "生物识别")
-        }
-    }
-
     func lock() {
         if isEnabled {
             isLocked = true

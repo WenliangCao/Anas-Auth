@@ -43,7 +43,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("安全") {
-                    Toggle("\(lockManager.biometryName) 锁定", isOn: $lockManager.isEnabled)
+                    Toggle("应用锁", isOn: $lockManager.isEnabled)
                 }
 
                 Section {
@@ -52,6 +52,7 @@ struct SettingsView: View {
                     } label: {
                         Label("导出备份（\(entries.count) 条）", systemImage: "square.and.arrow.up")
                     }
+                    .foregroundStyle(.primary)
                     .disabled(entries.isEmpty)
 
                     Button {
@@ -59,23 +60,17 @@ struct SettingsView: View {
                     } label: {
                         Label("从文件导入", systemImage: "square.and.arrow.down")
                     }
+                    .foregroundStyle(.primary)
                 } header: {
                     Text("备份")
                 } footer: {
-                    Text("导出可选密码加密（AES-GCM）。加密备份需牢记密码，密码丢失将无法恢复。")
+                    Text("加密备份的密码丢失后无法恢复。")
                 }
+                // 去掉强调色：按钮文字和图标都用正文色
+                .tint(.primary)
 
-                Section("同步") {
-                    Label("通过 iCloud 自动同步到你的其他设备", systemImage: "icloud")
-                        .foregroundStyle(.secondary)
-                        .font(.footnote)
-                }
-
-                Section("关于") {
+                Section {
                     LabeledContent("版本", value: appVersion)
-                    Link("算法基于开放标准 RFC 4226 / RFC 6238",
-                         destination: URL(string: "https://www.rfc-editor.org/rfc/rfc6238")!)
-                        .font(.footnote)
                 }
             }
             .navigationTitle("设置")
@@ -220,7 +215,7 @@ private struct ExportPasswordView: View {
                 } header: {
                     Text("加密备份")
                 } footer: {
-                    Text("备份文件包含所有密钥，建议设置密码加密。密码丢失无法恢复。")
+                    Text("密码丢失后无法恢复备份。")
                 }
                 Section {
                     Button("不加密，直接导出", role: .destructive) {
@@ -271,10 +266,6 @@ private struct ImportPasswordView: View {
                             .font(.caption)
                             .foregroundStyle(.red)
                     }
-                } header: {
-                    Text("加密备份")
-                } footer: {
-                    Text("此备份已加密，请输入导出时设置的密码。")
                 }
             }
             .navigationTitle("输入密码")
