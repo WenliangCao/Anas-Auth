@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 // 各来源导入器的解析结果与 ente 保持一致
 struct ImportersTests {

@@ -8,6 +8,7 @@ import Foundation
 /// 头部一个 magic 前缀便于导入时区分明文/密文。
 enum BackupCrypto {
     static let magic = "AUTHENCRYPTED1"
+    /// 加密格式常量：沿用改名前的旧值，改了会导致已有加密备份无法解密
     private static let salt = Data("com.wenliang.auth.backup.v1".utf8)
 
     enum CryptoError: Error, Equatable {

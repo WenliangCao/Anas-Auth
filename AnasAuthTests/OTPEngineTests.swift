@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 struct OTPEngineTests {
     // RFC 4226 附录 D 的标准测试向量（密钥为 ASCII "12345678901234567890"）

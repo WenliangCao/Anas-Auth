@@ -1,5 +1,5 @@
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 struct BrandIconCatalogTests {
     @Test func catalogLoadsBothSources() {

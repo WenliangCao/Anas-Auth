@@ -126,7 +126,7 @@ struct CodeListView: View {
             .accessibilityLabel("设置")
         }
         ToolbarItem(placement: .principal) {
-            Text("Auth")
+            Text("Anas Auth")
                 .font(.title2.weight(.heavy))
         }
         ToolbarItem(placement: .topBarTrailing) {

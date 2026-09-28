@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct AuthApp: App {
+struct AnasAuthApp: App {
     let container: ModelContainer
 
     init() {

@@ -103,7 +103,7 @@ struct SettingsView: View {
                 isPresented: $showingExporter,
                 document: exportDocument,
                 contentType: .data,
-                defaultFilename: "auth-backup.authbackup"
+                defaultFilename: "anas-auth-backup.anasauth"
             ) { _ in }
             .fileImporter(
                 isPresented: $showingImporter,

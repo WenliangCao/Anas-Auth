@@ -3,7 +3,7 @@ import CoreImage.CIFilterBuiltins
 import Foundation
 import Testing
 import UIKit
-@testable import Auth
+@testable import AnasAuth
 
 struct QRImageDecoderTests {
     private static func qrPNG(_ message: String) -> Data {

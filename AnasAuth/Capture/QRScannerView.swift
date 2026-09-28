@@ -132,7 +132,7 @@ struct ScannerScreen: View {
         ContentUnavailableView {
             Label("无法访问相机", systemImage: "camera.badge.ellipsis")
         } description: {
-            Text("请到系统设置中允许 Auth 使用相机，然后返回重试。")
+            Text("请到系统设置中允许 Anas Auth 使用相机，然后返回重试。")
         } actions: {
             Button("打开系统设置") {
                 if let url = URL(string: UIApplication.openSettingsURLString) {

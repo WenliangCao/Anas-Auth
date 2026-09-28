@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 struct OTPAuthURLParserTests {
     @Test func parsesStandardTOTP() throws {

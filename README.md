@@ -29,9 +29,9 @@ It is not a fork, and it contains no Dart or Flutter code from ente. These parts
 
 | What | Where | How |
 |---|---|---|
-| Community brand icons | `Auth/BrandIcons.xcassets/custom/` | Taken from `mobile/apps/auth/assets/custom-icons` and pre-rendered to PNG by `Scripts/generate_brand_icons.mjs` |
-| Import formats | `Auth/ImportExport/` | Parsing and decryption of the ente export format and other apps' export formats, ported to Swift from ente's implementation |
-| Layout and behaviour | `Auth/Views/` | Card layout, compact mode, tags, sorting and icon matching modeled on ente Auth |
+| Community brand icons | `AnasAuth/BrandIcons.xcassets/custom/` | Taken from `mobile/apps/auth/assets/custom-icons` and pre-rendered to PNG by `Scripts/generate_brand_icons.mjs` |
+| Import formats | `AnasAuth/ImportExport/` | Parsing and decryption of the ente export format and other apps' export formats, ported to Swift from ente's implementation |
+| Layout and behaviour | `AnasAuth/Views/` | Card layout, compact mode, tags, sorting and icon matching modeled on ente Auth |
 
 The full list of third-party material and its licenses is in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
@@ -53,9 +53,9 @@ Brand icons are trademarks of their respective owners. They are used only to ide
 
 Requirements: Xcode 27 or later. The app targets iOS 27.
 
-1. Open `Auth.xcodeproj`.
+1. Open `AnasAuth.xcodeproj`.
 2. Choose your own development team under *Signing & Capabilities*. iCloud sync requires a CloudKit container on your team.
-3. Build and run the `Auth` scheme.
+3. Build and run the `AnasAuth` scheme.
 
 The brand icons are already committed. To regenerate them, see the usage notes at the top of `Scripts/generate_brand_icons.mjs`.
 

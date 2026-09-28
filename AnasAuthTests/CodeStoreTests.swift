@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 struct CodeStoreTests {
     @MainActor

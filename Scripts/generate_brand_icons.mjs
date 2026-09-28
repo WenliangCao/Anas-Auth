@@ -1,9 +1,9 @@
 // 生成品牌图标资源，与 ente Auth 使用同一套图标：
-//   1. simple-icons（CC0）：单色矢量，按品牌色着色 → Auth/BrandIcons.xcassets/brand/
+//   1. simple-icons（CC0）：单色矢量，按品牌色着色 → AnasAuth/BrandIcons.xcassets/brand/
 //   2. ente custom-icons（ente 社区提交，随 ente 仓库以 AGPL-3.0 发布）：多为彩色，
 //      用 resvg 预渲染成 PNG（它们大量使用 CSS、clipPath、mask、滤镜，Xcode 的 SVG 渲染器靠不住）
-//      → Auth/BrandIcons.xcassets/custom/
-//   同名时 custom 优先（与 ente 一致）。另生成 Auth/Resources/BrandIcons.json：名称、颜色、匹配索引。
+//      → AnasAuth/BrandIcons.xcassets/custom/
+//   同名时 custom 优先（与 ente 一致）。另生成 AnasAuth/Resources/BrandIcons.json：名称、颜色、匹配索引。
 //
 // 用法：
 //   npm install --prefix Scripts
@@ -20,7 +20,7 @@ if (!simplePkg || !customDir) {
 }
 
 const root = path.join(path.dirname(new URL(import.meta.url).pathname), "..");
-const catalog = path.join(root, "Auth/BrandIcons.xcassets");
+const catalog = path.join(root, "AnasAuth/BrandIcons.xcassets");
 const info = { author: "xcode", version: 1 };
 /// 预渲染尺寸：最大显示 64pt @3x
 const PNG_SIZE = 192;
@@ -123,8 +123,8 @@ for (const icon of simpleAliases) {
 }
 
 icons.sort((a, b) => a.title.localeCompare(b.title, "en", { sensitivity: "base" }));
-fs.mkdirSync(path.join(root, "Auth/Resources"), { recursive: true });
-fs.writeFileSync(path.join(root, "Auth/Resources/BrandIcons.json"), JSON.stringify({ icons, lookup, replaced }));
+fs.mkdirSync(path.join(root, "AnasAuth/Resources"), { recursive: true });
+fs.writeFileSync(path.join(root, "AnasAuth/Resources/BrandIcons.json"), JSON.stringify({ icons, lookup, replaced }));
 const customCount = icons.filter((i) => i.asset.startsWith("custom/")).length;
 console.log(`${icons.length} icons (${customCount} ente custom, ${icons.length - customCount} simple-icons), ` +
   `${Object.keys(replaced).length} simple-icons replaced, ${Object.keys(lookup).length} lookup keys`);

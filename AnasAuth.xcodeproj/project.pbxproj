@@ -16,52 +16,52 @@
 			containerPortal = AA0000000000000000000001 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = AA0000000000000000000006;
-			remoteInfo = Auth;
+			remoteInfo = AnasAuth;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AA0000000000000000000004 /* Auth.app */ = {
+		AA0000000000000000000004 /* AnasAuth.app */ = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.application;
 			includeInIndex = 0;
-			path = Auth.app;
+			path = AnasAuth.app;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		AA0000000000000000000005 /* AuthTests.xctest */ = {
+		AA0000000000000000000005 /* AnasAuthTests.xctest */ = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.cfbundle;
 			includeInIndex = 0;
-			path = AuthTests.xctest;
+			path = AnasAuthTests.xctest;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AA0000000000000000000008 /* Auth */ = {
+		AA0000000000000000000008 /* AnasAuth */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AA0000000000000000000100 /* Exceptions for "Auth" folder in "Auth" target */,
+				AA0000000000000000000100 /* Exceptions for "AnasAuth" folder in "AnasAuth" target */,
 			);
-			path = Auth;
+			path = AnasAuth;
 			sourceTree = "<group>";
 		};
-		AA0000000000000000000009 /* AuthTests */ = {
+		AA0000000000000000000009 /* AnasAuthTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			explicitFileTypes = {};
 			explicitFolders = ();
-			path = AuthTests;
+			path = AnasAuthTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AA0000000000000000000100 /* Exceptions for "Auth" folder in "Auth" target */ = {
+		AA0000000000000000000100 /* Exceptions for "AnasAuth" folder in "AnasAuth" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = AA0000000000000000000006 /* Auth */;
+			target = AA0000000000000000000006 /* AnasAuth */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -87,8 +87,8 @@
 		AA0000000000000000000002 = {
 			isa = PBXGroup;
 			children = (
-				AA0000000000000000000008 /* Auth */,
-				AA0000000000000000000009 /* AuthTests */,
+				AA0000000000000000000008 /* AnasAuth */,
+				AA0000000000000000000009 /* AnasAuthTests */,
 				AA0000000000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,8 +96,8 @@
 		AA0000000000000000000003 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AA0000000000000000000004 /* Auth.app */,
-				AA0000000000000000000005 /* AuthTests.xctest */,
+				AA0000000000000000000004 /* AnasAuth.app */,
+				AA0000000000000000000005 /* AnasAuthTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,9 +105,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA0000000000000000000006 /* Auth */ = {
+		AA0000000000000000000006 /* AnasAuth */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA0000000000000000000013 /* Build configuration list for PBXNativeTarget "Auth" */;
+			buildConfigurationList = AA0000000000000000000013 /* Build configuration list for PBXNativeTarget "AnasAuth" */;
 			buildPhases = (
 				AA000000000000000000000A /* Sources */,
 				AA000000000000000000000B /* Frameworks */,
@@ -118,19 +118,19 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AA0000000000000000000008 /* Auth */,
+				AA0000000000000000000008 /* AnasAuth */,
 			);
-			name = Auth;
+			name = AnasAuth;
 			packageProductDependencies = (
 				AA0000000000000000000031 /* Clibsodium */,
 			);
-			productName = Auth;
-			productReference = AA0000000000000000000004 /* Auth.app */;
+			productName = AnasAuth;
+			productReference = AA0000000000000000000004 /* AnasAuth.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AA0000000000000000000007 /* AuthTests */ = {
+		AA0000000000000000000007 /* AnasAuthTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA0000000000000000000016 /* Build configuration list for PBXNativeTarget "AuthTests" */;
+			buildConfigurationList = AA0000000000000000000016 /* Build configuration list for PBXNativeTarget "AnasAuthTests" */;
 			buildPhases = (
 				AA000000000000000000000D /* Sources */,
 				AA000000000000000000000E /* Frameworks */,
@@ -142,13 +142,13 @@
 				AA0000000000000000000019 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				AA0000000000000000000009 /* AuthTests */,
+				AA0000000000000000000009 /* AnasAuthTests */,
 			);
-			name = AuthTests;
+			name = AnasAuthTests;
 			packageProductDependencies = (
 			);
-			productName = AuthTests;
-			productReference = AA0000000000000000000005 /* AuthTests.xctest */;
+			productName = AnasAuthTests;
+			productReference = AA0000000000000000000005 /* AnasAuthTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -170,7 +170,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AA0000000000000000000010 /* Build configuration list for PBXProject "Auth" */;
+			buildConfigurationList = AA0000000000000000000010 /* Build configuration list for PBXProject "AnasAuth" */;
 			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -189,8 +189,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AA0000000000000000000006 /* Auth */,
-				AA0000000000000000000007 /* AuthTests */,
+				AA0000000000000000000006 /* AnasAuth */,
+				AA0000000000000000000007 /* AnasAuthTests */,
 			);
 		};
 /* End PBXProject section */
@@ -232,7 +232,7 @@
 /* Begin PBXTargetDependency section */
 		AA0000000000000000000019 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AA0000000000000000000006 /* Auth */;
+			target = AA0000000000000000000006 /* AnasAuth */;
 			targetProxy = AA000000000000000000001A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -361,16 +361,16 @@
 		AA0000000000000000000014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AuthIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AnasAuthIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Auth/Auth.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AnasAuth/AnasAuth.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 95765392HF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Auth/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Auth;
+				INFOPLIST_FILE = AnasAuth/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Anas Auth";
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -382,7 +382,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.auth;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.anasauth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
@@ -393,16 +393,16 @@
 		AA0000000000000000000015 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AuthIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AnasAuthIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Auth/Auth.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AnasAuth/AnasAuth.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 95765392HF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Auth/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Auth;
+				INFOPLIST_FILE = AnasAuth/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Anas Auth";
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -415,7 +415,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.auth;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.anasauth;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
@@ -433,12 +433,12 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.auth.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.anasauth.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Auth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Auth";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnasAuth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnasAuth";
 			};
 			name = Debug;
 		};
@@ -452,19 +452,19 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.auth.tests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wenliang.anasauth.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Auth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Auth";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AnasAuth.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AnasAuth";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AA0000000000000000000010 /* Build configuration list for PBXProject "Auth" */ = {
+		AA0000000000000000000010 /* Build configuration list for PBXProject "AnasAuth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA0000000000000000000011 /* Debug */,
@@ -473,7 +473,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA0000000000000000000013 /* Build configuration list for PBXNativeTarget "Auth" */ = {
+		AA0000000000000000000013 /* Build configuration list for PBXNativeTarget "AnasAuth" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA0000000000000000000014 /* Debug */,
@@ -482,7 +482,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AA0000000000000000000016 /* Build configuration list for PBXNativeTarget "AuthTests" */ = {
+		AA0000000000000000000016 /* Build configuration list for PBXNativeTarget "AnasAuthTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA0000000000000000000017 /* Debug */,

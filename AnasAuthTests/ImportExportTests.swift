@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Auth
+@testable import AnasAuth
 
 struct ImportExportTests {
     /// 手工拼一段 OtpParameters protobuf 字段
