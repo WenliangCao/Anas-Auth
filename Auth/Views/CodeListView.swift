@@ -126,12 +126,7 @@ struct CodeListView: View {
         }
         ToolbarItem(placement: .principal) {
             if isSearching {
-                TextField("搜索", text: $searchText)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .focused($searchFieldFocused)
-                    .submitLabel(.search)
-                    .frame(minWidth: 220)
+                searchField
             } else {
                 Text("Auth")
                     .font(.title2.weight(.heavy))
@@ -157,6 +152,25 @@ struct CodeListView: View {
             }
             .accessibilityLabel(isSearching ? "关闭搜索" : "搜索")
         }
+    }
+
+    /// 顶栏搜索框：玻璃胶囊，高度与两侧玻璃按钮一致。
+    /// principal 位置按理想宽度排版（maxWidth 无效），给一个偏大的 idealWidth，
+    /// 导航栏会把它压到两侧按钮之间的剩余空间，从而撑满且不压住设置按钮
+    private var searchField: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(.secondary)
+            TextField("搜索", text: $searchText)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .focused($searchFieldFocused)
+                .submitLabel(.search)
+        }
+        .padding(.horizontal, 14)
+        .frame(idealWidth: 600, maxWidth: .infinity, minHeight: 44)
+        .glassEffect(in: .capsule)
+        .padding(.horizontal, 8)
     }
 
     private func toggleSearch() {
