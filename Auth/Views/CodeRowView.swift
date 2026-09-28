@@ -1,38 +1,42 @@
 import SwiftUI
 
-/// 验证码列表行。性能关键设计：
-/// - 行主体完全静态，不随时间重渲染（滚动/搜索动画不再被打断）
-/// - 验证码文本只在周期边界那一刻刷新（30 秒一次而非每秒一次）
-/// - 倒计时是一个独立的自绘圆环，每秒重画但没有隐式动画
+/// 验证码卡片，布局对齐 ente auth 的 CodeWidget：
+/// 顶部倒计时进度条 → 发行方/账号 + 图标 → 当前码 + 下一个码。
+/// 性能关键设计：
+/// - 卡片主体静态，不随时间重渲染（滚动/搜索动画不被打断）
+/// - 验证码文本只在周期边界那一刻刷新
+/// - 进度条是独立的 Canvas，只有它按帧重画
 struct CodeRowView: View {
     let entry: CodeEntry
-    /// 当前刚被复制的条目 ID（用于行内淡出反馈）
+    /// 当前刚被复制的条目 ID（用于卡片淡出反馈）
     var copiedEntryID: UUID?
+    /// 轻点"下一个"：TOTP 复制下一个码
+    var onCopyNext: () -> Void = {}
+    /// HOTP 的前进按钮：计数器 +1
+    var onAdvanceCounter: () -> Void = {}
 
     var body: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 6) {
-                    if entry.pinned {
-                        Image(systemName: "pin.fill")
-                            .font(.caption)
-                            .foregroundStyle(.orange)
-                    }
-                    Text(entry.issuer.isEmpty ? entry.accountName : entry.issuer)
-                        .font(.headline)
-                        .lineLimit(1)
-                }
-                if !entry.accountName.isEmpty && !entry.issuer.isEmpty {
-                    Text(entry.accountName)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-                codeText
+        VStack(alignment: .leading, spacing: 0) {
+            if entry.type == .hotp {
+                Color.clear.frame(height: 3)
+            } else {
+                CodeProgressBar(period: entry.period)
+                    .frame(height: 3)
             }
-            Spacer(minLength: 8)
-            trailingView
+            header
+                .padding(.top, 28)
+            codes
+                .padding(.top, 4)
+                .padding(.bottom, 32)
         }
+        .background(Color.codeCardBackground)
+        .overlay(alignment: .topTrailing) {
+            if entry.pinned {
+                PinnedCorner()
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .shadow(color: .black.opacity(entry.pinned ? 0.12 : 0), radius: 2, y: 2)
         .opacity(isCopied ? 0.35 : 1)
         .animation(.snappy(duration: 0.25), value: isCopied)
         .accessibilityElement(children: .combine)
@@ -43,68 +47,52 @@ struct CodeRowView: View {
         copiedEntryID == entry.id
     }
 
+    private var title: String {
+        entry.issuer.isEmpty ? entry.accountName : entry.issuer
+    }
+
+    private var subtitle: String {
+        entry.issuer.isEmpty ? "" : entry.accountName
+    }
+
+    private var header: some View {
+        HStack(alignment: .top, spacing: 8) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.title3.weight(.medium))
+                    .lineLimit(1)
+                // 账号为空也占一行，保证所有卡片等高
+                Text(subtitle.isEmpty ? " " : subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
+            Spacer(minLength: 8)
+            IssuerAvatar(name: title)
+        }
+        .padding(.horizontal, 16)
+    }
+
     @ViewBuilder
-    private var codeText: some View {
-        if entry.type == .hotp {
-            // counter 是行内容的唯一输入：复制推进计数器后，SwiftData 变更
-            // 触发本行重新求值，新 counter 生成新码，显示永远与剪贴板一致
-            if let code = CodeFormatter.formatted(entry: entry, at: .now) {
-                Text(code)
-                    .font(.title3.monospacedDigit())
-                    .foregroundStyle(.primary)
+    private var codes: some View {
+        Group {
+            if entry.type == .hotp {
+                // counter 是 HOTP 码的唯一输入：计数器变更触发重新求值
+                CodePair(entry: entry, date: .now, trailing: .advance(onAdvanceCounter))
                     .id(entry.counter)
-                    .transaction { $0.animation = nil }
-            } else if let reason = CodeFormatter.invalidReason(entry: entry) {
-                Text(reason)
-                    .font(.subheadline)
-                    .foregroundStyle(.red)
             } else {
-                Text(String(localized: "无效密钥"))
-                    .font(.title3.monospacedDigit())
-                    .foregroundStyle(.red)
-            }
-        } else {
-            PeriodBoundaryCodeText(entry: entry)
-        }
-    }
-
-    @ViewBuilder
-    private var trailingView: some View {
-        if entry.type == .hotp {
-            Image(systemName: "number.circle")
-                .foregroundStyle(.secondary)
-        } else {
-            CountdownRingView(period: entry.period)
-        }
-    }
-}
-
-/// 只在 TOTP 周期边界刷新的验证码文本
-private struct PeriodBoundaryCodeText: View {
-    let entry: CodeEntry
-
-    var body: some View {
-        TimelineView(.periodic(
-            from: Self.nextBoundary(period: entry.period),
-            by: TimeInterval(max(entry.period, 1))
-        )) { context in
-            let code = CodeFormatter.formatted(entry: entry, at: context.date)
-            if let code {
-                Text(code)
-                    .font(.title3.monospacedDigit())
-            } else if let reason = CodeFormatter.invalidReason(entry: entry) {
-                Text(reason)
-                    .font(.subheadline)
-                    .foregroundStyle(.red)
-            } else {
-                Text(String(localized: "无效密钥"))
-                    .font(.title3.monospacedDigit())
-                    .foregroundStyle(.red)
+                TimelineView(.periodic(
+                    from: Self.nextBoundary(period: entry.period),
+                    by: TimeInterval(max(entry.period, 1))
+                )) { context in
+                    CodePair(entry: entry, date: context.date, trailing: .nextCode(onCopyNext))
+                }
             }
         }
+        .padding(.horizontal, 16)
     }
 
-    /// 下一个周期边界（对齐 Unix 时间戳，所有行同相位）
+    /// 下一个周期边界（对齐 Unix 时间戳，所有卡片同相位）
     static func nextBoundary(period: Int) -> Date {
         let period = TimeInterval(max(period, 1))
         let now = Date().timeIntervalSince1970
@@ -112,34 +100,144 @@ private struct PeriodBoundaryCodeText: View {
     }
 }
 
-/// 自绘倒计时圆环：每秒对齐刷新，无隐式动画开销
-private struct CountdownRingView: View {
-    let period: Int
+/// 当前码（左）+ 下一个码 / HOTP 前进按钮（右）
+private struct CodePair: View {
+    enum Trailing {
+        case nextCode(() -> Void)
+        case advance(() -> Void)
+    }
+
+    let entry: CodeEntry
+    let date: Date
+    let trailing: Trailing
 
     var body: some View {
-        TimelineView(.periodic(from: Self.nextWholeSecond(), by: 1)) { context in
-            let remaining = OTPGenerator.remainingSeconds(at: context.date, period: period)
-            let fraction = Double(remaining) / Double(max(period, 1))
-            ZStack {
-                Circle()
-                    .stroke(.quaternary, lineWidth: 3)
-                Circle()
-                    .trim(from: 0, to: fraction)
-                    .stroke(
-                        remaining <= 5 ? Color.red : Color.accentColor,
-                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                    )
-                    .rotationEffect(.degrees(-90))
-                Text("\(remaining)")
-                    .font(.caption2.monospacedDigit())
-                    .foregroundStyle(.secondary)
+        if let code = CodeFormatter.formatted(entry: entry, at: date) {
+            HStack(alignment: .bottom, spacing: 8) {
+                Text(code)
+                    .font(.system(size: 26).monospacedDigit())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .transaction { $0.animation = nil }
+                Spacer(minLength: 0)
+                trailingView
             }
-            .frame(width: 44, height: 44)
+        } else {
+            Text(CodeFormatter.invalidReason(entry: entry) ?? String(localized: "无效密钥"))
+                .font(.subheadline)
+                .foregroundStyle(.red)
         }
     }
 
-    static func nextWholeSecond() -> Date {
-        Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.up))
+    @ViewBuilder
+    private var trailingView: some View {
+        VStack(alignment: .trailing, spacing: 2) {
+            Text("下一个")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            switch trailing {
+            case .nextCode(let onTap):
+                Text(CodeFormatter.formattedNext(entry: entry, at: date) ?? "")
+                    .font(.system(size: 20).monospacedDigit())
+                    .foregroundStyle(.gray)
+                    .lineLimit(1)
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: onTap)
+                    .accessibilityAddTraits(.isButton)
+            case .advance(let onTap):
+                // borderless：避免 List 把整行当成按钮
+                Button(action: onTap) {
+                    Image(systemName: "arrow.forward")
+                        .font(.title2)
+                        .foregroundStyle(.gray)
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel("下一个验证码")
+            }
+        }
+    }
+}
+
+/// 顶部倒计时进度条：剩余比例 > 40% 为紫色，否则橙色（同 ente）
+private struct CodeProgressBar: View {
+    let period: Int
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 30)) { context in
+            let period = TimeInterval(max(period, 1))
+            let elapsed = context.date.timeIntervalSince1970.truncatingRemainder(dividingBy: period)
+            let progress = (period - elapsed) / period
+            Canvas { canvas, size in
+                let rect = CGRect(x: 0, y: 0, width: size.width * progress, height: size.height)
+                canvas.fill(
+                    Path(roundedRect: rect, cornerRadius: 2),
+                    with: .color(progress > 0.4 ? .entePurple : .orange)
+                )
+            }
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+/// 置顶标记：右上角三角 + 图钉
+private struct PinnedCorner: View {
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Triangle()
+                .fill(Color.pinnedCorner)
+                .frame(width: 39, height: 39)
+            Image(systemName: "pin.fill")
+                .font(.system(size: 10))
+                .foregroundStyle(Color.entePurple)
+                .rotationEffect(.degrees(45))
+                .padding(6)
+        }
+        .accessibilityLabel("已置顶")
+    }
+
+    private struct Triangle: Shape {
+        func path(in rect: CGRect) -> Path {
+            Path { path in
+                path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+                path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+                path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+                path.closeSubpath()
+            }
+        }
+    }
+}
+
+/// 发行方图标。暂无品牌图标库，按 ente 的兜底样式显示首字母圆形头像
+struct IssuerAvatar: View {
+    let name: String
+    var size: CGFloat = 24
+
+    var body: some View {
+        if let initial {
+            Circle()
+                .fill(color)
+                .frame(width: size, height: size)
+                .overlay {
+                    Text(initial)
+                        .font(.system(size: size * 0.6))
+                        .foregroundStyle(.white)
+                }
+                .accessibilityHidden(true)
+        }
+    }
+
+    /// 首个字母或数字（跳过引号等符号）
+    private var initial: String? {
+        name.first { $0.isLetter || $0.isNumber }.map { String($0).uppercased() }
+    }
+
+    /// 稳定哈希取色：Swift 的 hashValue 每次启动随机，不能用
+    private var color: Color {
+        var hash: UInt32 = 0
+        for scalar in name.lowercased().unicodeScalars {
+            hash = hash &* 31 &+ scalar.value
+        }
+        return Color.avatarPalette[Int(hash % UInt32(Color.avatarPalette.count))]
     }
 }
 
@@ -147,6 +245,12 @@ enum CodeFormatter {
     /// 当前验证码，格式化为每 3 位一组，便于阅读
     static func formatted(entry: CodeEntry, at date: Date) -> String? {
         guard let code = try? entry.generateCode(at: date) else { return nil }
+        return format(code: code, type: entry.type)
+    }
+
+    /// 下一个验证码（TOTP 为下一周期，HOTP 为计数器 +1）
+    static func formattedNext(entry: CodeEntry, at date: Date) -> String? {
+        guard let code = try? entry.generateNextCode(at: date) else { return nil }
         return format(code: code, type: entry.type)
     }
 

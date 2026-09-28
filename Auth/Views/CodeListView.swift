@@ -145,8 +145,16 @@ struct CodeListView: View {
     private var codeList: some View {
         List {
             ForEach(filteredEntries) { entry in
-                CodeRowView(entry: entry, copiedEntryID: copiedEntryID)
+                CodeRowView(
+                    entry: entry,
+                    copiedEntryID: copiedEntryID,
+                    onCopyNext: { copyNextCode(of: entry) },
+                    onAdvanceCounter: { entry.counter += 1 }
+                )
                     .contentShape(Rectangle())
+                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                     .onTapGesture {
                         copyCode(of: entry)
                     }
@@ -191,10 +199,21 @@ struct CodeListView: View {
                     }
             }
         }
+        .listStyle(.plain)
     }
 
     private func copyCode(of entry: CodeEntry) {
         guard let code = try? entry.generateCode() else { return }
+        copyToPasteboard(code, entry: entry)
+    }
+
+    /// 提前复制下一周期的码（仅 TOTP/Steam，HOTP 用前进按钮）
+    private func copyNextCode(of entry: CodeEntry) {
+        guard entry.type != .hotp, let code = try? entry.generateNextCode() else { return }
+        copyToPasteboard(code, entry: entry)
+    }
+
+    private func copyToPasteboard(_ code: String, entry: CodeEntry) {
         // 验证码是敏感数据：不 Handoff 到其他设备，60 秒后自动过期
         UIPasteboard.general.setItems(
             [[UTType.plainText.identifier: code]],
@@ -213,10 +232,6 @@ struct CodeListView: View {
                 copiedEntryID = nil
                 copiedCode = nil
             }
-        }
-        if entry.type == .hotp {
-            // HOTP 按计数器推进：复制当前码后自增，下次显示下一个
-            entry.counter += 1
         }
     }
 
