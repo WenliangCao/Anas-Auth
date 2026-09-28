@@ -1,10 +1,12 @@
 // 从 simple-icons（CC0）生成品牌图标资源：
 //   Auth/BrandIcons.xcassets/brand/<slug>.imageset  矢量模板图
 //   Auth/Resources/BrandIcons.json                  名称、品牌色与匹配索引
-// 用法：npm pack simple-icons && tar xzf simple-icons-*.tgz
+// 用法：npm install --prefix Scripts
+//       npm pack simple-icons && tar xzf simple-icons-*.tgz
 //       node Scripts/generate_brand_icons.mjs ./package
 import fs from "node:fs";
 import path from "node:path";
+import svgpath from "svgpath";
 
 const pkg = process.argv[2];
 if (!pkg) throw new Error("usage: node generate_brand_icons.mjs <simple-icons package dir>");
@@ -23,6 +25,11 @@ fs.writeFileSync(
   JSON.stringify({ ...info, properties: { "provides-namespace": true } }, null, 2),
 );
 
+// Xcode 资源目录的 SVG 渲染器解析不了压缩写法的圆弧（如 "a1 1 0 00-4.8 1"，
+// flag 与坐标粘连），图形会错位、被裁切。统一转成绝对坐标并把圆弧改写成贝塞尔曲线。
+const normalizePaths = (svg) =>
+  svg.replace(/ d="([^"]+)"/g, (_, d) => ` d="${svgpath(d).abs().unarc().round(3).toString()}"`);
+
 // 匹配键：小写且只保留字母数字，如 "\"xAI\"" → "xai"
 const normalize = (s) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
 const lookup = {};
@@ -34,7 +41,8 @@ const addKey = (key, slug) => {
 for (const icon of icons) {
   const set = path.join(folder, `${icon.slug}.imageset`);
   fs.mkdirSync(set);
-  fs.copyFileSync(path.join(pkg, "icons", `${icon.slug}.svg`), path.join(set, `${icon.slug}.svg`));
+  const svg = fs.readFileSync(path.join(pkg, "icons", `${icon.slug}.svg`), "utf8");
+  fs.writeFileSync(path.join(set, `${icon.slug}.svg`), normalizePaths(svg));
   fs.writeFileSync(
     path.join(set, "Contents.json"),
     JSON.stringify(
