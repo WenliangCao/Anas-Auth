@@ -86,8 +86,10 @@ struct CodeRowView: View, @MainActor Equatable {
                 CodePair(entry: entry, date: .now, compact: compact, trailing: .advance(onAdvanceCounter))
                     .id(entry.counter)
             } else {
+                // 起点必须是当前周期的开始（过去的时间）：若用未来的边界做起点，
+                // 视图被重算时 context.date 会取到未来的边界，卡片提前显示下一个周期的码
                 TimelineView(.periodic(
-                    from: Self.nextBoundary(period: entry.period),
+                    from: Self.currentPeriodStart(period: entry.period),
                     by: TimeInterval(max(entry.period, 1))
                 )) { context in
                     CodePair(entry: entry, date: context.date, compact: compact, trailing: .nextCode(onCopyNext))
@@ -97,11 +99,10 @@ struct CodeRowView: View, @MainActor Equatable {
         .padding(.horizontal, 16)
     }
 
-    /// 下一个周期边界（对齐 Unix 时间戳，所有卡片同相位）
-    static func nextBoundary(period: Int) -> Date {
+    /// 当前周期的开始（对齐 Unix 时间戳，所有卡片同相位）
+    static func currentPeriodStart(period: Int, now: Date = .now) -> Date {
         let period = TimeInterval(max(period, 1))
-        let now = Date().timeIntervalSince1970
-        return Date(timeIntervalSince1970: (now / period).rounded(.up) * period)
+        return Date(timeIntervalSince1970: (now.timeIntervalSince1970 / period).rounded(.down) * period)
     }
 }
 
