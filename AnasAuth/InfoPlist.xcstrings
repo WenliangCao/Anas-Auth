@@ -16,6 +16,12 @@
             "state": "translated",
             "value": "Anas Auth"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anas Auth"
+          }
         }
       }
     },
@@ -30,6 +36,12 @@
           }
         },
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AnasAuth"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "AnasAuth"
@@ -52,6 +64,12 @@
             "state": "translated",
             "value": "需要摄像头权限来扫描二维码添加验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "需要相機權限來掃描 QR 碼加入驗證碼"
+          }
         }
       }
     },
@@ -69,6 +87,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "使用 Face ID 解锁你的验证码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Face ID 解鎖你的驗證碼"
           }
         }
       }

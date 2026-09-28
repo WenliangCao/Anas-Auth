@@ -8,12 +8,24 @@
             "state": "translated",
             "value": "6 位"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 位"
+          }
         }
       }
     },
     "7 digits": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 位"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "7 位"
@@ -28,6 +40,12 @@
             "state": "translated",
             "value": "8 位"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 位"
+          }
         }
       }
     },
@@ -37,6 +55,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "账号"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "帳號"
           }
         }
       }
@@ -48,6 +72,12 @@
             "state": "translated",
             "value": "账号名（如邮箱）"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "帳號名（如電子郵件）"
+          }
         }
       }
     },
@@ -57,6 +87,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "账号信息"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "帳號資訊"
           }
         }
       }
@@ -68,6 +104,12 @@
             "state": "translated",
             "value": "添加"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加入"
+          }
         }
       }
     },
@@ -77,6 +119,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "添加验证码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加入驗證碼"
           }
         }
       }
@@ -88,6 +136,12 @@
             "state": "translated",
             "value": "手动添加"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手動加入"
+          }
         }
       }
     },
@@ -97,6 +151,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "添加标签"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加入標籤"
           }
         }
       }
@@ -108,12 +168,24 @@
             "state": "translated",
             "value": "算法"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "演算法"
+          }
         }
       }
     },
     "All": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "全部"
@@ -128,6 +200,12 @@
             "state": "translated",
             "value": "请到系统设置中允许 Anas Auth 使用相机，然后返回重试。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請到系統設定中允許 Anas Auth 使用相機，然後返回重試。"
+          }
         }
       }
     },
@@ -137,6 +215,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "加密备份的密码丢失后无法恢复。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密備份的密碼丟失後無法恢復。"
           }
         }
       }
@@ -148,6 +232,12 @@
             "state": "translated",
             "value": "Anas Auth 是自由软件：你可以依据 GNU Affero 通用公共许可证第 3 版（AGPL-3.0）的条款使用、修改和再分发它。本程序不提供任何担保，详见许可证全文。本项目与 ente 无隶属关系。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anas Auth 是自由軟體：你可以依據 GNU Affero 通用公共授權條款第 3 版（AGPL-3.0）的條款使用、修改和再分發它。本程式不提供任何擔保，詳見授權條款全文。本專案與 ente 無隸屬關係。"
+          }
         }
       }
     },
@@ -157,6 +247,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anas Auth 以 AGPL-3.0 许可开源。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anas Auth 以 AGPL-3.0 授權開放原始碼。"
           }
         }
       }
@@ -168,6 +264,12 @@
             "state": "translated",
             "value": "应用锁"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 鎖定"
+          }
         }
       }
     },
@@ -177,6 +279,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "外观"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外觀"
           }
         }
       }
@@ -188,6 +296,12 @@
             "state": "translated",
             "value": "备份"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "備份"
+          }
         }
       }
     },
@@ -197,6 +311,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "备份密码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "備份密碼"
           }
         }
       }
@@ -208,6 +328,12 @@
             "state": "translated",
             "value": "Base32 密钥"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base32 金鑰"
+          }
         }
       }
     },
@@ -218,12 +344,24 @@
             "state": "translated",
             "value": "无法访问相机"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法取用相機"
+          }
         }
       }
     },
     "Cancel": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "取消"
@@ -238,6 +376,12 @@
             "state": "translated",
             "value": "更换图标"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更換圖示"
+          }
         }
       }
     },
@@ -247,6 +391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择文件"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇檔案"
           }
         }
       }
@@ -258,6 +408,12 @@
             "state": "translated",
             "value": "选择图标"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇圖示"
+          }
         }
       }
     },
@@ -267,6 +423,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择图片"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇圖片"
           }
         }
       }
@@ -278,6 +440,12 @@
             "state": "translated",
             "value": "要从 Google Authenticator 导入 %lld 个验证码吗？"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要從 Google Authenticator 匯入 %lld 個驗證碼嗎？"
+          }
         }
       }
     },
@@ -287,6 +455,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "紧凑"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊湊"
           }
         }
       }
@@ -298,6 +472,12 @@
             "state": "translated",
             "value": "紧凑模式下卡片更矮、字号更小，一屏能看到更多验证码。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊湊模式下卡片更矮、字號更小，一個畫面能看到更多驗證碼。"
+          }
         }
       }
     },
@@ -307,6 +487,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "再次输入密码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再次輸入密碼"
           }
         }
       }
@@ -318,6 +504,12 @@
             "state": "translated",
             "value": "已复制 %@"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已拷貝 %@"
+          }
         }
       }
     },
@@ -327,6 +519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已复制验证码 %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已拷貝驗證碼 %@"
           }
         }
       }
@@ -338,6 +536,12 @@
             "state": "translated",
             "value": "复制验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "拷貝驗證碼"
+          }
         }
       }
     },
@@ -347,6 +551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法解析选定的文件。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法解析選定的檔案。"
           }
         }
       }
@@ -358,6 +568,12 @@
             "state": "translated",
             "value": "无法读取所选文件。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法讀取所選檔案。"
+          }
         }
       }
     },
@@ -367,6 +583,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法识别"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法識別"
           }
         }
       }
@@ -378,6 +600,12 @@
             "state": "translated",
             "value": "基于计数器 (HOTP)"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "基於計數器 (HOTP)"
+          }
         }
       }
     },
@@ -387,6 +615,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "默认"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "預設"
           }
         }
       }
@@ -398,6 +632,12 @@
             "state": "translated",
             "value": "删除"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除"
+          }
         }
       }
     },
@@ -407,6 +647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "确定删除 %@？如果这是唯一的验证凭证，删除后可能无法登录该服务。此操作无法撤销。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確定刪除 %@？如果這是唯一的驗證憑證，刪除後可能無法登入該服務。此動作無法復原。"
           }
         }
       }
@@ -418,6 +664,12 @@
             "state": "translated",
             "value": "删除验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "刪除驗證碼"
+          }
         }
       }
     },
@@ -428,12 +680,24 @@
             "state": "translated",
             "value": "位数"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位數"
+          }
         }
       }
     },
     "Done": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "完成"
@@ -448,6 +712,12 @@
             "state": "translated",
             "value": "编辑"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "編輯"
+          }
         }
       }
     },
@@ -457,6 +727,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "加密备份"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密備份"
           }
         }
       }
@@ -468,6 +744,12 @@
             "state": "translated",
             "value": "ente 社区品牌图标"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ente 社群品牌圖示"
+          }
         }
       }
     },
@@ -477,6 +759,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ente 加密导出"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ente 加密匯出"
           }
         }
       }
@@ -488,6 +776,12 @@
             "state": "translated",
             "value": "手动输入"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手動輸入"
+          }
         }
       }
     },
@@ -497,6 +791,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "输入密码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "輸入密碼"
           }
         }
       }
@@ -508,6 +808,12 @@
             "state": "translated",
             "value": "请输入 Aegis 密码库的密码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請輸入 Aegis 密碼庫的密碼"
+          }
         }
       }
     },
@@ -517,6 +823,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请输入密码以解密 2FAS 备份"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請輸入密碼以解密 2FAS 備份"
           }
         }
       }
@@ -528,6 +840,12 @@
             "state": "translated",
             "value": "请输入密码以解密 andOTP 备份"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請輸入密碼以解密 andOTP 備份"
+          }
         }
       }
     },
@@ -537,6 +855,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "从 OTP Auth 导出加密备份，然后选择 .otpauthdb 或 .otpauthdp 文件。也支持单账户的 .otpauth 文件。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從 OTP Auth 匯出加密備份，然後選擇 .otpauthdb 或 .otpauthdp 檔案。也支援單帳戶的 .otpauth 檔案。"
           }
         }
       }
@@ -548,6 +872,12 @@
             "state": "translated",
             "value": "导出备份"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出備份"
+          }
         }
       }
     },
@@ -557,6 +887,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导出备份（%lld 条）"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出備份（%lld 條）"
           }
         }
       }
@@ -568,6 +904,12 @@
             "state": "translated",
             "value": "加密导出"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密匯出"
+          }
         }
       }
     },
@@ -577,6 +919,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导出失败：%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯出失敗：%@"
           }
         }
       }
@@ -588,6 +936,12 @@
             "state": "translated",
             "value": "不加密，直接导出"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不加密，直接匯出"
+          }
         }
       }
     },
@@ -597,6 +951,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "GNU AGPL-3.0 许可证全文"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU AGPL-3.0 授權條款全文"
           }
         }
       }
@@ -608,6 +968,12 @@
             "state": "translated",
             "value": "完整第三方声明"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完整第三方聲明"
+          }
         }
       }
     },
@@ -617,6 +983,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "隐藏密钥"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隱藏金鑰"
           }
         }
       }
@@ -628,6 +1000,12 @@
             "state": "translated",
             "value": "密码丢失后无法恢复备份。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼丟失後無法恢復備份。"
+          }
         }
       }
     },
@@ -637,6 +1015,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导入"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入"
           }
         }
       }
@@ -648,6 +1032,12 @@
             "state": "translated",
             "value": "导入完成"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入完成"
+          }
         }
       }
     },
@@ -657,6 +1047,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导入失败"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入失敗"
           }
         }
       }
@@ -668,6 +1064,12 @@
             "state": "translated",
             "value": "导入失败：无法读取文件。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入失敗：無法讀取檔案。"
+          }
         }
       }
     },
@@ -677,6 +1079,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "导入失败：文件内容不是支持的格式。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入失敗：檔案內容不是支援的格式。"
           }
         }
       }
@@ -688,6 +1096,12 @@
             "state": "translated",
             "value": "导入格式解析（参照 ente 实现）"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入格式解析（參照 ente 實作）"
+          }
         }
       }
     },
@@ -697,6 +1111,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "从备份文件导入"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從備份檔案匯入"
           }
         }
       }
@@ -708,6 +1128,12 @@
             "state": "translated",
             "value": "从其他应用导入"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從其他 App 匯入"
+          }
         }
       }
     },
@@ -717,6 +1143,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "从相册导入"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "從相簿匯入"
           }
         }
       }
@@ -728,6 +1160,12 @@
             "state": "translated",
             "value": "导入结果"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "匯入結果"
+          }
         }
       }
     },
@@ -737,6 +1175,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已导入 %lld 个验证码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已匯入 %lld 個驗證碼。"
           }
         }
       }
@@ -748,6 +1192,12 @@
             "state": "translated",
             "value": "已导入 %1$lld 个验证码，跳过 %2$lld 个已存在的。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已匯入 %1$lld 個驗證碼，跳過 %2$lld 個已存在的。"
+          }
         }
       }
     },
@@ -757,6 +1207,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "使用 2FAS 中的「设置 → 备份 → 导出」选项。\n\n如果备份已加密，需要输入密码来解密。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 2FAS 中的「設定 → 備份 → 匯出」選項。\n\n如果備份已加密，需要輸入密碼來解密。"
           }
         }
       }
@@ -768,6 +1224,12 @@
             "state": "translated",
             "value": "使用 Aegis 设置中的「导出密码库」选项。\n\n如果密码库已加密，需要输入密码库密码才能解密。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Aegis 設定中的「匯出密碼庫」選項。\n\n如果密碼庫已加密，需要輸入密碼庫密碼才能解密。"
+          }
         }
       }
     },
@@ -777,6 +1239,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "使用 andOTP 设置中的「备份」选项导出备份。\n\n如果备份已加密，需要输入备份密码才能解密。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 andOTP 設定中的「備份」選項匯出備份。\n\n如果備份已加密，需要輸入備份密碼才能解密。"
           }
         }
       }
@@ -788,6 +1256,12 @@
             "state": "translated",
             "value": "使用 Bitwarden 工具中的「导出密码库」选项，导入未加密的 JSON 文件。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Bitwarden 工具中的「匯出密碼庫」選項，匯入未加密的 JSON 檔案。"
+          }
         }
       }
     },
@@ -797,6 +1271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "在 Google Authenticator 中使用「转移账号」把账号导出为二维码，然后扫描二维码或从图片导入。账号较多时会生成多张二维码，需要全部扫完。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Google Authenticator 中使用「轉移帳號」把帳號匯出為 QR 碼，然後掃描 QR 碼或從圖片匯入。帳號較多時會生成多張 QR 碼，需要全部掃描完。"
           }
         }
       }
@@ -808,6 +1288,12 @@
             "state": "translated",
             "value": "使用 LastPass Authenticator 设置中的「转移账户」选项，然后点「将账户导出到文件」，导入下载的 JSON。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 LastPass Authenticator 設定中的「轉移帳戶」選項，然後點「將帳戶匯出到檔案」，匯入下載的 JSON。"
+          }
         }
       }
     },
@@ -817,6 +1303,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "使用 Proton Authenticator 设置中的「导出」选项导出验证码。\n\n如果导出文件设置了密码，需要输入密码才能解密。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Proton Authenticator 設定中的「匯出」選項匯出驗證碼。\n\n如果匯出檔案設定了密碼，需要輸入密碼才能解密。"
           }
         }
       }
@@ -828,6 +1320,12 @@
             "state": "translated",
             "value": "使用 Raivo 设置中的「Export OTPs to ZIP archive」选项。\n\n解压 zip 文件后导入其中的 JSON 文件。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Raivo 設定中的「Export OTPs to ZIP archive」選項。\n\n解壓縮 zip 檔案後匯入其中的 JSON 檔案。"
+          }
         }
       }
     },
@@ -837,6 +1335,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "密码不正确"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼不正確"
           }
         }
       }
@@ -848,6 +1352,12 @@
             "state": "translated",
             "value": "密码错误"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼錯誤"
+          }
         }
       }
     },
@@ -857,6 +1367,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "密码错误，请检查后重试。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼錯誤，請檢查後重試。"
           }
         }
       }
@@ -868,6 +1384,12 @@
             "state": "translated",
             "value": "密码不正确，导入失败。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼不正確，匯入失敗。"
+          }
         }
       }
     },
@@ -877,6 +1399,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "初始计数：%lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初始計數：%lld"
           }
         }
       }
@@ -888,6 +1416,12 @@
             "state": "translated",
             "value": "条目格式不对"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "項目格式不對"
+          }
         }
       }
     },
@@ -897,6 +1431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "HOTP 计数器无效：%lld"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HOTP 計數器無效：%lld"
           }
         }
       }
@@ -908,6 +1448,12 @@
             "state": "translated",
             "value": "位数无效：%lld"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位數無效：%lld"
+          }
         }
       }
     },
@@ -917,6 +1463,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "二维码无效：不是 Google Authenticator 的转移二维码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR 碼無效：不是 Google Authenticator 的轉移 QR 碼。"
           }
         }
       }
@@ -928,6 +1480,12 @@
             "state": "translated",
             "value": "无效密钥"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無效金鑰"
+          }
         }
       }
     },
@@ -937,6 +1495,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "发行方"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "發行方"
           }
         }
       }
@@ -948,6 +1512,12 @@
             "state": "translated",
             "value": "发行方（如 GitHub）"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "發行方（如 GitHub）"
+          }
         }
       }
     },
@@ -957,6 +1527,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "布局"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "佈局"
           }
         }
       }
@@ -968,6 +1544,12 @@
             "state": "translated",
             "value": "已锁定"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已鎖定"
+          }
         }
       }
     },
@@ -978,12 +1560,24 @@
             "state": "translated",
             "value": "缺少账号或密钥"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缺少帳號或金鑰"
+          }
         }
       }
     },
     "Most Used": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最常用"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "最常用"
@@ -998,6 +1592,12 @@
             "state": "translated",
             "value": "下一个"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一個"
+          }
         }
       }
     },
@@ -1007,6 +1607,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "下一个验证码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一個驗證碼"
           }
         }
       }
@@ -1018,6 +1624,12 @@
             "state": "translated",
             "value": "还没有验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "還沒有驗證碼"
+          }
         }
       }
     },
@@ -1027,6 +1639,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "图片中没有找到二维码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圖片中沒有找到 QR 碼。"
           }
         }
       }
@@ -1038,6 +1656,12 @@
             "state": "translated",
             "value": "解密所需内存不足，请关闭其他应用后重试。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解密所需記憶體不足，請關閉其他 App 後重試。"
+          }
         }
       }
     },
@@ -1048,12 +1672,24 @@
             "state": "translated",
             "value": "备注"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "備註"
+          }
         }
       }
     },
     "OK": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "好"
@@ -1068,6 +1704,12 @@
             "state": "translated",
             "value": "有一个条目无法解析：%@"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有一個項目無法解析：%@"
+          }
         }
       }
     },
@@ -1077,6 +1719,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "打开系统设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開系統設定"
           }
         }
       }
@@ -1088,6 +1736,12 @@
             "state": "translated",
             "value": "开源许可"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開放原始碼授權"
+          }
         }
       }
     },
@@ -1097,6 +1751,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "参数"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "參數"
           }
         }
       }
@@ -1108,6 +1768,12 @@
             "state": "translated",
             "value": "密码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼"
+          }
         }
       }
     },
@@ -1117,6 +1783,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "周期：%lld 秒"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "週期：%lld 秒"
           }
         }
       }
@@ -1128,6 +1800,12 @@
             "state": "translated",
             "value": "置顶"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "置頂"
+          }
         }
       }
     },
@@ -1137,6 +1815,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "已置顶"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已置頂"
           }
         }
       }
@@ -1148,6 +1832,12 @@
             "state": "translated",
             "value": "纯文本"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "純文字"
+          }
         }
       }
     },
@@ -1157,6 +1847,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "请检查您的密码并重试。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請檢查您的密碼並重試。"
           }
         }
       }
@@ -1168,6 +1864,12 @@
             "state": "translated",
             "value": "请稍候…"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請稍候…"
+          }
         }
       }
     },
@@ -1177,6 +1879,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "对准二维码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "對準 QR 碼"
           }
         }
       }
@@ -1188,12 +1896,24 @@
             "state": "translated",
             "value": "已收到 %1$lld/%2$lld 张二维码，请继续扫描或选择下一张。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已收到 %1$lld/%2$lld 張 QR 碼，請繼續掃描或選擇下一張。"
+          }
         }
       }
     },
     "Recently Used": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近使用"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "最近使用"
@@ -1208,6 +1928,12 @@
             "state": "translated",
             "value": "请扫描二维码或选择二维码图片。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請掃描 QR 碼或選擇 QR 碼圖片。"
+          }
         }
       }
     },
@@ -1217,6 +1943,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "扫描二维码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "掃描 QR 碼"
           }
         }
       }
@@ -1228,6 +1960,12 @@
             "state": "translated",
             "value": "搜索"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜尋"
+          }
         }
       }
     },
@@ -1238,12 +1976,24 @@
             "state": "translated",
             "value": "密钥"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰"
+          }
         }
       }
     },
     "Security": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安全"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "安全"
@@ -1258,6 +2008,12 @@
             "state": "translated",
             "value": "请选择一个包含以下格式的代码列表的文件：\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\n代码可以用逗号或换行符分隔。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請選擇一個包含以下格式的代碼清單的檔案：\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\n代碼可以用逗號或換行字元分隔。"
+          }
         }
       }
     },
@@ -1267,6 +2023,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择从 Ente 导出的 JSON 加密文件。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選擇從 Ente 匯出的 JSON 加密檔案。"
           }
         }
       }
@@ -1278,6 +2040,12 @@
             "state": "translated",
             "value": "设置密码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定密碼"
+          }
         }
       }
     },
@@ -1287,6 +2055,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "设置"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
           }
         }
       }
@@ -1298,6 +2072,12 @@
             "state": "translated",
             "value": "显示密钥"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顯示金鑰"
+          }
         }
       }
     },
@@ -1308,12 +2088,24 @@
             "state": "translated",
             "value": "simple-icons 品牌图标"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "simple-icons 品牌圖示"
+          }
         }
       }
     },
     "Sort By": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "排序方式"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "排序方式"
@@ -1328,12 +2120,24 @@
             "state": "translated",
             "value": "源代码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "原始碼"
+          }
         }
       }
     },
     "Steam": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steam"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "Steam"
@@ -1348,6 +2152,12 @@
             "state": "translated",
             "value": "swift-sodium / libsodium"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "swift-sodium / libsodium"
+          }
         }
       }
     },
@@ -1357,6 +2167,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "标签"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標籤"
           }
         }
       }
@@ -1368,6 +2184,12 @@
             "state": "translated",
             "value": "点右下角 + 扫码、手动输入或从相册导入你的第一个两步验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點一下右下角的 +，掃描 QR 碼、手動輸入或從相簿匯入你的第一個兩步驟驗證碼"
+          }
         }
       }
     },
@@ -1377,6 +2199,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "轻点复制验证码，长按查看更多操作"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點一下即可拷貝驗證碼，按住可查看更多操作"
           }
         }
       }
@@ -1388,6 +2216,12 @@
             "state": "translated",
             "value": "2FAS 备份解密后的内容无效。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2FAS 備份解密後的內容無效。"
+          }
         }
       }
     },
@@ -1397,6 +2231,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "andOTP 备份解密后的内容无效。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "andOTP 備份解密後的內容無效。"
           }
         }
       }
@@ -1408,6 +2248,12 @@
             "state": "translated",
             "value": "密码库解密后的内容无效。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼庫解密後的內容無效。"
+          }
         }
       }
     },
@@ -1417,6 +2263,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "2FAS 加密备份格式不对。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2FAS 加密備份格式不對。"
           }
         }
       }
@@ -1428,6 +2280,12 @@
             "state": "translated",
             "value": "文件不是有效的 JSON。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檔案不是有效的 JSON。"
+          }
         }
       }
     },
@@ -1437,6 +2295,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Google Authenticator 导出的批次信息无效。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Authenticator 匯出的批次資訊無效。"
           }
         }
       }
@@ -1448,6 +2312,12 @@
             "state": "translated",
             "value": "OTP Auth 备份内容无效。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 備份內容無效。"
+          }
         }
       }
     },
@@ -1457,6 +2327,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "OTP Auth 导出的加密格式不对。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 匯出的加密格式不對。"
           }
         }
       }
@@ -1468,6 +2344,12 @@
             "state": "translated",
             "value": "OTP Auth 导出内容无效。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 匯出內容無效。"
+          }
         }
       }
     },
@@ -1477,6 +2359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "用来解密导出的密码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用來解密匯出的密碼"
           }
         }
       }
@@ -1488,6 +2376,12 @@
             "state": "translated",
             "value": "两次输入的密码不一致"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "兩次輸入的密碼不一致"
+          }
         }
       }
     },
@@ -1497,6 +2391,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "二维码内容不是有效的验证码格式。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR 碼內容不是有效的驗證碼格式。"
           }
         }
       }
@@ -1508,6 +2408,12 @@
             "state": "translated",
             "value": "密钥不能为空"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰不能為空"
+          }
         }
       }
     },
@@ -1517,6 +2423,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "密钥无法解析"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰無法解析"
           }
         }
       }
@@ -1528,6 +2440,12 @@
             "state": "translated",
             "value": "密钥包含非法字符（同步或迁移时可能损坏）"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰包含非法字元（同步或遷移時可能損壞）"
+          }
         }
       }
     },
@@ -1537,6 +2455,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "密钥为空"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰為空"
           }
         }
       }
@@ -1548,6 +2472,12 @@
             "state": "translated",
             "value": "密钥不是有效的 Base32"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰不是有效的 Base32"
+          }
         }
       }
     },
@@ -1557,6 +2487,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "密钥不是有效的 Base32 编码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "金鑰不是有效的 Base32 編碼"
           }
         }
       }
@@ -1568,6 +2504,12 @@
             "state": "translated",
             "value": "所选文件不是 LastPass Authenticator 导出的 JSON。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是 LastPass Authenticator 匯出的 JSON。"
+          }
         }
       }
     },
@@ -1577,6 +2519,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "所选文件不是 Raivo 导出的 JSON。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是 Raivo 匯出的 JSON。"
           }
         }
       }
@@ -1588,6 +2536,12 @@
             "state": "translated",
             "value": "所选文件不是有效的 2FAS Authenticator 导出。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是有效的 2FAS Authenticator 匯出。"
+          }
         }
       }
     },
@@ -1597,6 +2551,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "所选文件不是有效的 OTP Auth 导出。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是有效的 OTP Auth 匯出。"
           }
         }
       }
@@ -1608,6 +2568,12 @@
             "state": "translated",
             "value": "所选文件不是有效的 Proton Authenticator 导出文件。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是有效的 Proton Authenticator 匯出檔案。"
+          }
         }
       }
     },
@@ -1617,6 +2583,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "所选文件不是 Aegis 导出的密码库。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是 Aegis 匯出的密碼庫。"
           }
         }
       }
@@ -1628,6 +2600,12 @@
             "state": "translated",
             "value": "所选文件不是 andOTP 备份。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是 andOTP 備份。"
+          }
         }
       }
     },
@@ -1637,6 +2615,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "所选文件不是未加密的 Bitwarden JSON 导出。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所選檔案不是未加密的 Bitwarden JSON 匯出。"
           }
         }
       }
@@ -1648,6 +2632,12 @@
             "state": "translated",
             "value": "密码库里没有条目。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密碼庫裡沒有項目。"
+          }
         }
       }
     },
@@ -1657,6 +2647,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "文件中没有可导入的验证码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "檔案中沒有可匯入的驗證碼。"
           }
         }
       }
@@ -1668,6 +2664,12 @@
             "state": "translated",
             "value": "这些验证码都已存在，没有新内容可添加。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這些驗證碼都已存在，沒有新內容可加入。"
+          }
         }
       }
     },
@@ -1677,6 +2679,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "第三方组件"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第三方元件"
           }
         }
       }
@@ -1688,6 +2696,12 @@
             "state": "translated",
             "value": "这张二维码属于另一次 Google Authenticator 导出。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這張 QR 碼屬於另一次 Google Authenticator 匯出。"
+          }
         }
       }
     },
@@ -1697,6 +2711,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "暂不支持该版本的 2FAS 导出（schemaVersion %lld）。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫不支援該版本的 2FAS 匯出（schemaVersion %lld）。"
           }
         }
       }
@@ -1708,6 +2728,12 @@
             "state": "translated",
             "value": "暂不支持该版本的 OTP Auth 导出（%@）。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫不支援該版本的 OTP Auth 匯出（%@）。"
+          }
         }
       }
     },
@@ -1717,6 +2743,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "基于时间 (TOTP)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "基於時間 (TOTP)"
           }
         }
       }
@@ -1728,6 +2760,12 @@
             "state": "translated",
             "value": "图标中的商标归各自所有者，仅用于标识对应服务。"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "圖示中的商標歸各自所有者，僅用於識別對應服務。"
+          }
         }
       }
     },
@@ -1737,6 +2775,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "重试"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重試"
           }
         }
       }
@@ -1748,12 +2792,24 @@
             "state": "translated",
             "value": "类型"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "類型"
+          }
         }
       }
     },
     "unknown": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "未知"
@@ -1768,6 +2824,12 @@
             "state": "translated",
             "value": "解锁"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解鎖"
+          }
         }
       }
     },
@@ -1777,6 +2839,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "解锁以查看你的验证码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解鎖以查看你的驗證碼"
           }
         }
       }
@@ -1788,6 +2856,12 @@
             "state": "translated",
             "value": "取消置顶"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消置頂"
+          }
         }
       }
     },
@@ -1797,6 +2871,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "无法解析的条目"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法解析的項目"
           }
         }
       }
@@ -1808,6 +2888,12 @@
             "state": "translated",
             "value": "不支持的算法"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支援的演算法"
+          }
         }
       }
     },
@@ -1817,6 +2903,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "不支持的验证码类型"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支援的驗證碼類型"
           }
         }
       }
@@ -1828,6 +2920,12 @@
             "state": "translated",
             "value": "不支持的验证码类型：%@"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支援的驗證碼類型：%@"
+          }
         }
       }
     },
@@ -1838,12 +2936,24 @@
             "state": "translated",
             "value": "验证身份后查看你的验证码"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "驗證身份後查看你的驗證碼"
+          }
         }
       }
     },
     "Version": {
       "localizations": {
         "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本"
+          }
+        },
+        "zh-Hant": {
           "stringUnit": {
             "state": "translated",
             "value": "版本"
@@ -1858,6 +2968,12 @@
             "state": "translated",
             "value": "查看条目"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看項目"
+          }
         }
       }
     },
@@ -1868,6 +2984,12 @@
             "state": "translated",
             "value": "通常在开启两步验证的页面可以找到，形如 JBSW Y3DP EHPK 3PXP"
           }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通常在開啟兩步驟驗證的頁面可以找到，形如 JBSW Y3DP EHPK 3PXP"
+          }
         }
       }
     },
@@ -1877,6 +2999,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "暂不支持 zip 文件，请先解压再导入其中的 JSON 文件。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫不支援 zip 檔案，請先解壓縮再匯入其中的 JSON 檔案。"
           }
         }
       }
