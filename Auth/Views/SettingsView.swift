@@ -58,7 +58,14 @@ struct SettingsView: View {
                     Button {
                         showingImporter = true
                     } label: {
-                        Label("从文件导入", systemImage: "square.and.arrow.down")
+                        Label("从备份文件导入", systemImage: "square.and.arrow.down")
+                    }
+                    .foregroundStyle(.primary)
+
+                    NavigationLink {
+                        ImportSourcesView()
+                    } label: {
+                        Label("从其他应用导入", systemImage: "arrow.down.app")
                     }
                     .foregroundStyle(.primary)
                 } header: {
