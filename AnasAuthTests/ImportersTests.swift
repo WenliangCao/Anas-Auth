@@ -121,8 +121,16 @@ struct ImportersTests {
             try AegisImporter.parseEntries(db)
         } throws: { error in
             guard case .invalidEntry(let entry, _) = error as? ImportProviderError else { return false }
-            return entry.contains("yandex")
+            return entry.contains("yandex") && !entry.contains("JBSWY3DPEHPK3PXP")
         }
+    }
+
+    /// 展示给用户的出错条目不带密钥
+    @Test func invalidEntryDescriptionRedactsSecrets() {
+        let entry: [String: Any] = ["login": ["totp": "otpauth://totp/x?secret=JBSWY3DPEHPK3PXP"], "name": "Site"]
+        let description = ImportEntry.describe(entry)
+        #expect(description.contains("Site") && !description.contains("JBSWY3DPEHPK3PXP"))
+        #expect(ImportEntry.describe("otpauth://totp/x?secret=JBSWY3DPEHPK3PXP&issuer=X") == "otpauth://totp/x?secret=•••&issuer=X")
     }
 
     // MARK: - 2FAS

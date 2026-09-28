@@ -122,12 +122,32 @@ enum ImportEntry {
     }
 
     static func describe(_ entry: Any) -> String {
+        let entry = redact(entry)
         if let string = entry as? String { return string }
         if JSONSerialization.isValidJSONObject(entry),
            let data = try? JSONSerialization.data(withJSONObject: entry, options: [.prettyPrinted, .sortedKeys]) {
             return String(decoding: data, as: UTF8.self)
         }
         return String(describing: entry)
+    }
+
+    /// 出错条目会展示给用户（可能被截图分享），密钥类字段与 URL 里的 secret 参数一律打码
+    private static let sensitiveKeys = ["secret", "totp", "seed", "key", "password", "token"]
+
+    static func redact(_ value: Any) -> Any {
+        switch value {
+        case let dictionary as [String: Any]:
+            dictionary.reduce(into: [String: Any]()) { result, pair in
+                let key = pair.key.lowercased()
+                result[pair.key] = sensitiveKeys.contains(where: key.contains) ? "•••" : redact(pair.value)
+            }
+        case let array as [Any]:
+            array.map(redact)
+        case let string as String:
+            string.replacingOccurrences(of: #"(?i)(secret=)[^&\s]*"#, with: "$1•••", options: .regularExpression)
+        default:
+            value
+        }
     }
 }
 
