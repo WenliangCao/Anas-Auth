@@ -14,6 +14,8 @@ struct CodeListView: View {
     @State private var copiedEntryID: UUID?
     @State private var copiedCode: String?
     @State private var copyFeedbackTask: Task<Void, Never>?
+    /// 每次复制 +1，作为触感反馈的触发器（连续复制同一条也会震，反馈消失时不会震）
+    @State private var copyCount = 0
     @State private var entryToDelete: CodeEntry?
     @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
     @AppStorage("codeLayout") private var layout: CodeLayout = .standard
@@ -81,7 +83,7 @@ struct CodeListView: View {
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
             }
-            .sensoryFeedback(.success, trigger: copiedEntryID)
+            .sensoryFeedback(.success, trigger: copyCount)
             .overlay(alignment: .top) {
                 if let copiedCode {
                     copiedToast(code: copiedCode)
@@ -246,6 +248,7 @@ struct CodeListView: View {
             [[UTType.plainText.identifier: code]],
             options: [.localOnly: true, .expirationDate: Date().addingTimeInterval(60)]
         )
+        copyCount += 1
         // 行内淡出反馈 + 顶部 toast，1.5 秒后消失
         withAnimation(.snappy(duration: 0.25)) {
             copiedEntryID = entry.id
