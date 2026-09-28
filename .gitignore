@@ -7,3 +7,6 @@ xcuserdata/
 .swiftpm/
 Scripts/node_modules/
 Scripts/package-lock.json
+
+# 图标采集的中间产物，只留在本地
+IconSourcing/
