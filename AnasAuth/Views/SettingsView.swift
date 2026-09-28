@@ -91,6 +91,11 @@ struct SettingsView: View {
 
                 Section {
                     LabeledContent("版本", value: appVersion)
+                    NavigationLink("开源许可") {
+                        LicensesView()
+                    }
+                } footer: {
+                    Text("Anas Auth 以 AGPL-3.0 许可开源。")
                 }
             }
             .navigationTitle("设置")

@@ -46,6 +46,7 @@ Our AGPL-3.0 commitments:
 - **The complete source is public.** Everything needed to build the app is in this repository.
 - **No additional restrictions.** You may use, study, modify and redistribute this code under AGPL-3.0. If you distribute a modified version, it must also be under AGPL-3.0 and its source must be made available.
 - **Notices are kept.** Copyright and license notices from ente and from all other third-party material are preserved.
+- **App Store builds.** The App Store version is distributed under Apple's Standard EULA, which explicitly allows whatever the licenses of included open-source components permit. Your rights under AGPL-3.0 are not limited by it. The same notices are shown in the app under *Settings → 开源许可*.
 
 Brand icons are trademarks of their respective owners. They are used only to identify the corresponding services and do not imply endorsement.
 
@@ -80,5 +81,6 @@ Anas Auth 是一个用 SwiftUI 原生编写的 iOS 两步验证 App。
 - 构建 App 所需的完整源代码都公开在本仓库。
 - 不附加任何额外限制。
 - 保留 ente 及其他第三方资源的版权与许可声明。
+- App Store 版本使用 Apple 标准 EULA，该协议明确允许开源组件许可证所允许的一切，不限制你依据 AGPL-3.0 享有的权利；App 内「设置 → 开源许可」有同样的声明。
 
 第三方资源清单见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
