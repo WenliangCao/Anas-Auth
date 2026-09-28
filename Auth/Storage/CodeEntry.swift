@@ -16,6 +16,8 @@ final class CodeEntry {
     var typeRaw: String = OTPType.totp.rawValue
     var note: String = ""
     var pinned: Bool = false
+    /// 首页标签筛选用（对齐 ente 的 tags）
+    var tags: [String] = []
     var createdAt: Date = Date()
     /// 复制次数与最近复制时间，用于"最常用/最近使用"排序
     var tapCount: Int = 0
@@ -33,6 +35,7 @@ final class CodeEntry {
         type: OTPType = .totp,
         note: String = "",
         pinned: Bool = false,
+        tags: [String] = [],
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -46,6 +49,7 @@ final class CodeEntry {
         self.typeRaw = type.rawValue
         self.note = note
         self.pinned = pinned
+        self.tags = tags
         self.createdAt = createdAt
     }
 
@@ -61,7 +65,8 @@ final class CodeEntry {
             counter: code.counter,
             type: code.type,
             note: code.note,
-            pinned: code.pinned
+            pinned: code.pinned,
+            tags: code.tags
         )
     }
 
@@ -99,7 +104,8 @@ final class CodeEntry {
             counter: counter,
             type: type,
             note: note,
-            pinned: pinned
+            pinned: pinned,
+            tags: tags
         )
     }
 }

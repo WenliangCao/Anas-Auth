@@ -18,11 +18,23 @@ struct CodeListView: View {
     @State private var copyFeedbackTask: Task<Void, Never>?
     @State private var entryToDelete: CodeEntry?
     @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
+    @State private var selectedTag: String?
+
+    /// 所有条目出现过的标签，按自然顺序
+    private var allTags: [String] {
+        Set(entries.flatMap(\.tags)).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
+    }
+
+    /// 选中的标签被删光后自动回到「全部」
+    private var activeTag: String? {
+        selectedTag.flatMap { allTags.contains($0) ? $0 : nil }
+    }
 
     private var filteredEntries: [CodeEntry] {
+        let tagged = activeTag.map { tag in entries.filter { $0.tags.contains(tag) } } ?? entries
         let filtered = searchText.isEmpty
-            ? entries
-            : entries.filter {
+            ? tagged
+            : tagged.filter {
                 $0.issuer.localizedCaseInsensitiveContains(searchText)
                     || $0.accountName.localizedCaseInsensitiveContains(searchText)
             }
@@ -58,6 +70,12 @@ struct CodeListView: View {
                     }
                 } else {
                     codeList
+                }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if !entries.isEmpty {
+                    TagFilterBar(tags: allTags, selectedTag: $selectedTag)
+                        .background(Color(.systemBackground))
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

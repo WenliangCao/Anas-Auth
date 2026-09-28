@@ -84,7 +84,8 @@ enum ImportService {
                 counter: exported.counter,
                 type: OTPType(rawValue: exported.type.lowercased()) ?? .totp,
                 note: exported.note,
-                pinned: exported.pinned
+                pinned: exported.pinned,
+                tags: exported.tags ?? []
             )
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }

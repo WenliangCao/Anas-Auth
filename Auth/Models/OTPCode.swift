@@ -15,6 +15,7 @@ struct OTPCode: Identifiable, Hashable, Sendable {
     var type: OTPType = .totp
     var note: String = ""
     var pinned: Bool = false
+    var tags: [String] = []
 
     var displayName: String {
         accountName.isEmpty ? issuer : "\(issuer) (\(accountName))"

@@ -14,6 +14,8 @@ struct EditCodeView: View {
     @State private var accountName = ""
     @State private var note = ""
     @State private var pinned = false
+    @State private var tags: [String] = []
+    @State private var newTag = ""
     @State private var algorithm: OTPAlgorithm = .sha1
     @State private var digits = OTPGenerator.defaultDigits
     @State private var period = OTPGenerator.defaultPeriod
@@ -32,6 +34,16 @@ struct EditCodeView: View {
                     TextField("备注（可选）", text: $note, axis: .vertical)
                         .lineLimit(1...4)
                     Toggle("置顶", isOn: $pinned)
+                }
+
+                Section("标签") {
+                    ForEach(tags, id: \.self) { tag in
+                        Text(tag)
+                    }
+                    .onDelete { tags.remove(atOffsets: $0) }
+                    TextField("添加标签", text: $newTag)
+                        .submitLabel(.done)
+                        .onSubmit(addTag)
                 }
 
                 if entry.type != .steam {
@@ -70,6 +82,7 @@ struct EditCodeView: View {
                 accountName = entry.accountName
                 note = entry.note
                 pinned = entry.pinned
+                tags = entry.tags
                 algorithm = entry.algorithm
                 digits = entry.digits
                 period = entry.period
@@ -77,11 +90,21 @@ struct EditCodeView: View {
         }
     }
 
+    /// 去掉首尾空格，忽略空值与重复
+    private func addTag() {
+        let tag = newTag.trimmingCharacters(in: .whitespaces)
+        newTag = ""
+        guard !tag.isEmpty, !tags.contains(tag) else { return }
+        tags.append(tag)
+    }
+
     private func save() {
         entry.issuer = issuer.trimmingCharacters(in: .whitespaces)
         entry.accountName = accountName.trimmingCharacters(in: .whitespaces)
         entry.note = note
         entry.pinned = pinned
+        addTag()
+        entry.tags = tags
         entry.algorithm = algorithm
         entry.digits = digits
         entry.period = period

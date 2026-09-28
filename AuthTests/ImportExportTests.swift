@@ -111,7 +111,8 @@ struct ImportExportTests {
     @Test func jsonExportImportRoundTrip() throws {
         let originals = [
             OTPCode(issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP",
-                    algorithm: .sha256, digits: 8, period: 45, note: "工作号", pinned: true),
+                    algorithm: .sha256, digits: 8, period: 45, note: "工作号", pinned: true,
+                    tags: ["工作", "开发"]),
             OTPCode(issuer: "Steam", accountName: "gaben", secret: "ABCDEF234567",
                     type: .steam),
         ]
@@ -123,7 +124,20 @@ struct ImportExportTests {
         #expect(imported[0].algorithm == .sha256)
         #expect(imported[0].note == "工作号")
         #expect(imported[0].pinned)
+        #expect(imported[0].tags == ["工作", "开发"])
         #expect(imported[1].type == .steam)
+    }
+
+    /// 加标签功能之前导出的文件没有 tags 字段，仍能导入
+    @Test func importsLegacyJSONWithoutTags() throws {
+        let legacy = """
+        {"version":1,"exportedAt":"2026-01-01T00:00:00Z","codes":[{"issuer":"GitHub",\
+        "accountName":"alice","secret":"JBSWY3DPEHPK3PXP","algorithm":"sha1","digits":6,\
+        "period":30,"counter":0,"type":"totp","note":"","pinned":false}]}
+        """
+        let imported = try ImportService.importCodes(from: legacy)
+        #expect(imported.count == 1)
+        #expect(imported[0].tags.isEmpty)
     }
 
     @Test func otpAuthTextExportParses() throws {

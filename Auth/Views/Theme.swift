@@ -20,6 +20,13 @@ extension Color {
             : UIColor(red: 0xF9 / 255, green: 0xEC / 255, blue: 0xFF / 255, alpha: 1)
     })
 
+    /// 未选中的标签底色
+    static let tagChipUnselected = Color(UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor(red: 0x1C / 255, green: 0x0F / 255, blue: 0x22 / 255, alpha: 1)
+            : UIColor(red: 0xFC / 255, green: 0xF5 / 255, blue: 0xFF / 255, alpha: 1)
+    })
+
     /// 悬浮添加按钮：浅色模式深底白字，深色模式反之
     static let fabBackground = Color(UIColor { traits in
         traits.userInterfaceStyle == .dark
