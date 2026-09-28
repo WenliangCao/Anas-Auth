@@ -1,7 +1,9 @@
 import SwiftUI
 import SwiftData
 
-/// 编辑已有条目。改动先落在本地副本，点"完成"才一次性写回 SwiftData：
+/// 编辑已有条目，字段对齐 ente：发行方、密钥、账号、备注、标签。
+/// 算法、位数、周期由导入时决定，不允许手动修改。
+/// 改动先落在本地副本，点"完成"才一次性写回 SwiftData：
 /// - 输入过程中不触发 CloudKit 同步，避免产生大量中间记录
 /// - 支持随手取消（下滑或取消按钮），库保持原样
 struct EditCodeView: View {
@@ -11,29 +13,69 @@ struct EditCodeView: View {
 
     // 本地编辑副本
     @State private var issuer = ""
+    @State private var secret = ""
     @State private var accountName = ""
     @State private var note = ""
-    @State private var pinned = false
     @State private var tags: [String] = []
     @State private var newTag = ""
-    @State private var algorithm: OTPAlgorithm = .sha1
-    @State private var digits = OTPGenerator.defaultDigits
-    @State private var period = OTPGenerator.defaultPeriod
+    @State private var showsSecret = false
+
+    private var sanitizedSecret: String {
+        OTPAuthURLParser.sanitizeSecret(secret)
+    }
+
+    private var isSecretValid: Bool {
+        !sanitizedSecret.isEmpty && (try? Base32.decode(sanitizedSecret)) != nil
+    }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("账号信息") {
+                Section("发行方") {
                     TextField("发行方", text: $issuer)
-                    TextField("账号名", text: $accountName)
+                }
+
+                Section {
+                    HStack {
+                        Group {
+                            if showsSecret {
+                                TextField("密钥", text: $secret)
+                            } else {
+                                SecureField("密钥", text: $secret)
+                            }
+                        }
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
+                        .font(.body.monospaced())
+
+                        Button {
+                            showsSecret.toggle()
+                        } label: {
+                            Image(systemName: showsSecret ? "eye" : "eye.slash")
+                                .foregroundStyle(.secondary)
+                        }
+                        .buttonStyle(.borderless)
+                        .tint(.secondary)
+                        .accessibilityLabel(showsSecret ? "隐藏密钥" : "显示密钥")
+                    }
+                } header: {
+                    Text("密钥")
+                } footer: {
+                    if !isSecretValid {
+                        Text(secret.isEmpty ? "密钥不能为空" : "密钥不是有效的 Base32 编码")
+                            .foregroundStyle(.red)
+                    }
+                }
+
+                Section("账号") {
+                    TextField("账号", text: $accountName)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                 }
 
                 Section("备注") {
-                    TextField("备注（可选）", text: $note, axis: .vertical)
-                        .lineLimit(1...4)
-                    Toggle("置顶", isOn: $pinned)
+                    TextField("备注", text: $note, axis: .vertical)
+                        .lineLimit(3...6)
                 }
 
                 Section("标签") {
@@ -45,26 +87,9 @@ struct EditCodeView: View {
                         .submitLabel(.done)
                         .onSubmit(addTag)
                 }
-
-                if entry.type != .steam {
-                    Section("参数") {
-                        Picker("算法", selection: $algorithm) {
-                            ForEach(OTPAlgorithm.allCases, id: \.self) { algorithm in
-                                Text(algorithm.displayName).tag(algorithm)
-                            }
-                        }
-                        Picker("位数", selection: $digits) {
-                            Text("6 位").tag(6)
-                            Text("7 位").tag(7)
-                            Text("8 位").tag(8)
-                        }
-                        if entry.type == .totp {
-                            Stepper("周期：\(period) 秒", value: $period, in: 5...300, step: 5)
-                        }
-                    }
-                }
             }
             .navigationTitle("编辑")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }
@@ -74,18 +99,16 @@ struct EditCodeView: View {
                         save()
                         dismiss()
                     }
+                    .disabled(!isSecretValid)
                 }
             }
             .onAppear {
                 // 从库中的模型拷贝出编辑副本
                 issuer = entry.issuer
+                secret = entry.secret
                 accountName = entry.accountName
                 note = entry.note
-                pinned = entry.pinned
                 tags = entry.tags
-                algorithm = entry.algorithm
-                digits = entry.digits
-                period = entry.period
             }
         }
     }
@@ -99,15 +122,12 @@ struct EditCodeView: View {
     }
 
     private func save() {
+        addTag()
         entry.issuer = issuer.trimmingCharacters(in: .whitespaces)
+        entry.secret = sanitizedSecret
         entry.accountName = accountName.trimmingCharacters(in: .whitespaces)
         entry.note = note
-        entry.pinned = pinned
-        addTag()
         entry.tags = tags
-        entry.algorithm = algorithm
-        entry.digits = digits
-        entry.period = period
         try? modelContext.save()
     }
 }
