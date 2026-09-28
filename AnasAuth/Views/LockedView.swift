@@ -12,7 +12,7 @@ struct LockedView: View {
             Button("解锁") {
                 Task { await unlock() }
             }
-            .buttonStyle(.glass)
+            .glassButtonStyle()
         }
         .task {
             await unlock()

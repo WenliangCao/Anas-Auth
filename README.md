@@ -52,7 +52,7 @@ Brand icons are trademarks of their respective owners. They are used only to ide
 
 ## Building
 
-Requirements: Xcode 27 or later. The app targets iOS 27.
+Requirements: Xcode 27 or later. The app runs on iPhone and iPad with iOS 18 or later.
 
 1. Open `AnasAuth.xcodeproj`.
 2. Choose your own development team under *Signing & Capabilities*. iCloud sync requires a CloudKit container on your team.

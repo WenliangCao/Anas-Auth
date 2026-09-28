@@ -9,7 +9,7 @@ struct TagFilterBar: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            GlassEffectContainer {
+            GlassContainer {
                 HStack(spacing: 8) {
                     TagChip(title: "全部", isSelected: selectedTag == nil) {
                         selectedTag = nil
@@ -38,13 +38,15 @@ private struct TagChip: View {
     var body: some View {
         if isSelected {
             Button(title, action: action)
-                .buttonStyle(.glassProminent)
+                .glassProminentButtonStyle()
+                .buttonBorderShape(.capsule)
                 .tint(.primary)
                 .foregroundStyle(Color(.systemBackground))
                 .accessibilityAddTraits(.isSelected)
         } else {
             Button(title, action: action)
-                .buttonStyle(.glass)
+                .glassButtonStyle()
+                .buttonBorderShape(.capsule)
                 .foregroundStyle(.primary)
         }
     }

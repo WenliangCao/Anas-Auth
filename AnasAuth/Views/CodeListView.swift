@@ -72,13 +72,9 @@ struct CodeListView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            // 原生搜索（iOS 26+ iPhone 规范）：底栏里的搜索按钮，点击后由系统在键盘上方展开
             .searchable(text: $searchText, prompt: "搜索")
-            .searchToolbarBehavior(.minimize)
-            .toolbar {
-                topBar
-                bottomBar
-            }
+            .toolbar { topBar }
+            .modifier(BottomBar())
             .sheet(item: $entryToEdit) { entry in
                 EditCodeView(entry: entry)
             }
@@ -143,16 +139,6 @@ struct CodeListView: View {
         }
     }
 
-    /// 底栏：左侧系统搜索按钮，右侧添加菜单
-    @ToolbarContentBuilder
-    private var bottomBar: some ToolbarContent {
-        DefaultToolbarItem(kind: .search, placement: .bottomBar)
-        ToolbarSpacer(placement: .bottomBar)
-        ToolbarItem(placement: .bottomBar) {
-            AddCodeMenu()
-        }
-    }
-
     private var showDeleteConfirmation: Binding<Bool> {
         Binding(
             get: { entryToDelete != nil },
@@ -198,7 +184,7 @@ struct CodeListView: View {
             }
             .padding(.top, 8)
         }
-        .scrollEdgeEffectStyle(.soft, for: .top)
+        .softTopScrollEdge()
     }
 
     private func codeCard(_ entry: CodeEntry) -> some View {
@@ -285,3 +271,27 @@ struct CodeListView: View {
     }
 }
 
+/// 底栏。iOS 26+：原生搜索按钮（点击后由系统在键盘上方展开）+ 添加菜单；
+/// iOS 18–25：搜索框由系统放在导航栏下方，底栏只放添加菜单
+private struct BottomBar: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+                .searchToolbarBehavior(.minimize)
+                .toolbar {
+                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
+                    ToolbarSpacer(placement: .bottomBar)
+                    ToolbarItem(placement: .bottomBar) {
+                        AddCodeMenu()
+                    }
+                }
+        } else {
+            content.toolbar {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    AddCodeMenu()
+                }
+            }
+        }
+    }
+}
