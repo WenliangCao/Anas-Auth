@@ -30,6 +30,7 @@ struct CodeListView: View {
     @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
     @AppStorage("codeLayout") private var layout: CodeLayout = .standard
     @State private var selectedTag: String?
+    @State private var saveError: String?
 
     /// 所有条目出现过的标签，按自然顺序
     private var allTags: [String] {
@@ -119,6 +120,11 @@ struct CodeListView: View {
                 if let entry = entryToDelete {
                     Text("Delete \(entry.displayName)? If this is your only way to sign in, you may lose access to the account. This can’t be undone.")
                 }
+            }
+            .alert("Couldn’t Save", isPresented: showSaveError) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(saveError ?? "")
             }
         }
     }
@@ -265,7 +271,9 @@ struct CodeListView: View {
     }
 
     private func advanceCounter(of entry: CodeEntry) {
-        if entry.counter < .max { entry.counter += 1 }
+        guard entry.counter < .max else { return }
+        entry.counter += 1
+        persist()
     }
 
     private func copyToPasteboard(_ code: String, entry: CodeEntry) {
@@ -294,19 +302,36 @@ struct CodeListView: View {
     }
 
     private func flushUsage() {
+        guard !pendingUsage.isEmpty else { return }
         for usage in pendingUsage.values where !usage.entry.isDeleted {
             usage.entry.tapCount += usage.taps
             usage.entry.lastUsedAt = usage.lastUsedAt
         }
         pendingUsage = [:]
+        persist()
     }
 
     private func togglePin(_ entry: CodeEntry) {
         entry.pinned.toggle()
+        persist()
     }
 
     private func delete(_ entry: CodeEntry) {
         modelContext.delete(entry)
+        persist()
+    }
+
+    /// 立即保存，不依赖自动保存（强制退出时可能来不及）；失败时库已回滚，提示用户
+    private func persist() {
+        do {
+            try modelContext.saveOrRollback()
+        } catch {
+            saveError = CodeStore.saveFailureMessage(error)
+        }
+    }
+
+    private var showSaveError: Binding<Bool> {
+        Binding(get: { saveError != nil }, set: { if !$0 { saveError = nil } })
     }
 }
 
