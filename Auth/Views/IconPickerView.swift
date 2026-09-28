@@ -76,7 +76,7 @@ struct IconPickerView: View {
             .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 16))
             .overlay {
                 if isSelected {
-                    RoundedRectangle(cornerRadius: 16).strokeBorder(Color.accentColor, lineWidth: 2)
+                    RoundedRectangle(cornerRadius: 16).strokeBorder(Color.primary, lineWidth: 2)
                 }
             }
         }

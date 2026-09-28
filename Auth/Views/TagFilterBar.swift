@@ -1,6 +1,7 @@
 import SwiftUI
 
 /// 首页顶部的标签筛选条（对齐 ente）：「全部」+ 各标签，横向滚动。
+/// 用原生 Liquid Glass 按钮，不加强调色；选中的标签用突出样式。
 /// 再次点选中的标签会取消筛选，回到「全部」。
 struct TagFilterBar: View {
     let tags: [String]
@@ -8,18 +9,21 @@ struct TagFilterBar: View {
 
     var body: some View {
         ScrollView(.horizontal) {
-            HStack(spacing: 8) {
-                TagChip(title: "全部", isSelected: selectedTag == nil) {
-                    selectedTag = nil
-                }
-                ForEach(tags, id: \.self) { tag in
-                    TagChip(title: tag, isSelected: selectedTag == tag) {
-                        selectedTag = selectedTag == tag ? nil : tag
+            GlassEffectContainer {
+                HStack(spacing: 8) {
+                    TagChip(title: "全部", isSelected: selectedTag == nil) {
+                        selectedTag = nil
+                    }
+                    ForEach(tags, id: \.self) { tag in
+                        TagChip(title: tag, isSelected: selectedTag == tag) {
+                            selectedTag = selectedTag == tag ? nil : tag
+                        }
                     }
                 }
+                .padding(.horizontal, 16)
+                // 给玻璃的阴影留出空间，避免被滚动视图裁掉
+                .padding(.vertical, 6)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 4)
         }
         .scrollIndicators(.hidden)
         .sensoryFeedback(.selection, trigger: selectedTag)
@@ -32,19 +36,16 @@ private struct TagChip: View {
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.body)
-                .lineLimit(1)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 10)
-                .foregroundStyle(isSelected ? Color.white : Color.primary)
-                .background(isSelected ? Color.entePurple : Color.tagChipUnselected, in: Capsule())
-                .overlay {
-                    Capsule().strokeBorder(Color.entePurple.opacity(isSelected ? 0 : 0.2))
-                }
+        if isSelected {
+            Button(title, action: action)
+                .buttonStyle(.glassProminent)
+                .tint(.primary)
+                .foregroundStyle(Color(.systemBackground))
+                .accessibilityAddTraits(.isSelected)
+        } else {
+            Button(title, action: action)
+                .buttonStyle(.glass)
+                .foregroundStyle(.primary)
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

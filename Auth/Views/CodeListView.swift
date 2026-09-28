@@ -72,12 +72,6 @@ struct CodeListView: View {
                     codeList
                 }
             }
-            .safeAreaInset(edge: .top, spacing: 0) {
-                if !entries.isEmpty {
-                    TagFilterBar(tags: allTags, selectedTag: $selectedTag)
-                        .background(Color(.systemBackground))
-                }
-            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { topBar }
             .sheet(item: $entryToEdit) { entry in
@@ -196,20 +190,26 @@ struct CodeListView: View {
         .accessibilityLabel("已复制验证码 \(code)")
     }
 
-    /// 卡片网格（同 ente）：iPhone 单列，iPad 等宽屏自动多列。
+    /// 标签条 + 卡片网格（同 ente）：iPhone 单列，iPad 等宽屏自动多列。
+    /// 标签条是滚动内容的一部分，上滑时跟卡片一起滑到顶栏下方，
+    /// 顶部用 soft 边缘效果逐渐模糊消失，而不是 hard 的分界线。
     /// 不用 List：List 的行会带来滑动删除和整行高亮，和卡片样式不符
     private var codeList: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
-                ForEach(filteredEntries) { entry in
-                    codeCard(entry)
+            VStack(spacing: 8) {
+                TagFilterBar(tags: allTags, selectedTag: $selectedTag)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
+                    ForEach(filteredEntries) { entry in
+                        codeCard(entry)
+                    }
                 }
+                .padding(.horizontal, 16)
             }
-            .padding(.horizontal, 16)
             .padding(.top, 8)
             // 底部留白，最后一张卡片不被悬浮按钮挡住
             .padding(.bottom, 80)
         }
+        .scrollEdgeEffectStyle(.soft, for: .top)
     }
 
     private func codeCard(_ entry: CodeEntry) -> some View {

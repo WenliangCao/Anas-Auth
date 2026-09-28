@@ -2,7 +2,7 @@ import PhotosUI
 import SwiftData
 import SwiftUI
 
-/// 右下角添加按钮：系统 Menu + Liquid Glass 圆形按钮。
+/// 右下角添加按钮：系统 Menu + 原生 Liquid Glass 圆形按钮（不加强调色）。
 /// 扫描二维码 / 手动输入 / 从相册导入。
 struct AddCodeMenu: View {
     @Environment(\.modelContext) private var modelContext
@@ -30,7 +30,7 @@ struct AddCodeMenu: View {
                 .font(.title2.weight(.semibold))
                 .frame(width: 44, height: 44)
         }
-        .buttonStyle(.glassProminent)
+        .buttonStyle(.glass)
         .buttonBorderShape(.circle)
         .accessibilityLabel("添加验证码")
         .padding(.trailing, 20)

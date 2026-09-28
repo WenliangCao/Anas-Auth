@@ -128,12 +128,12 @@ private struct ImportGuideView: View {
         VStack(spacing: 10) {
             if source == .googleAuthenticator {
                 Button("扫描二维码") { showingScanner = true }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glass)
                 Button("选择图片") { showingPhotoPicker = true }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.glass)
             } else {
                 Button("选择文件") { showingFilePicker = true }
-                    .buttonStyle(.borderedProminent)
+                    .buttonStyle(.glass)
             }
         }
         .controlSize(.large)

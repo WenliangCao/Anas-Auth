@@ -134,7 +134,7 @@ struct EditCodeView: View {
                 .frame(width: 88, height: 88)
                 .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 20).strokeBorder(Color.accentColor.opacity(0.5), lineWidth: 1.5)
+                    RoundedRectangle(cornerRadius: 20).strokeBorder(Color.primary.opacity(0.15), lineWidth: 1.5)
                 }
                 .overlay(alignment: .bottomTrailing) {
                     Image(systemName: "pencil")
