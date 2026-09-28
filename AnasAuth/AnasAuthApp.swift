@@ -3,21 +3,29 @@ import SwiftData
 
 @main
 struct AnasAuthApp: App {
-    let container: ModelContainer
-
-    init() {
-        if let persistent = try? CodeStore.makeContainer() {
-            container = persistent
-        } else {
-            // 极端情况下（如存储损坏）退化为内存库，保证 App 可用
-            container = try! CodeStore.makeContainer(inMemoryOnly: true)
-        }
-    }
+    /// 打不开持久化存储时为 nil。不退化成内存库：那样用户会以为数据丢了、重新添加，
+    /// 而新加的内容重启后又会消失
+    private let container = try? CodeStore.makeContainer()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if let container {
+                ContentView()
+                    .modelContainer(container)
+            } else {
+                StorageErrorView()
+            }
         }
-        .modelContainer(container)
+    }
+}
+
+/// 存储打不开时的提示页：不展示空列表，避免误导
+private struct StorageErrorView: View {
+    var body: some View {
+        ContentUnavailableView {
+            Label("Couldn’t Open Your Codes", systemImage: "exclamationmark.triangle")
+        } description: {
+            Text("Your codes haven’t been changed. Quit and reopen the app, or restart your device, then try again.")
+        }
     }
 }

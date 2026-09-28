@@ -545,6 +545,22 @@
         }
       }
     },
+    "Couldn’t Open Your Codes": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法打开验证码数据"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法打開驗證碼資料"
+          }
+        }
+      }
+    },
     "Couldn’t parse the selected file.": {
       "localizations": {
         "zh-Hans": {
@@ -3021,6 +3037,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "通常在開啟兩步驟驗證的頁面可以找到，形如 JBSW Y3DP EHPK 3PXP"
+          }
+        }
+      }
+    },
+    "Your codes haven’t been changed. Quit and reopen the app, or restart your device, then try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的验证码没有被改动。请退出后重新打开 App，或重启设备后再试。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你的驗證碼沒有被更動。請結束後重新打開 App，或重新啟動裝置後再試一次。"
           }
         }
       }

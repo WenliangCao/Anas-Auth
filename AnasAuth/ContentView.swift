@@ -41,4 +41,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(try! CodeStore.makeContainer(inMemoryOnly: true))
 }
