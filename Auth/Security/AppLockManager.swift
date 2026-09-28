@@ -19,6 +19,10 @@ final class AppLockManager {
 
     private(set) var isLocked: Bool
 
+    /// 正在走系统验证面板。面板会让 App 变为 inactive，且要等收起动画放完
+    /// （约 1 秒）才回到 active；这段时间隐私遮罩应让位，否则解锁后内容被挡住
+    private(set) var isAuthenticating = false
+
     private init() {
         let enabled = UserDefaults.standard.bool(forKey: defaultsKey)
         self.isEnabled = enabled
@@ -26,6 +30,7 @@ final class AppLockManager {
     }
 
     func lock() {
+        isAuthenticating = false
         if isEnabled {
             isLocked = true
         }
@@ -37,6 +42,7 @@ final class AppLockManager {
             return
         }
         let context = LAContext()
+        isAuthenticating = true
         do {
             let success = try await context.evaluatePolicy(
                 .deviceOwnerAuthentication,
@@ -48,5 +54,10 @@ final class AppLockManager {
         } catch {
             // 用户取消或验证失败：保持锁定
         }
+    }
+
+    /// 回到 active 时由界面调用：验证面板已完全收起
+    func authenticationDidEnd() {
+        isAuthenticating = false
     }
 }

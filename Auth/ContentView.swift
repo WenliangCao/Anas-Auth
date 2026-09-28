@@ -13,8 +13,9 @@ struct ContentView: View {
             }
         }
         .overlay {
-            // 切后台/多任务时遮住内容，防止应用切换器快照泄露验证码
-            if scenePhase != .active {
+            // 切后台/多任务时遮住内容，防止应用切换器快照泄露验证码。
+            // 自己弹 Face ID 引起的 inactive 除外，解锁成功后立刻露出内容
+            if scenePhase != .active && !lockManager.isAuthenticating {
                 Rectangle()
                     .fill(.regularMaterial)
                     .ignoresSafeArea()
@@ -26,8 +27,13 @@ struct ContentView: View {
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .background {
+            switch phase {
+            case .active:
+                lockManager.authenticationDidEnd()
+            case .background:
                 lockManager.lock()
+            default:
+                break
             }
         }
     }
