@@ -2,12 +2,11 @@ import PhotosUI
 import SwiftData
 import SwiftUI
 
-/// 右下角展开式添加按钮（对齐 ente 的 SpeedDial）：
-/// 扫描二维码 / 手动输入 / 从相册导入。展开时半透明遮罩覆盖全屏。
+/// 右下角添加按钮：系统 Menu + Liquid Glass 圆形按钮。
+/// 扫描二维码 / 手动输入 / 从相册导入。
 struct AddCodeMenu: View {
     @Environment(\.modelContext) private var modelContext
 
-    @State private var isExpanded = false
     @State private var showingScanner = false
     @State private var showingManualEntry = false
     @State private var showingPhotoPicker = false
@@ -15,39 +14,29 @@ struct AddCodeMenu: View {
     @State private var importError: String?
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            if isExpanded {
-                Color(.systemBackground)
-                    .opacity(0.5)
-                    .ignoresSafeArea()
-                    .onTapGesture { toggle() }
-                    .transition(.opacity)
+        Menu {
+            // 相机不可用时 ScannerScreen 自带引导页
+            Button("扫描二维码", systemImage: "qrcode.viewfinder") {
+                showingScanner = true
             }
-            VStack(alignment: .trailing, spacing: 12) {
-                if isExpanded {
-                    // 顺序与 ente 一致：离主按钮最近的是扫码
-                    Group {
-                        item("从相册导入", systemImage: "photo.on.rectangle") {
-                            showingPhotoPicker = true
-                        }
-                        item("手动输入详细信息", systemImage: "keyboard") {
-                            showingManualEntry = true
-                        }
-                        // 相机不可用时 ScannerScreen 自带引导页
-                        item("扫描二维码", systemImage: "qrcode") {
-                            showingScanner = true
-                        }
-                    }
-                    .transition(.scale(scale: 0.6, anchor: .bottomTrailing).combined(with: .opacity))
-                }
-                mainButton
+            Button("手动输入", systemImage: "keyboard") {
+                showingManualEntry = true
             }
-            .padding(.trailing, 16)
-            .padding(.bottom, 8)
+            Button("从相册导入", systemImage: "photo") {
+                showingPhotoPicker = true
+            }
+        } label: {
+            Image(systemName: "plus")
+                .font(.title2.weight(.semibold))
+                .frame(width: 44, height: 44)
         }
+        .buttonStyle(.glassProminent)
+        .buttonBorderShape(.circle)
+        .accessibilityLabel("添加验证码")
+        .padding(.trailing, 20)
+        .padding(.bottom, 8)
         // 撑满全屏把按钮推到右下角；空白区域不拦截触摸
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-        .sensoryFeedback(.impact(weight: .light), trigger: isExpanded)
         .fullScreenCover(isPresented: $showingScanner) {
             NavigationStack {
                 ScannerScreen(
@@ -72,49 +61,6 @@ struct AddCodeMenu: View {
             Button("好") { importError = nil }
         } message: {
             Text(importError ?? "")
-        }
-    }
-
-    private var mainButton: some View {
-        Button(action: toggle) {
-            Image(systemName: "plus")
-                .font(.system(size: 24, weight: .regular))
-                .rotationEffect(.degrees(isExpanded ? 45 : 0))
-                .frame(width: 60, height: 60)
-                .foregroundStyle(Color.fabForeground)
-                .background(Color.fabBackground, in: Circle())
-                .shadow(color: .black.opacity(0.25), radius: 8, y: 4)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(isExpanded ? "关闭" : "添加验证码")
-    }
-
-    private func item(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
-        Button {
-            toggle()
-            action()
-        } label: {
-            HStack(spacing: 12) {
-                Text(title)
-                    .font(.body)
-                    .padding(12)
-                    .background(Color.fabBackground, in: RoundedRectangle(cornerRadius: 8))
-                Image(systemName: systemImage)
-                    .font(.system(size: 20))
-                    .frame(width: 48, height: 48)
-                    .background(Color.fabBackground, in: Circle())
-                    .shadow(color: .black.opacity(0.2), radius: 4, y: 2)
-                    // 与主按钮中心对齐
-                    .padding(.trailing, 6)
-            }
-            .foregroundStyle(Color.fabForeground)
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func toggle() {
-        withAnimation(.spring(duration: 0.3, bounce: 0.3)) {
-            isExpanded.toggle()
         }
     }
 

@@ -27,19 +27,6 @@ extension Color {
             : UIColor(red: 0xFC / 255, green: 0xF5 / 255, blue: 0xFF / 255, alpha: 1)
     })
 
-    /// 悬浮添加按钮：浅色模式深底白字，深色模式反之
-    static let fabBackground = Color(UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? .white
-            : UIColor(red: 40 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1)
-    })
-
-    static let fabForeground = Color(UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor(red: 40 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1)
-            : .white
-    })
-
     /// 无品牌图标时首字母头像的底色
     static let avatarPalette: [Color] = [
         (118, 84, 154), (223, 120, 97), (148, 180, 159), (135, 162, 251),
