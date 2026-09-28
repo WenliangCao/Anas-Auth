@@ -65,7 +65,7 @@ struct ImportersTests {
         let codes = try EnteImporter.decrypt(export, password: "test1234")
         #expect(codes.count == 2) // 第三条在回收站
         #expect(codes[0].issuer == "GitHub" && codes[0].pinned && codes[0].tags == ["Work"] && codes[0].note == "admin")
-        #expect(codes[0].iconID == "github")
+        #expect(codes[0].iconID == BrandIconCatalog.match(issuer: "github")?.id)
         #expect(codes[1].type == .hotp && codes[1].counter == 42)
         #expect(throws: ImportProviderError.incorrectPassword) { try EnteImporter.decrypt(export, password: "wrong") }
     }

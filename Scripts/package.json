@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "svgpath": "^2.6.0",
-    "svgo": "^4.0.0"
+    "@resvg/resvg-js": "^2.6.2",
+    "svgpath": "^2.6.0"
   }
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 选择品牌图标（对齐 ente 的 Choose icon）：三列网格 + 搜索。
+/// 选择品牌图标（对齐 ente 的 Choose icon）：三列网格 + 搜索，图标与 ente 相同。
 /// 第一格「默认」表示按发行方名称自动匹配。
 struct IconPickerView: View {
     let issuer: String
@@ -15,7 +15,7 @@ struct IconPickerView: View {
         let query = BrandIconCatalog.normalize(searchText)
         return BrandIconCatalog.all.filter {
             $0.title.localizedCaseInsensitiveContains(searchText)
-                || (!query.isEmpty && $0.slug.contains(query))
+                || (!query.isEmpty && $0.id.contains(query))
         }
     }
 
@@ -30,10 +30,10 @@ struct IconPickerView: View {
                     }
                 }
                 ForEach(icons) { icon in
-                    cell(title: icon.title, isSelected: selection == icon.slug) {
+                    cell(title: icon.title, isSelected: selection == icon.id) {
                         BrandIconImage(icon: icon, size: 44)
                     } action: {
-                        select(icon.slug)
+                        select(icon.id)
                     }
                 }
             }

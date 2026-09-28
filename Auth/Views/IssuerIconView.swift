@@ -15,21 +15,23 @@ struct IssuerIconView: View {
     }
 
     private var resolvedIcon: BrandIcon? {
-        if !iconID.isEmpty, let icon = BrandIconCatalog.icon(slug: iconID) {
+        if !iconID.isEmpty, let icon = BrandIconCatalog.icon(id: iconID) {
             return icon
         }
         return BrandIconCatalog.match(issuer: issuer)
     }
 }
 
-/// 品牌矢量图，按品牌色着色；颜色与背景太接近时退回正文色（如深色模式下的黑色 logo）
+/// 品牌图标：彩色图标按原色显示；单色图标按品牌色着色，
+/// 颜色与背景太接近时退回正文色（如深色模式下的黑色 logo）
 struct BrandIconImage: View {
     let icon: BrandIcon
     var size: CGFloat = 24
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        Image(icon.assetName)
+        Image(icon.asset)
+            .renderingMode(icon.tinted ? .template : .original)
             .resizable()
             .scaledToFit()
             .frame(width: size, height: size)
@@ -38,7 +40,7 @@ struct BrandIconImage: View {
     }
 
     private var tint: Color {
-        guard let value = UInt32(icon.hex, radix: 16) else { return .primary }
+        guard let hex = icon.hex, let value = UInt32(hex, radix: 16) else { return .primary }
         let red = Double((value >> 16) & 0xFF) / 255
         let green = Double((value >> 8) & 0xFF) / 255
         let blue = Double(value & 0xFF) / 255

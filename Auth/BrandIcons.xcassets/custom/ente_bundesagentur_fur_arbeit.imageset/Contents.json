@@ -1,0 +1,16 @@
+{
+  "images": [
+    {
+      "filename": "ente_bundesagentur_fur_arbeit.png",
+      "idiom": "universal",
+      "scale": "3x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  },
+  "properties": {
+    "template-rendering-intent": "original"
+  }
+}

@@ -42,9 +42,10 @@ enum EnteImporter {
         code.pinned = display["pinned"] as? Bool ?? false
         code.tags = display["tags"] as? [String] ?? []
         code.note = display["note"] as? String ?? ""
-        // ente 的图标名与本 App 图标库一致时沿用
-        if let iconID = display["iconID"] as? String, BrandIconCatalog.icon(slug: iconID) != nil {
-            code.iconID = iconID
+        // ente 记录的是图标名，换算成本 App 图标库里的同一个图标
+        if let iconID = display["iconID"] as? String, !iconID.isEmpty,
+           let icon = BrandIconCatalog.icon(id: iconID) ?? BrandIconCatalog.match(issuer: iconID) {
+            code.iconID = icon.id
         }
         return code
     }
