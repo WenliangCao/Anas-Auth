@@ -5,6 +5,8 @@ import VisionKit
 /// 系统原生扫码视图（VisionKit DataScanner），自带取景指引与高亮。
 struct QRScannerView: UIViewControllerRepresentable {
     let onCodeScanned: (String) -> Void
+    /// 扫码器无法工作（多为相机权限被拒）
+    let onError: () -> Void
 
     static var isAvailable: Bool {
         DataScannerViewController.isSupported && DataScannerViewController.isAvailable
@@ -34,17 +36,19 @@ struct QRScannerView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(onCodeScanned: onCodeScanned)
+        Coordinator(onCodeScanned: onCodeScanned, onError: onError)
     }
 
     @MainActor
     final class Coordinator: NSObject, DataScannerViewControllerDelegate {
         private let onCodeScanned: (String) -> Void
+        private let onError: () -> Void
         private var hasDelivered = false
         weak var parent: DataScannerViewController?
 
-        init(onCodeScanned: @escaping (String) -> Void) {
+        init(onCodeScanned: @escaping (String) -> Void, onError: @escaping () -> Void) {
             self.onCodeScanned = onCodeScanned
+            self.onError = onError
         }
 
         func dataScanner(
@@ -74,7 +78,7 @@ struct QRScannerView: UIViewControllerRepresentable {
         func reportScannerError(_ error: Error) {
             guard !hasDelivered else { return }
             hasDelivered = true
-            onCodeScanned("\u{0}SCANNER_ERROR:\(error.localizedDescription)")
+            onError()
         }
 
         private func deliver(items: [RecognizedItem]) {
@@ -106,15 +110,9 @@ struct ScannerScreen: View {
     var body: some View {
         ZStack {
             if QRScannerView.isAvailable && !cameraDenied {
-                QRScannerView { payload in
-                    // 扫码器内部错误（多为相机权限被拒）→ 展示引导页
-                    if payload.hasPrefix("\u{0}SCANNER_ERROR:") {
-                        cameraDenied = true
-                    } else {
-                        onPayload(payload)
-                    }
-                }
-                .ignoresSafeArea()
+                // 扫码器内部错误（多为相机权限被拒）→ 展示引导页
+                QRScannerView(onCodeScanned: onPayload, onError: { cameraDenied = true })
+                    .ignoresSafeArea()
             } else {
                 deniedView
             }

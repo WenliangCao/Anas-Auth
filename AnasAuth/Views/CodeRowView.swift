@@ -117,12 +117,14 @@ private struct CodePair: View {
     let date: Date
     let compact: Bool
     let trailing: Trailing
+    /// 验证码字号跟随动态字体缩放
+    @ScaledMetric(relativeTo: .title2) private var fontScale: CGFloat = 1
 
     var body: some View {
         if let code = CodeFormatter.formatted(entry: entry, at: date) {
             HStack(alignment: .bottom, spacing: 8) {
                 Text(code)
-                    .font(.system(size: compact ? 16 : 26).monospacedDigit())
+                    .font(.system(size: (compact ? 16 : 26) * fontScale).monospacedDigit())
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .transaction { $0.animation = nil }
@@ -144,13 +146,13 @@ private struct CodePair: View {
                 .foregroundStyle(.secondary)
             switch trailing {
             case .nextCode(let onTap):
+                // VoiceOver 通过卡片上的「复制下一个验证码」动作使用（卡片已合并为一个元素）
                 Text(CodeFormatter.formattedNext(entry: entry, at: date) ?? "")
-                    .font(.system(size: compact ? 13 : 20).monospacedDigit())
+                    .font(.system(size: (compact ? 13 : 20) * fontScale).monospacedDigit())
                     .foregroundStyle(.gray)
                     .lineLimit(1)
                     .contentShape(Rectangle())
                     .onTapGesture(perform: onTap)
-                    .accessibilityAddTraits(.isButton)
             case .advance(let onTap):
                 // borderless：不带按钮底色，和旁边的文字一致
                 Button(action: onTap) {

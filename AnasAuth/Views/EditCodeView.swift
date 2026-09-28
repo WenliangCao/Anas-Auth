@@ -7,7 +7,7 @@ import SwiftData
 /// - 输入过程中不触发 CloudKit 同步，避免产生大量中间记录
 /// - 支持随手取消（下滑或取消按钮），库保持原样
 struct EditCodeView: View {
-    @Bindable var entry: CodeEntry
+    let entry: CodeEntry
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -21,6 +21,7 @@ struct EditCodeView: View {
     @State private var iconID = ""
     @State private var showsSecret = false
     @State private var showingIconPicker = false
+    @State private var didLoad = false
 
     private var sanitizedSecret: String {
         OTPAuthURLParser.sanitizeSecret(secret)
@@ -113,8 +114,9 @@ struct EditCodeView: View {
                 IconPickerView(issuer: issuer, selection: $iconID)
             }
             .onAppear {
-                // 从库中的模型拷贝出编辑副本
-                guard issuer.isEmpty && secret.isEmpty else { return } // 从图标页返回时不覆盖
+                // 从库中的模型拷贝出编辑副本；从图标页返回时不覆盖已有的编辑
+                guard !didLoad else { return }
+                didLoad = true
                 issuer = entry.issuer
                 iconID = entry.iconID
                 secret = entry.secret

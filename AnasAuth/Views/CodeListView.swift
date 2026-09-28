@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct CodeListView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
 
     @Query(sort: \CodeEntry.createdAt, order: .forward)
     private var entries: [CodeEntry]
@@ -16,6 +17,15 @@ struct CodeListView: View {
     @State private var copyFeedbackTask: Task<Void, Never>?
     /// 每次复制 +1，作为触感反馈的触发器（连续复制同一条也会震，反馈消失时不会震）
     @State private var copyCount = 0
+    /// 复制带来的使用次数/时间先记在这里，离开首页或切到后台时才写库：
+    /// 否则按「最近使用/最常用」排序时，卡片会在手指下立刻跳走，每次复制也都触发一次 iCloud 同步
+    @State private var pendingUsage: [UUID: PendingUsage] = [:]
+
+    private struct PendingUsage {
+        let entry: CodeEntry
+        var taps = 0
+        var lastUsedAt = Date.distantPast
+    }
     @State private var entryToDelete: CodeEntry?
     @AppStorage("codeSortKey") private var sortKey: CodeSortKey = .issuer
     @AppStorage("codeLayout") private var layout: CodeLayout = .standard
@@ -81,6 +91,10 @@ struct CodeListView: View {
                 SettingsView()
             }
             .sensoryFeedback(.success, trigger: copyCount)
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .background { flushUsage() }
+            }
+            .onDisappear(perform: flushUsage)
             .overlay(alignment: .top) {
                 if let copiedCode {
                     copiedToast(code: copiedCode)
@@ -194,7 +208,7 @@ struct CodeListView: View {
             compact: layout == .compact,
             isCopied: copiedEntryID == entry.id,
             onCopyNext: { copyNextCode(of: entry) },
-            onAdvanceCounter: { if entry.counter < .max { entry.counter += 1 } }
+            onAdvanceCounter: { advanceCounter(of: entry) }
         )
         .equatable()
         // 点击区域与长按预览都只是卡片本身
@@ -202,6 +216,16 @@ struct CodeListView: View {
         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
         .onTapGesture {
             copyCode(of: entry)
+        }
+        // 卡片不是 Button（里面还有「下一个」按钮），给 VoiceOver 补上按钮语义与动作
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction { copyCode(of: entry) }
+        .accessibilityAction(named: entry.type == .hotp ? Text("Next code") : Text("Copy Next Code")) {
+            if entry.type == .hotp {
+                advanceCounter(of: entry)
+            } else {
+                copyNextCode(of: entry)
+            }
         }
         .contextMenu {
             Button {
@@ -240,9 +264,13 @@ struct CodeListView: View {
         copyToPasteboard(code, entry: entry)
     }
 
+    private func advanceCounter(of entry: CodeEntry) {
+        if entry.counter < .max { entry.counter += 1 }
+    }
+
     private func copyToPasteboard(_ code: String, entry: CodeEntry) {
-        entry.tapCount += 1
-        entry.lastUsedAt = .now
+        pendingUsage[entry.id, default: PendingUsage(entry: entry)].taps += 1
+        pendingUsage[entry.id]?.lastUsedAt = .now
         // 验证码是敏感数据：不 Handoff 到其他设备，60 秒后自动过期
         UIPasteboard.general.setItems(
             [[UTType.plainText.identifier: code]],
@@ -263,6 +291,14 @@ struct CodeListView: View {
                 copiedCode = nil
             }
         }
+    }
+
+    private func flushUsage() {
+        for usage in pendingUsage.values where !usage.entry.isDeleted {
+            usage.entry.tapCount += usage.taps
+            usage.entry.lastUsedAt = usage.lastUsedAt
+        }
+        pendingUsage = [:]
     }
 
     private func togglePin(_ entry: CodeEntry) {
