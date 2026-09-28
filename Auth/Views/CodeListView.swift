@@ -196,68 +196,59 @@ struct CodeListView: View {
         .accessibilityLabel("已复制验证码 \(code)")
     }
 
+    /// 卡片网格（同 ente）：iPhone 单列，iPad 等宽屏自动多列。
+    /// 不用 List：List 的行会带来滑动删除和整行高亮，和卡片样式不符
     private var codeList: some View {
-        List {
-            ForEach(filteredEntries) { entry in
-                CodeRowView(
-                    entry: entry,
-                    copiedEntryID: copiedEntryID,
-                    onCopyNext: { copyNextCode(of: entry) },
-                    onAdvanceCounter: { entry.counter += 1 }
-                )
-                    .contentShape(Rectangle())
-                    // 长按预览只截卡片本身，不带列表行的白底
-                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        copyCode(of: entry)
-                    }
-                    .contextMenu {
-                        Button {
-                            togglePin(entry)
-                        } label: {
-                            Label(entry.pinned ? "取消置顶" : "置顶",
-                                  systemImage: entry.pinned ? "pin.slash" : "pin")
-                        }
-                        Button {
-                            entryToEdit = entry
-                        } label: {
-                            Label("编辑", systemImage: "pencil")
-                        }
-                        Button {
-                            copyCode(of: entry)
-                        } label: {
-                            Label("复制验证码", systemImage: "doc.on.doc")
-                        }
-                        Divider()
-                        Button(role: .destructive) {
-                            entryToDelete = entry
-                        } label: {
-                            Label("删除", systemImage: "trash")
-                        }
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            entryToDelete = entry
-                        } label: {
-                            Label("删除", systemImage: "trash")
-                        }
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            togglePin(entry)
-                        } label: {
-                            Label("置顶", systemImage: "pin")
-                        }
-                        .tint(.orange)
-                    }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 340), spacing: 16)], spacing: 16) {
+                ForEach(filteredEntries) { entry in
+                    codeCard(entry)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+            // 底部留白，最后一张卡片不被悬浮按钮挡住
+            .padding(.bottom, 80)
+        }
+    }
+
+    private func codeCard(_ entry: CodeEntry) -> some View {
+        CodeRowView(
+            entry: entry,
+            copiedEntryID: copiedEntryID,
+            onCopyNext: { copyNextCode(of: entry) },
+            onAdvanceCounter: { entry.counter += 1 }
+        )
+        // 点击区域与长按预览都只是卡片本身
+        .contentShape(RoundedRectangle(cornerRadius: 8))
+        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
+        .onTapGesture {
+            copyCode(of: entry)
+        }
+        .contextMenu {
+            Button {
+                togglePin(entry)
+            } label: {
+                Label(entry.pinned ? "取消置顶" : "置顶",
+                      systemImage: entry.pinned ? "pin.slash" : "pin")
+            }
+            Button {
+                entryToEdit = entry
+            } label: {
+                Label("编辑", systemImage: "pencil")
+            }
+            Button {
+                copyCode(of: entry)
+            } label: {
+                Label("复制验证码", systemImage: "doc.on.doc")
+            }
+            Divider()
+            Button(role: .destructive) {
+                entryToDelete = entry
+            } label: {
+                Label("删除", systemImage: "trash")
             }
         }
-        .listStyle(.plain)
-        // 底部留白，最后一张卡片不被悬浮按钮挡住
-        .contentMargins(.bottom, 80, for: .scrollContent)
     }
 
     private func copyCode(of entry: CodeEntry) {

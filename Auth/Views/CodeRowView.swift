@@ -145,7 +145,7 @@ private struct CodePair: View {
                     .onTapGesture(perform: onTap)
                     .accessibilityAddTraits(.isButton)
             case .advance(let onTap):
-                // borderless：避免 List 把整行当成按钮
+                // borderless：不带按钮底色，和旁边的文字一致
                 Button(action: onTap) {
                     Image(systemName: "arrow.forward")
                         .font(.title2)
