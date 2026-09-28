@@ -11,7 +11,23 @@ enum GoogleMigrationError: Error {
 /// `otpauth-migration://offline?data=<base64url 编码的 protobuf>`
 /// protobuf schema 见 https://github.com/google/google-authenticator-android 的 MigrationPayload。
 enum GoogleMigrationParser {
+    /// 一张迁移二维码的内容。账号多时 Google 会拆成多张（batchSize 张），需全部扫完
+    struct Migration {
+        let codes: [OTPCode]
+        let batchID: Int
+        let batchSize: Int
+        let batchIndex: Int
+
+        var hasValidBatchMetadata: Bool {
+            batchSize > 0 && batchIndex >= 0 && batchIndex < batchSize
+        }
+    }
+
     static func parse(_ rawURL: String) throws -> [OTPCode] {
+        try parseMigration(rawURL).codes
+    }
+
+    static func parseMigration(_ rawURL: String) throws -> Migration {
         guard let components = URLComponents(string: rawURL),
               components.scheme == "otpauth-migration" else {
             throw GoogleMigrationError.notMigrationURL
@@ -29,7 +45,14 @@ enum GoogleMigrationParser {
         guard !otpParameterBlobs.isEmpty else {
             throw GoogleMigrationError.emptyPayload
         }
-        return otpParameterBlobs.compactMap(parseOtpParameters(_:))
+        // 字段 3 batch_size、4 batch_index、5 batch_id
+        let number = { (field: Int) in Int(fields.first { $0.number == field }?.varintValue ?? 0) }
+        return Migration(
+            codes: otpParameterBlobs.compactMap(parseOtpParameters(_:)),
+            batchID: number(5),
+            batchSize: number(3),
+            batchIndex: number(4)
+        )
     }
 
     private static func parseOtpParameters(_ blob: Data) -> OTPCode? {
@@ -98,5 +121,56 @@ enum GoogleMigrationParser {
             base64 += String(repeating: "=", count: 4 - remainder)
         }
         return Data(base64Encoded: base64)
+    }
+}
+
+/// 收集多张迁移二维码，全部到齐后按顺序合并（与 ente 的 GoogleAuthMigrationTracker 一致）
+struct GoogleMigrationTracker {
+    enum TrackerError: Error, Equatable, LocalizedError {
+        case differentExport
+        case invalidBatch
+
+        var errorDescription: String? {
+            switch self {
+            case .differentExport: "这张二维码属于另一次 Google Authenticator 导出。"
+            case .invalidBatch: "Google Authenticator 导出的批次信息无效。"
+            }
+        }
+    }
+
+    private var batchID: Int?
+    private var batchSize: Int?
+    private var batches: [Int: [OTPCode]] = [:]
+
+    var receivedCount: Int { batches.count }
+    var expectedCount: Int { batchSize ?? 0 }
+
+    /// 返回合并后的全部条目；还有批次没扫到时返回 nil
+    mutating func add(_ migration: GoogleMigrationParser.Migration) throws -> [OTPCode]? {
+        if let batchID, batchID != migration.batchID || batchSize != migration.batchSize {
+            throw TrackerError.differentExport
+        }
+        // 没有批次信息，或只有一张
+        if migration.batchSize <= 1 {
+            guard migration.batchSize == 0 || migration.hasValidBatchMetadata else { throw TrackerError.invalidBatch }
+            reset()
+            return migration.codes
+        }
+        guard migration.hasValidBatchMetadata else { throw TrackerError.invalidBatch }
+        batchID = migration.batchID
+        batchSize = migration.batchSize
+        if batches[migration.batchIndex] == nil {
+            batches[migration.batchIndex] = migration.codes
+        }
+        guard batches.count == migration.batchSize else { return nil }
+        let codes = (0..<migration.batchSize).flatMap { batches[$0] ?? [] }
+        reset()
+        return codes
+    }
+
+    private mutating func reset() {
+        batchID = nil
+        batchSize = nil
+        batches = [:]
     }
 }
