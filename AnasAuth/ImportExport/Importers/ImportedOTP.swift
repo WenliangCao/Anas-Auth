@@ -133,24 +133,29 @@ enum ImportEntry {
 
     /// 出错条目会展示给用户（可能被截图分享）。只保留定位问题需要的字段（白名单），
     /// 密钥、备注、自定义字段的值等一律不展示：各家格式里敏感内容的位置无法穷举
-    /// （如 Bitwarden 的隐藏字段是 fields 里 type 为 1 的 value）
+    /// （如 Bitwarden 的隐藏字段是 fields 里 type 为 1 的 value，或密钥被写成数组/对象）
     private static let displayableKeys: Set<String> = [
         "type", "kind", "tokentype",
         "issuer", "issuername", "originalissuername",
         "name", "label", "account", "accountname", "username", "originalusername",
         "algorithm", "algo", "digits", "period", "timer", "timestep", "counter",
     ]
+    /// 只展开这些嵌套对象（Aegis info、Bitwarden login、2FAS otp、Proton content），
+    /// 其余数组/对象整体丢弃：密钥写成数组或对象时也不会被带出来
+    private static let displayableContainers: Set<String> = ["info", "login", "otp", "content"]
 
     static func redact(_ value: Any) -> Any {
         switch value {
         case let dictionary as [String: Any]:
             dictionary.reduce(into: [String: Any]()) { result, pair in
+                let key = pair.key.lowercased()
                 switch pair.value {
                 case is [String: Any], is [Any]:
+                    guard displayableContainers.contains(key) else { return }
                     let nested = redact(pair.value)
                     if !isEmpty(nested) { result[pair.key] = nested }
                 default:
-                    if displayableKeys.contains(pair.key.lowercased()) { result[pair.key] = pair.value }
+                    if displayableKeys.contains(key) { result[pair.key] = pair.value }
                 }
             }
         case let array as [Any]:

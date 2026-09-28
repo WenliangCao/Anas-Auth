@@ -147,8 +147,22 @@ struct ImportersTests {
             try BitwardenImporter.parse(data(json))
         } throws: { error in
             guard case .invalidEntry(let entry, _) = error as? ImportProviderError else { return false }
-            return entry.contains("Site") && entry.contains("Recovery")
+            return entry.contains("Site") && entry.contains("me")
                 && !entry.contains("RECOVERY-CODE-123") && !entry.contains("NOTE-SECRET")
+        }
+    }
+
+    /// 密钥被写成数组或对象时，整个字段丢弃，不会因递归展开而带出明文
+    @Test(arguments: [#"["LEAKED-SECRET"]"#, #"{"name": "LEAKED-SECRET"}"#])
+    func aegisSecretContainerIsDropped(_ secretJSON: String) throws {
+        let secret = try JSONInput.object(data(secretJSON))
+        let db: [String: Any] = ["entries": [["type": "totp", "name": "x", "issuer": "Y",
+                                             "info": ["secret": secret, "digits": 6]]]]
+        #expect {
+            try AegisImporter.parseEntries(db)
+        } throws: { error in
+            guard case .invalidEntry(let entry, _) = error as? ImportProviderError else { return false }
+            return entry.contains("Y") && !entry.contains("LEAKED-SECRET")
         }
     }
 
