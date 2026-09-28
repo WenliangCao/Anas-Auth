@@ -9,6 +9,8 @@ struct CodeListView: View {
     private var entries: [CodeEntry]
 
     @State private var searchText = ""
+    @State private var isSearching = false
+    @FocusState private var searchFieldFocused: Bool
     @State private var showingSettings = false
     @State private var entryToEdit: CodeEntry?
     @State private var copiedEntryID: UUID?
@@ -63,17 +65,8 @@ struct CodeListView: View {
                     codeList
                 }
             }
-            .navigationTitle("验证码")
-            .searchable(text: $searchText, prompt: "搜索")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
-                }
-            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { topBar }
             .sheet(item: $entryToEdit) { entry in
                 EditCodeView(entry: entry)
             }
@@ -109,6 +102,50 @@ struct CodeListView: View {
         }
         .overlay {
             AddCodeMenu()
+        }
+    }
+
+    /// 顶栏对齐 ente：左侧菜单（设置），中间标题/搜索框，右侧搜索开关
+    @ToolbarContentBuilder
+    private var topBar: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button {
+                showingSettings = true
+            } label: {
+                Image(systemName: "line.3.horizontal")
+            }
+            .accessibilityLabel("设置")
+        }
+        ToolbarItem(placement: .principal) {
+            if isSearching {
+                TextField("搜索", text: $searchText)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .focused($searchFieldFocused)
+                    .submitLabel(.search)
+                    .frame(minWidth: 220)
+            } else {
+                Text("Auth")
+                    .font(.title2.weight(.heavy))
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                toggleSearch()
+            } label: {
+                Image(systemName: isSearching ? "xmark" : "magnifyingglass")
+            }
+            .accessibilityLabel(isSearching ? "关闭搜索" : "搜索")
+        }
+    }
+
+    private func toggleSearch() {
+        isSearching.toggle()
+        if isSearching {
+            searchFieldFocused = true
+        } else {
+            searchText = ""
+            searchFieldFocused = false
         }
     }
 
