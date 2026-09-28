@@ -9,8 +9,6 @@ struct CodeListView: View {
     private var entries: [CodeEntry]
 
     @State private var searchText = ""
-    @State private var isSearching = false
-    @FocusState private var searchFieldFocused: Bool
     @State private var showingSettings = false
     @State private var entryToEdit: CodeEntry?
     @State private var copiedEntryID: UUID?
@@ -74,7 +72,13 @@ struct CodeListView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar { topBar }
+            // 原生搜索（iOS 26+ iPhone 规范）：底栏里的搜索按钮，点击后由系统在键盘上方展开
+            .searchable(text: $searchText, prompt: "搜索")
+            .searchToolbarBehavior(.minimize)
+            .toolbar {
+                topBar
+                bottomBar
+            }
             .sheet(item: $entryToEdit) { entry in
                 EditCodeView(entry: entry)
             }
@@ -108,12 +112,9 @@ struct CodeListView: View {
                 }
             }
         }
-        .overlay {
-            AddCodeMenu()
-        }
     }
 
-    /// 顶栏：左侧设置，中间标题/搜索框，右侧排序与搜索开关
+    /// 顶栏：左侧设置，中间标题，右侧排序
     @ToolbarContentBuilder
     private var topBar: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
@@ -125,12 +126,8 @@ struct CodeListView: View {
             .accessibilityLabel("设置")
         }
         ToolbarItem(placement: .principal) {
-            if isSearching {
-                TopBarSearchField(text: $searchText, focused: $searchFieldFocused)
-            } else {
-                Text("Auth")
-                    .font(.title2.weight(.heavy))
-            }
+            Text("Auth")
+                .font(.title2.weight(.heavy))
         }
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
@@ -144,25 +141,15 @@ struct CodeListView: View {
             }
             .accessibilityLabel("排序方式")
         }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                toggleSearch()
-            } label: {
-                Image(systemName: isSearching ? "xmark" : "magnifyingglass")
-                    .contentTransition(.symbolEffect(.replace))
-                    .animation(.smooth(duration: 0.25), value: isSearching)
-            }
-            .accessibilityLabel(isSearching ? "关闭搜索" : "搜索")
-        }
     }
 
-    private func toggleSearch() {
-        isSearching.toggle()
-        if isSearching {
-            searchFieldFocused = true
-        } else {
-            searchText = ""
-            searchFieldFocused = false
+    /// 底栏：左侧系统搜索按钮，右侧添加菜单
+    @ToolbarContentBuilder
+    private var bottomBar: some ToolbarContent {
+        DefaultToolbarItem(kind: .search, placement: .bottomBar)
+        ToolbarSpacer(placement: .bottomBar)
+        ToolbarItem(placement: .bottomBar) {
+            AddCodeMenu()
         }
     }
 
@@ -210,8 +197,6 @@ struct CodeListView: View {
                 .padding(.horizontal, 16)
             }
             .padding(.top, 8)
-            // 底部留白，最后一张卡片不被悬浮按钮挡住
-            .padding(.bottom, 80)
         }
         .scrollEdgeEffectStyle(.soft, for: .top)
     }
@@ -300,42 +285,3 @@ struct CodeListView: View {
     }
 }
 
-/// 顶栏搜索框：与系统搜索栏一致的灰色填充胶囊（不用玻璃，避免像多出一个悬浮按钮）。
-/// principal 位置按理想宽度排版（maxWidth 无效），给一个偏大的 idealWidth，
-/// 导航栏会把它压到两侧按钮之间的剩余空间，从而撑满且不压住设置按钮。
-/// 出现动画只在框内部做（遮罩从右侧展开）：切换本身不能包在 withAnimation 里，
-/// 否则导航栏会把标题区尺寸变化做成从左侧滑入
-private struct TopBarSearchField: View {
-    @Binding var text: String
-    var focused: FocusState<Bool>.Binding
-    @State private var expanded = false
-
-    var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
-            TextField("搜索", text: $text)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .focused(focused)
-                .submitLabel(.search)
-        }
-        .padding(.horizontal, 12)
-        .frame(idealWidth: 600, maxWidth: .infinity, minHeight: 36)
-        .background(.fill.tertiary, in: .capsule)
-        .mask {
-            GeometryReader { geometry in
-                Capsule()
-                    .frame(width: expanded ? geometry.size.width : geometry.size.height)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-        }
-        .opacity(expanded ? 1 : 0)
-        .padding(.horizontal, 8)
-        .onAppear {
-            withAnimation(.smooth(duration: 0.3)) {
-                expanded = true
-            }
-        }
-    }
-}

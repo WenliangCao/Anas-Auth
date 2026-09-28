@@ -2,7 +2,7 @@ import PhotosUI
 import SwiftData
 import SwiftUI
 
-/// 右下角添加按钮：系统 Menu + 原生 Liquid Glass 圆形按钮（不加强调色）。
+/// 底栏右侧的添加按钮（系统 Menu，玻璃样式由工具栏提供）。
 /// 扫描二维码 / 手动输入 / 从相册导入。
 struct AddCodeMenu: View {
     @Environment(\.modelContext) private var modelContext
@@ -26,17 +26,8 @@ struct AddCodeMenu: View {
                 showingPhotoPicker = true
             }
         } label: {
-            Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
-                .frame(width: 44, height: 44)
+            Label("添加验证码", systemImage: "plus")
         }
-        .buttonStyle(.glass)
-        .buttonBorderShape(.circle)
-        .accessibilityLabel("添加验证码")
-        .padding(.trailing, 20)
-        .padding(.bottom, 8)
-        // 撑满全屏把按钮推到右下角；空白区域不拦截触摸
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
         .fullScreenCover(isPresented: $showingScanner) {
             NavigationStack {
                 ScannerScreen(
