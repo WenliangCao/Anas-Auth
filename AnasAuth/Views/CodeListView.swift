@@ -26,38 +26,35 @@ struct CodeListView: View {
         Set(entries.flatMap(\.tags)).sorted { $0.localizedStandardCompare($1) == .orderedAscending }
     }
 
-    /// 选中的标签被删光后自动回到「全部」
-    private var activeTag: String? {
-        selectedTag.flatMap { allTags.contains($0) ? $0 : nil }
-    }
-
-    private var filteredEntries: [CodeEntry] {
+    /// 按标签与搜索词过滤并排序。选中的标签被删光后自动回到「全部」
+    private func filteredEntries(tags: [String]) -> [CodeEntry] {
+        let activeTag = selectedTag.flatMap { tags.contains($0) ? $0 : nil }
         let tagged = activeTag.map { tag in entries.filter { $0.tags.contains(tag) } } ?? entries
-        let filtered = searchText.isEmpty
-            ? tagged
-            : tagged.filter {
-                $0.issuer.localizedCaseInsensitiveContains(searchText)
-                    || $0.accountName.localizedCaseInsensitiveContains(searchText)
-            }
         guard !searchText.isEmpty else {
-            return sortKey.sorted(filtered)
+            return sortKey.sorted(tagged)
         }
-        // 搜索态：按相关度排序（命中位置靠前的在前），置顶仅作次级权重
-        return filtered.sorted { lhs, rhs in
-            let lhsScore = relevanceScore(of: lhs)
-            let rhsScore = relevanceScore(of: rhs)
-            if lhsScore != rhsScore { return lhsScore < rhsScore }
-            if lhs.pinned != rhs.pinned { return lhs.pinned }
-            return lhs.createdAt < rhs.createdAt
+        // 搜索态：按相关度排序（命中位置靠前的在前），置顶仅作次级权重。
+        // 相关度每条只算一次，不在比较函数里反复计算
+        let query = searchText.lowercased()
+        let scored = tagged.compactMap { entry in
+            relevanceScore(of: entry, query: query).map { (entry: entry, score: $0) }
         }
+        return scored.sorted { lhs, rhs in
+            if lhs.score != rhs.score { return lhs.score < rhs.score }
+            if lhs.entry.pinned != rhs.entry.pinned { return lhs.entry.pinned }
+            return lhs.entry.createdAt < rhs.entry.createdAt
+        }.map(\.entry)
     }
 
-    /// 0 = issuer 前缀命中（最相关），数值越大越不相关
-    private func relevanceScore(of entry: CodeEntry) -> Int {
-        if entry.issuer.lowercased().hasPrefix(searchText.lowercased()) { return 0 }
-        if entry.accountName.lowercased().hasPrefix(searchText.lowercased()) { return 1 }
+    /// 0 = issuer 前缀命中（最相关），数值越大越不相关；nil = 不匹配
+    private func relevanceScore(of entry: CodeEntry, query: String) -> Int? {
+        let issuer = entry.issuer.lowercased()
+        let account = entry.accountName.lowercased()
+        if issuer.hasPrefix(query) { return 0 }
+        if account.hasPrefix(query) { return 1 }
         if entry.issuer.localizedCaseInsensitiveContains(searchText) { return 2 }
-        return 3
+        if entry.accountName.localizedCaseInsensitiveContains(searchText) { return 3 }
+        return nil
     }
 
     var body: some View {
@@ -171,14 +168,16 @@ struct CodeListView: View {
     private var codeList: some View {
         let compact = layout == .compact
         let spacing: CGFloat = compact ? 12 : 16
+        let tags = allTags
+        let visibleEntries = filteredEntries(tags: tags)
         return ScrollView {
             VStack(spacing: 8) {
-                TagFilterBar(tags: allTags, selectedTag: $selectedTag)
+                TagFilterBar(tags: tags, selectedTag: $selectedTag)
                 LazyVGrid(
                     columns: [GridItem(.adaptive(minimum: compact ? 280 : 340), spacing: spacing)],
                     spacing: spacing
                 ) {
-                    ForEach(filteredEntries) { entry in
+                    ForEach(visibleEntries) { entry in
                         codeCard(entry)
                     }
                 }
@@ -193,10 +192,11 @@ struct CodeListView: View {
         CodeRowView(
             entry: entry,
             compact: layout == .compact,
-            copiedEntryID: copiedEntryID,
+            isCopied: copiedEntryID == entry.id,
             onCopyNext: { copyNextCode(of: entry) },
             onAdvanceCounter: { if entry.counter < .max { entry.counter += 1 } }
         )
+        .equatable()
         // 点击区域与长按预览都只是卡片本身
         .contentShape(RoundedRectangle(cornerRadius: 8))
         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))

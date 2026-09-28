@@ -20,6 +20,8 @@ struct IconPickerView: View {
     }
 
     var body: some View {
+        // 3900+ 图标的过滤每次 body 只做一次（网格与空态共用）
+        let icons = icons
         ScrollView {
             LazyVGrid(columns: columns, spacing: 12) {
                 if searchText.isEmpty {

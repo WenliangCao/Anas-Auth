@@ -1,17 +1,19 @@
 import SwiftUI
+import UIKit
 
 /// 验证码卡片，布局对齐 ente auth 的 CodeWidget：
 /// 顶部倒计时进度条 → 发行方/账号 + 品牌图标 → 当前码 + 下一个码。
 /// 性能关键设计：
 /// - 卡片主体静态，不随时间重渲染（滚动/搜索动画不被打断）
 /// - 验证码文本只在周期边界那一刻刷新
-/// - 进度条是独立的 Canvas，只有它按帧重画
+/// - 进度条由 Core Animation 驱动，App 不逐帧重画
+/// - 输入不变时跳过重算（Equatable：闭包无法比较，只比数据）
 /// 紧凑模式的尺寸取自 ente 的 isCompactMode。
-struct CodeRowView: View {
+struct CodeRowView: View, @MainActor Equatable {
     let entry: CodeEntry
     var compact = false
-    /// 当前刚被复制的条目 ID（用于卡片淡出反馈）
-    var copiedEntryID: UUID?
+    /// 刚被复制（卡片淡出反馈）
+    var isCopied = false
     /// 轻点"下一个"：TOTP 复制下一个码
     var onCopyNext: () -> Void = {}
     /// HOTP 的前进按钮：计数器 +1
@@ -45,8 +47,9 @@ struct CodeRowView: View {
         .accessibilityHint("Tap to copy the code. Touch and hold for more options.")
     }
 
-    private var isCopied: Bool {
-        copiedEntryID == entry.id
+    /// entry 自身属性的变化由 Observation 追踪，这里只需比较身份与外部输入
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.entry === rhs.entry && lhs.compact == rhs.compact && lhs.isCopied == rhs.isCopied
     }
 
     private var title: String {
@@ -161,24 +164,94 @@ private struct CodePair: View {
     }
 }
 
-/// 顶部倒计时进度条：剩余比例 > 40% 为紫色，否则橙色（同 ente）
-private struct CodeProgressBar: View {
+/// 顶部倒计时进度条：剩余比例 > 40% 为紫色，否则橙色（同 ente）。
+/// 用 Core Animation 的无限循环动画：动画在系统渲染进程里跑，App 不逐帧重画，
+/// 卡片再多也几乎不耗 CPU
+private struct CodeProgressBar: UIViewRepresentable {
     let period: Int
 
-    var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 30)) { context in
-            let period = TimeInterval(max(period, 1))
-            let elapsed = context.date.timeIntervalSince1970.truncatingRemainder(dividingBy: period)
-            let progress = (period - elapsed) / period
-            Canvas { canvas, size in
-                let rect = CGRect(x: 0, y: 0, width: size.width * progress, height: size.height)
-                canvas.fill(
-                    Path(roundedRect: rect, cornerRadius: 2),
-                    with: .color(progress > 0.4 ? .entePurple : .orange)
-                )
-            }
+    func makeUIView(context: Context) -> ProgressBarView {
+        ProgressBarView()
+    }
+
+    func updateUIView(_ view: ProgressBarView, context: Context) {
+        view.period = TimeInterval(max(period, 1))
+    }
+}
+
+private final class ProgressBarView: UIView {
+    private static let warningFraction = 0.4
+
+    var period = TimeInterval(OTPGenerator.defaultPeriod) {
+        didSet { if period != oldValue { restart() } }
+    }
+
+    private let bar = CALayer()
+    private var animatedWidth: CGFloat = 0
+
+    init() {
+        super.init(frame: .zero)
+        isUserInteractionEnabled = false
+        bar.cornerRadius = 2
+        bar.anchorPoint = CGPoint(x: 0, y: 0.5)
+        layer.addSublayer(bar)
+        // 动画时钟（mach 时间）在设备休眠时不走，回到前台或系统改时间后要按墙上时间重新对齐
+        for name in [UIApplication.willEnterForegroundNotification, UIApplication.significantTimeChangeNotification] {
+            NotificationCenter.default.addObserver(self, selector: #selector(restart), name: name, object: nil)
         }
-        .accessibilityHidden(true)
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: ProgressBarView, _) in
+            view.restart()
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.width != animatedWidth else { return }
+        restart()
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        restart()
+    }
+
+    /// 按当前时间重新挂动画：宽度从满到空、剩 40% 时变橙，每个周期无限重复，
+    /// 起点对齐 Unix 时间的周期边界（与验证码切换同相位）
+    @objc private func restart() {
+        bar.removeAllAnimations()
+        animatedWidth = bounds.width
+        guard window != nil, bounds.width > 0 else { return }
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        bar.bounds = CGRect(x: 0, y: 0, width: 0, height: bounds.height)
+        bar.position = CGPoint(x: 0, y: bounds.midY)
+        CATransaction.commit()
+
+        let elapsed = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: period)
+        let cycleStart = bar.convertTime(CACurrentMediaTime(), from: nil) - elapsed
+
+        let width = CABasicAnimation(keyPath: "bounds.size.width")
+        width.fromValue = bounds.width
+        width.toValue = 0
+
+        let color = CAKeyframeAnimation(keyPath: "backgroundColor")
+        color.calculationMode = .discrete
+        color.values = [UIColor(Color.entePurple), UIColor.systemOrange].map {
+            $0.resolvedColor(with: traitCollection).cgColor
+        }
+        color.keyTimes = [0, NSNumber(value: 1 - Self.warningFraction), 1]
+
+        for (key, animation) in [("width", width as CAAnimation), ("color", color)] {
+            animation.beginTime = cycleStart
+            animation.duration = period
+            animation.repeatCount = .infinity
+            bar.add(animation, forKey: key)
+        }
     }
 }
 
