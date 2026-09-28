@@ -74,14 +74,15 @@ enum AegisImporter {
         var masterKey: Data?
         for slot in slots where ImportedOTP.integer(slot["type"]) == 1 {
             guard let salt = Data(hexString: JSONInput.string(slot["salt"]) ?? ""),
-                  let n = ImportedOTP.integer(slot["n"]), let r = ImportedOTP.integer(slot["r"]),
-                  let p = ImportedOTP.integer(slot["p"]),
+                  let n = ImportedOTP.integer(slot["n"]).flatMap(UInt64.init(exactly:)), n > 0,
+                  let r = ImportedOTP.integer(slot["r"]).flatMap(UInt32.init(exactly:)), r > 0,
+                  let p = ImportedOTP.integer(slot["p"]).flatMap(UInt32.init(exactly:)), p > 0,
                   let keyParams = slot["key_params"] as? [String: Any],
                   let nonce = Data(hexString: JSONInput.string(keyParams["nonce"]) ?? ""),
                   let tag = Data(hexString: JSONInput.string(keyParams["tag"]) ?? ""),
                   let encryptedKey = Data(hexString: JSONInput.string(slot["key"]) ?? "") else { continue }
             let derived = try ImportCrypto.scrypt(
-                password: password, salt: salt, n: UInt64(n), r: UInt32(r), p: UInt32(p), keyLength: 32
+                password: password, salt: salt, n: n, r: r, p: p, keyLength: 32
             )
             if let key = try? ImportCrypto.aesGCMOpen(key: derived, nonce: nonce, ciphertextAndTag: encryptedKey + tag) {
                 masterKey = key

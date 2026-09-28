@@ -23,15 +23,16 @@ struct ProtobufReader {
         var offset = data.startIndex
         while offset < data.endIndex {
             let key = try readVarint(from: data, at: &offset)
-            let fieldNumber = Int(key >> 3)
+            let fieldNumber = Int(clamping: key >> 3)
             let wireType = key & 0x7
             switch wireType {
             case 0: // varint
                 let value = try readVarint(from: data, at: &offset)
                 fields.append(Field(number: fieldNumber, wireType: wireType, varintValue: value, data: nil))
             case 2: // length-delimited
-                let length = Int(try readVarint(from: data, at: &offset))
-                guard offset + length <= data.endIndex else { throw ProtobufError.truncated }
+                let rawLength = try readVarint(from: data, at: &offset)
+                guard rawLength <= UInt64(data.endIndex - offset) else { throw ProtobufError.truncated }
+                let length = Int(rawLength)
                 fields.append(Field(number: fieldNumber, wireType: wireType, varintValue: nil,
                                     data: data[offset..<(offset + length)]))
                 offset += length

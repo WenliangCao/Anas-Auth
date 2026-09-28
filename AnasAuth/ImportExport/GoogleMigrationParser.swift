@@ -46,7 +46,7 @@ enum GoogleMigrationParser {
             throw GoogleMigrationError.emptyPayload
         }
         // 字段 3 batch_size、4 batch_index、5 batch_id
-        let number = { (field: Int) in Int(fields.first { $0.number == field }?.varintValue ?? 0) }
+        let number = { (field: Int) in Int(clamping: fields.first { $0.number == field }?.varintValue ?? 0) }
         return Migration(
             codes: otpParameterBlobs.compactMap(parseOtpParameters(_:)),
             batchID: number(5),
@@ -83,7 +83,7 @@ enum GoogleMigrationParser {
             case 6:
                 type = field.varintValue == 1 ? .hotp : .totp
             case 7:
-                counter = Int(field.varintValue ?? 0)
+                counter = Int(clamping: field.varintValue ?? 0)
             default:
                 break
             }

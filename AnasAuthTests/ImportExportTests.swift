@@ -175,4 +175,39 @@ extension ImportExportTests {
         #expect(unique[0].issuer == "GitLab")
         #expect(unique[1].accountName == "bob")
     }
+
+    /// 备份文件里的无效条目（负数计数器）被跳过，不会写入后让列表崩溃
+    @Test func jsonImportSkipsInvalidCounter() throws {
+        let json = """
+        {"version":1,"exportedAt":"2026-01-01T00:00:00Z","codes":[\
+        {"issuer":"A","accountName":"a","secret":"JBSWY3DPEHPK3PXP","algorithm":"sha1","digits":6,\
+        "period":30,"counter":-1,"type":"hotp","note":"","pinned":false},\
+        {"issuer":"B","accountName":"b","secret":"JBSWY3DPEHPK3PXP","algorithm":"sha1","digits":6,\
+        "period":30,"counter":3,"type":"hotp","note":"","pinned":false}]}
+        """
+        let imported = try ImportService.importCodes(from: json)
+        #expect(imported.map(\.issuer) == ["B"])
+        #expect(imported[0].counter == 3)
+    }
+
+    /// 已存进库里的负数计数器也不能让生成崩溃
+    @Test func negativeCounterDoesNotCrash() throws {
+        let code = OTPCode(issuer: "A", accountName: "a", secret: "JBSWY3DPEHPK3PXP", counter: -1, type: .hotp)
+        #expect(try code.generateCode() == code.withCounter(0).generateCode())
+        #expect(throws: Never.self) { try code.generateNextCode() }
+    }
+
+    /// 超长长度字段的恶意 protobuf 抛错而不是崩溃
+    @Test func protobufRejectsOversizedLength() {
+        let payload = Data([0x0A, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0x00])
+        #expect(throws: ProtobufError.self) { try ProtobufReader.readFields(from: payload) }
+    }
+}
+
+private extension OTPCode {
+    func withCounter(_ counter: Int) -> OTPCode {
+        var copy = self
+        copy.counter = counter
+        return copy
+    }
 }

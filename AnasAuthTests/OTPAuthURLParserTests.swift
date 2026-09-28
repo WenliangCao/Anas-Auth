@@ -143,4 +143,20 @@ extension OTPAuthURLParserTests {
         let generated = try code.generateCode(at: Date(timeIntervalSince1970: 1234567890))
         #expect(generated.count == 6)
     }
+
+    /// 负数计数器会让 HOTP 生成崩溃，解析时必须拒绝
+    @Test func rejectsNegativeCounter() {
+        #expect(throws: OTPAuthURLError.invalidParameter("counter")) {
+            try OTPAuthURLParser.parse("otpauth://hotp/X:a?secret=JBSWY3DPEHPK3PXP&counter=-1")
+        }
+    }
+
+    @Test func validatesDigitsAndPeriod() throws {
+        #expect(throws: OTPAuthURLError.invalidParameter("digits")) {
+            try OTPAuthURLParser.parse("otpauth://totp/X:a?secret=JBSWY3DPEHPK3PXP&digits=11")
+        }
+        let code = try OTPAuthURLParser.parse("otpauth://totp/X:a?secret=JBSWY3DPEHPK3PXP&digits=0&period=-5")
+        #expect(code.digits == 6)
+        #expect(code.period == 30)
+    }
 }

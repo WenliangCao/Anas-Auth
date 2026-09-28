@@ -193,7 +193,7 @@ struct CodeListView: View {
             compact: layout == .compact,
             copiedEntryID: copiedEntryID,
             onCopyNext: { copyNextCode(of: entry) },
-            onAdvanceCounter: { entry.counter += 1 }
+            onAdvanceCounter: { if entry.counter < .max { entry.counter += 1 } }
         )
         // 点击区域与长按预览都只是卡片本身
         .contentShape(RoundedRectangle(cornerRadius: 8))

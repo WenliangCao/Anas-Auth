@@ -71,23 +71,23 @@ enum ImportService {
         guard let file = try? decoder.decode(AuthExportFile.self, from: data) else {
             throw ImportError.malformedJSON
         }
+        // 参数校验与其他导入器一致，跳过无效条目（如负数计数器、非法位数）
         let codes = file.codes.compactMap { exported -> OTPCode? in
-            let secret = OTPAuthURLParser.sanitizeSecret(exported.secret)
-            guard (try? Base32.decode(secret)) != nil else { return nil }
-            return OTPCode(
+            var code = try? ImportedOTP.make(
+                kind: exported.type,
                 issuer: exported.issuer,
-                accountName: exported.accountName,
-                secret: secret,
-                algorithm: OTPAlgorithm(rawValue: exported.algorithm.lowercased()) ?? .sha1,
+                account: exported.accountName,
+                secret: exported.secret,
+                algorithm: exported.algorithm,
                 digits: exported.digits,
                 period: exported.period,
                 counter: exported.counter,
-                type: OTPType(rawValue: exported.type.lowercased()) ?? .totp,
                 note: exported.note,
                 pinned: exported.pinned,
-                tags: exported.tags ?? [],
-                iconID: exported.iconID ?? ""
+                tags: exported.tags ?? []
             )
+            code?.iconID = exported.iconID ?? ""
+            return code
         }
         guard !codes.isEmpty else { throw ImportError.noCodesFound }
         return codes

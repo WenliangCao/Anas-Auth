@@ -5,6 +5,7 @@ enum OTPAuthURLError: Error, Equatable {
     case unsupportedType(String)
     case missingSecret
     case invalidSecret
+    case invalidParameter(String)
 }
 
 /// 解析与生成 `otpauth://` URL（Google Key Uri Format 开放规范）。
@@ -53,11 +54,19 @@ enum OTPAuthURLParser {
             || issuer.compare("Steam", options: [.caseInsensitive, .diacriticInsensitive]) == .orderedSame
         let effectiveType: OTPType = isSteam ? .steam : type
 
-        let digits = effectiveType == .steam
-            ? OTPGenerator.steamDigits
-            : (Int(queryItems["digits"] ?? "") ?? OTPGenerator.defaultDigits)
-        let period = Int(queryItems["period"] ?? "") ?? OTPGenerator.defaultPeriod
+        // 与导入器（ImportedOTP）同一套规则：digits 缺省/0 取 6、超出 1...10 视为无效；
+        // period 缺省/≤0 取 30；counter 不能为负（负数会让验证码生成崩溃）
+        var digits = Int(queryItems["digits"] ?? "") ?? 0
+        if digits == 0 || effectiveType == .steam {
+            digits = effectiveType == .steam ? OTPGenerator.steamDigits : OTPGenerator.defaultDigits
+        }
+        guard (1...ImportedOTP.maxDigits).contains(digits) else {
+            throw OTPAuthURLError.invalidParameter("digits")
+        }
+        var period = Int(queryItems["period"] ?? "") ?? 0
+        if period <= 0 { period = OTPGenerator.defaultPeriod }
         let counter = Int(queryItems["counter"] ?? "") ?? 0
+        guard counter >= 0 else { throw OTPAuthURLError.invalidParameter("counter") }
         let algorithm = OTPAlgorithm(rawValue: (queryItems["algorithm"] ?? "sha1").lowercased()) ?? .sha1
 
         return OTPCode(

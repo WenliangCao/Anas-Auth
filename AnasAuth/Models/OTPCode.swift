@@ -30,7 +30,7 @@ struct OTPCode: Identifiable, Hashable, Sendable {
         case .totp:
             return OTPGenerator.totp(secret: secretData, at: date, period: period, digits: digits, algorithm: algorithm)
         case .hotp:
-            return OTPGenerator.hotp(secret: secretData, counter: UInt64(counter), digits: digits, algorithm: algorithm)
+            return OTPGenerator.hotp(secret: secretData, counter: UInt64(clamping: counter), digits: digits, algorithm: algorithm)
         case .steam:
             return OTPGenerator.steam(secret: secretData, at: date, period: period)
         }
@@ -44,7 +44,7 @@ struct OTPCode: Identifiable, Hashable, Sendable {
             let next = date.addingTimeInterval(TimeInterval(period))
             return OTPGenerator.totp(secret: secretData, at: next, period: period, digits: digits, algorithm: algorithm)
         case .hotp:
-            return OTPGenerator.hotp(secret: secretData, counter: UInt64(counter + 1), digits: digits, algorithm: algorithm)
+            return OTPGenerator.hotp(secret: secretData, counter: UInt64(clamping: counter) &+ 1, digits: digits, algorithm: algorithm)
         case .steam:
             let next = date.addingTimeInterval(TimeInterval(period))
             return OTPGenerator.steam(secret: secretData, at: next, period: period)
