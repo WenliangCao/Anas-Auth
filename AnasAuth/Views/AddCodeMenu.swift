@@ -13,6 +13,16 @@ struct AddCodeMenu: View {
     @State private var pickedPhoto: PhotosPickerItem?
     @State private var importError: String?
     @State private var saveError: String?
+    /// Google 迁移码账号多时会拆成多张，全部扫完再一起导入
+    @State private var googleTracker = GoogleMigrationTracker()
+    @State private var googlePending: GooglePending?
+
+    /// 还差批次没扫：提示进度，并记住从哪里继续（相机或相册）
+    private struct GooglePending {
+        let received: Int
+        let expected: Int
+        let fromPhotos: Bool
+    }
 
     var body: some View {
         Menu {
@@ -34,7 +44,7 @@ struct AddCodeMenu: View {
                 ScannerScreen(
                     onPayload: { payload in
                         showingScanner = false
-                        importPayload(payload)
+                        importPayload(payload, fromPhotos: false)
                     },
                     onCancel: { showingScanner = false }
                 )
@@ -54,11 +64,26 @@ struct AddCodeMenu: View {
         } message: {
             Text(importError ?? "")
         }
+        .alert(Text(verbatim: "Google Authenticator"), isPresented: showGooglePendingAlert, presenting: googlePending) { pending in
+            Button("Continue") {
+                if pending.fromPhotos { showingPhotoPicker = true } else { showingScanner = true }
+            }
+            Button("Cancel", role: .cancel) { googleTracker = GoogleMigrationTracker() }
+        } message: { pending in
+            Text("Received \(pending.received) of \(pending.expected) QR codes. Scan or choose the next one.")
+        }
         .alert("Couldn’t Save", isPresented: showSaveErrorAlert) {
             Button("OK") { saveError = nil }
         } message: {
             Text(saveError ?? "")
         }
+    }
+
+    private var showGooglePendingAlert: Binding<Bool> {
+        Binding(
+            get: { googlePending != nil },
+            set: { if !$0 { googlePending = nil } }
+        )
     }
 
     private var showSaveErrorAlert: Binding<Bool> {
@@ -83,12 +108,36 @@ struct AddCodeMenu: View {
             importError = String(localized: "No QR code found in the image.")
             return
         }
-        importPayload(payload)
+        importPayload(payload, fromPhotos: true)
     }
 
     /// 扫码与相册共用：兼容 otpauth:// 单条与 otpauth-migration:// 批量迁移
-    private func importPayload(_ payload: String) {
-        guard let codes = try? ImportService.importCodes(from: payload) else {
+    private func importPayload(_ payload: String, fromPhotos: Bool) {
+        let payload = payload.trimmingCharacters(in: .whitespacesAndNewlines)
+        let codes: [OTPCode]
+        do {
+            if payload.hasPrefix("otpauth-migration://") {
+                guard let all = try googleTracker.add(GoogleMigrationParser.parseMigration(payload)) else {
+                    googlePending = GooglePending(
+                        received: googleTracker.receivedCount,
+                        expected: googleTracker.expectedCount,
+                        fromPhotos: fromPhotos
+                    )
+                    return
+                }
+                codes = all
+            } else {
+                codes = try ImportService.importCodes(from: payload)
+            }
+        } catch let error as GoogleMigrationTracker.TrackerError {
+            googleTracker = GoogleMigrationTracker()
+            importError = error.localizedDescription
+            return
+        } catch {
+            importError = String(localized: "The QR code doesn’t contain a valid code.")
+            return
+        }
+        guard !codes.isEmpty else {
             importError = String(localized: "The QR code doesn’t contain a valid code.")
             return
         }
