@@ -13,7 +13,7 @@ enum OTPAuthAppImporter {
         let outer = try decryptOuterArchive(fileData)
         let isBackup = outer["WrappedData"] != nil
         guard let encrypted = (outer[isBackup ? "WrappedData" : "Data"]) as? Data else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 OTP Auth 导出。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid OTP Auth export."))
         }
         let version = (outer["Version"] as? NSNumber)?.doubleValue
         let isLegacy = (isBackup && version == 1.0) || (!isBackup && version == 1.1)
@@ -25,7 +25,7 @@ enum OTPAuthAppImporter {
         } else if isModern {
             decrypted = try decryptRNCryptor(encrypted, password: password)
         } else {
-            throw ImportProviderError.unsupportedVersion("暂不支持该版本的 OTP Auth 导出（\(version.map { "\($0)" } ?? "未知")）。")
+            throw ImportProviderError.unsupportedVersion(String(localized: "This version of the OTP Auth export isn’t supported yet (\(version.map { "\($0)" } ?? String(localized: "unknown")))."))
         }
 
         let accounts: [OTPAuthArchivedAccount]
@@ -55,13 +55,13 @@ enum OTPAuthAppImporter {
                 return archive
             }
         }
-        throw ImportProviderError.invalidFile("所选文件不是有效的 OTP Auth 导出。")
+        throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid OTP Auth export."))
     }
 
     private static func decryptLegacy(_ data: Data, outer: [String: Any], isBackup: Bool, password: String) throws -> Data {
         let ivSource: Data? = isBackup ? (outer["IV"] as? String).map { Data($0.utf8) } : outer["IV"] as? Data
         guard let ivSource, let salt = outer["Salt"] else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 OTP Auth 导出。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid OTP Auth export."))
         }
         let key = ImportCrypto.sha256(Data("\(salt)-\(password)".utf8))
         let iv = ImportCrypto.sha1(ivSource).prefix(16)
@@ -76,7 +76,7 @@ enum OTPAuthAppImporter {
     private static func decryptRNCryptor(_ data: Data, password: String) throws -> Data {
         let bytes = [UInt8](data)
         guard bytes.count >= 34 + 16 + 32, bytes[0] == 3, bytes[1] == 1 else {
-            throw ImportProviderError.invalidFile("OTP Auth 导出的加密格式不对。")
+            throw ImportProviderError.invalidFile(String(localized: "The OTP Auth export has an invalid encryption format."))
         }
         let encryptionKey = try ImportCrypto.pbkdf2(
             password: password, salt: Data(bytes[2..<10]), rounds: 10_000, keyLength: 32, prf: .sha1
@@ -108,12 +108,12 @@ enum OTPAuthAppImporter {
         )
         if isBackup {
             guard let folders = (root as? [String: Any])?["Folders"] as? [OTPAuthArchivedFolder] else {
-                throw ImportProviderError.invalidFile("OTP Auth 备份内容无效。")
+                throw ImportProviderError.invalidFile(String(localized: "The OTP Auth backup is invalid."))
             }
             return folders.flatMap(\.accounts)
         }
         guard let account = root as? OTPAuthArchivedAccount else {
-            throw ImportProviderError.invalidFile("OTP Auth 导出内容无效。")
+            throw ImportProviderError.invalidFile(String(localized: "The OTP Auth export is invalid."))
         }
         return [account]
     }
@@ -169,15 +169,15 @@ final class OTPAuthArchivedAccount: NSObject, NSSecureCoding {
         let kind = switch type {
         case 1: "hotp"
         case 2: "totp"
-        default: throw ImportFailure("不支持的验证码类型")
+        default: throw ImportFailure(String(localized: "Unsupported code type"))
         }
         let algorithmName = switch algorithm {
         case 0, 1: "SHA1"
         case 2: "SHA256"
         case 3: "SHA512"
-        default: throw ImportFailure("不支持的算法")
+        default: throw ImportFailure(String(localized: "Unsupported algorithm"))
         }
-        guard let label, let secret else { throw ImportFailure("缺少账号或密钥") }
+        guard let label, let secret else { throw ImportFailure(String(localized: "Missing account or secret")) }
         return try ImportedOTP.make(
             kind: kind,
             issuer: issuer,

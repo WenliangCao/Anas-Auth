@@ -1,0 +1,1886 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "6 digits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6 位"
+          }
+        }
+      }
+    },
+    "7 digits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7 位"
+          }
+        }
+      }
+    },
+    "8 digits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8 位"
+          }
+        }
+      }
+    },
+    "Account": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账号"
+          }
+        }
+      }
+    },
+    "Account (e.g. email)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账号名（如邮箱）"
+          }
+        }
+      }
+    },
+    "Account Details": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "账号信息"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加"
+          }
+        }
+      }
+    },
+    "Add Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加验证码"
+          }
+        }
+      }
+    },
+    "Add Manually": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手动添加"
+          }
+        }
+      }
+    },
+    "Add Tag": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "添加标签"
+          }
+        }
+      }
+    },
+    "Algorithm": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "算法"
+          }
+        }
+      }
+    },
+    "All": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全部"
+          }
+        }
+      }
+    },
+    "Allow Anas Auth to use the camera in Settings, then come back and try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请到系统设置中允许 Anas Auth 使用相机，然后返回重试。"
+          }
+        }
+      }
+    },
+    "An encrypted backup can’t be restored if you lose its password.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密备份的密码丢失后无法恢复。"
+          }
+        }
+      }
+    },
+    "Anas Auth is free software: you can use, modify and redistribute it under the terms of the GNU Affero General Public License version 3 (AGPL-3.0). It comes with no warranty; see the license for details. This project is not affiliated with ente.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anas Auth 是自由软件：你可以依据 GNU Affero 通用公共许可证第 3 版（AGPL-3.0）的条款使用、修改和再分发它。本程序不提供任何担保，详见许可证全文。本项目与 ente 无隶属关系。"
+          }
+        }
+      }
+    },
+    "Anas Auth is open source under the AGPL-3.0 license.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anas Auth 以 AGPL-3.0 许可开源。"
+          }
+        }
+      }
+    },
+    "App Lock": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "应用锁"
+          }
+        }
+      }
+    },
+    "Appearance": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外观"
+          }
+        }
+      }
+    },
+    "Backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "备份"
+          }
+        }
+      }
+    },
+    "Backup Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "备份密码"
+          }
+        }
+      }
+    },
+    "Base32 Secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Base32 密钥"
+          }
+        }
+      }
+    },
+    "Camera Unavailable": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法访问相机"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消"
+          }
+        }
+      }
+    },
+    "Change Icon": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更换图标"
+          }
+        }
+      }
+    },
+    "Choose File": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择文件"
+          }
+        }
+      }
+    },
+    "Choose Icon": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择图标"
+          }
+        }
+      }
+    },
+    "Choose Image": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择图片"
+          }
+        }
+      }
+    },
+    "Codes found in Google Authenticator: %lld. Import them?": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要从 Google Authenticator 导入 %lld 个验证码吗？"
+          }
+        }
+      }
+    },
+    "Compact": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "紧凑"
+          }
+        }
+      }
+    },
+    "Compact mode uses smaller cards and text, so more codes fit on screen.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "紧凑模式下卡片更矮、字号更小，一屏能看到更多验证码。"
+          }
+        }
+      }
+    },
+    "Confirm Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再次输入密码"
+          }
+        }
+      }
+    },
+    "Copied %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已复制 %@"
+          }
+        }
+      }
+    },
+    "Copied code %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已复制验证码 %@"
+          }
+        }
+      }
+    },
+    "Copy Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "复制验证码"
+          }
+        }
+      }
+    },
+    "Couldn’t parse the selected file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法解析选定的文件。"
+          }
+        }
+      }
+    },
+    "Couldn’t read the selected file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法读取所选文件。"
+          }
+        }
+      }
+    },
+    "Couldn’t Recognize": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法识别"
+          }
+        }
+      }
+    },
+    "Counter-based (HOTP)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "基于计数器 (HOTP)"
+          }
+        }
+      }
+    },
+    "Default": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "默认"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除"
+          }
+        }
+      }
+    },
+    "Delete %@? If this is your only way to sign in, you may lose access to the account. This can’t be undone.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "确定删除 %@？如果这是唯一的验证凭证，删除后可能无法登录该服务。此操作无法撤销。"
+          }
+        }
+      }
+    },
+    "Delete Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "删除验证码"
+          }
+        }
+      }
+    },
+    "Digits": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位数"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完成"
+          }
+        }
+      }
+    },
+    "Edit": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "编辑"
+          }
+        }
+      }
+    },
+    "Encrypt Backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密备份"
+          }
+        }
+      }
+    },
+    "ente Community Brand Icons": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ente 社区品牌图标"
+          }
+        }
+      }
+    },
+    "Ente Encrypted Export": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ente 加密导出"
+          }
+        }
+      }
+    },
+    "Enter Manually": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手动输入"
+          }
+        }
+      }
+    },
+    "Enter Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "输入密码"
+          }
+        }
+      }
+    },
+    "Enter the password for your Aegis vault": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入 Aegis 密码库的密码"
+          }
+        }
+      }
+    },
+    "Enter the password to decrypt the 2FAS backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入密码以解密 2FAS 备份"
+          }
+        }
+      }
+    },
+    "Enter the password to decrypt the andOTP backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请输入密码以解密 andOTP 备份"
+          }
+        }
+      }
+    },
+    "Export an encrypted backup from OTP Auth, then select the .otpauthdb or .otpauthdp file. Single-account .otpauth files are also supported.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从 OTP Auth 导出加密备份，然后选择 .otpauthdb 或 .otpauthdp 文件。也支持单账户的 .otpauth 文件。"
+          }
+        }
+      }
+    },
+    "Export Backup": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出备份"
+          }
+        }
+      }
+    },
+    "Export Backup (%lld)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出备份（%lld 条）"
+          }
+        }
+      }
+    },
+    "Export Encrypted": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加密导出"
+          }
+        }
+      }
+    },
+    "Export failed: %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出失败：%@"
+          }
+        }
+      }
+    },
+    "Export Without Encryption": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不加密，直接导出"
+          }
+        }
+      }
+    },
+    "Full Text of the GNU AGPL-3.0": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GNU AGPL-3.0 许可证全文"
+          }
+        }
+      }
+    },
+    "Full Third-Party Notices": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完整第三方声明"
+          }
+        }
+      }
+    },
+    "Hide Secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "隐藏密钥"
+          }
+        }
+      }
+    },
+    "If you lose the password, the backup can’t be restored.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码丢失后无法恢复备份。"
+          }
+        }
+      }
+    },
+    "Import": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入"
+          }
+        }
+      }
+    },
+    "Import Complete": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入完成"
+          }
+        }
+      }
+    },
+    "Import Failed": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入失败"
+          }
+        }
+      }
+    },
+    "Import failed: couldn’t read the file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入失败：无法读取文件。"
+          }
+        }
+      }
+    },
+    "Import failed: the file isn’t in a supported format.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入失败：文件内容不是支持的格式。"
+          }
+        }
+      }
+    },
+    "Import Formats (Ported from ente)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入格式解析（参照 ente 实现）"
+          }
+        }
+      }
+    },
+    "Import from Backup File": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从备份文件导入"
+          }
+        }
+      }
+    },
+    "Import from Other Apps": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从其他应用导入"
+          }
+        }
+      }
+    },
+    "Import from Photos": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "从相册导入"
+          }
+        }
+      }
+    },
+    "Import Result": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导入结果"
+          }
+        }
+      }
+    },
+    "Imported: %lld.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已导入 %lld 个验证码。"
+          }
+        }
+      }
+    },
+    "Imported: %lld. Skipped (already added): %lld.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已导入 %1$lld 个验证码，跳过 %2$lld 个已存在的。"
+          }
+        }
+      }
+    },
+    "In 2FAS, use “Settings → Backup → Export”.\n\nIf the backup is encrypted, you’ll need its password to decrypt it.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 2FAS 中的「设置 → 备份 → 导出」选项。\n\n如果备份已加密，需要输入密码来解密。"
+          }
+        }
+      }
+    },
+    "In Aegis settings, use “Export the vault”.\n\nIf the vault is encrypted, you’ll need the vault password to decrypt it.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Aegis 设置中的「导出密码库」选项。\n\n如果密码库已加密，需要输入密码库密码才能解密。"
+          }
+        }
+      }
+    },
+    "In andOTP settings, use “Backup” to export a backup.\n\nIf the backup is encrypted, you’ll need the backup password to decrypt it.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 andOTP 设置中的「备份」选项导出备份。\n\n如果备份已加密，需要输入备份密码才能解密。"
+          }
+        }
+      }
+    },
+    "In Bitwarden tools, use “Export vault”, then import the unencrypted JSON file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Bitwarden 工具中的「导出密码库」选项，导入未加密的 JSON 文件。"
+          }
+        }
+      }
+    },
+    "In Google Authenticator, use “Transfer accounts” to export your accounts as QR codes, then scan them or import them from images. Many accounts produce several QR codes; scan all of them.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "在 Google Authenticator 中使用「转移账号」把账号导出为二维码，然后扫描二维码或从图片导入。账号较多时会生成多张二维码，需要全部扫完。"
+          }
+        }
+      }
+    },
+    "In LastPass Authenticator settings, choose “Transfer accounts”, then “Export accounts to file”, and import the downloaded JSON.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 LastPass Authenticator 设置中的「转移账户」选项，然后点「将账户导出到文件」，导入下载的 JSON。"
+          }
+        }
+      }
+    },
+    "In Proton Authenticator settings, use “Export”.\n\nIf the export is password-protected, you’ll need the password to decrypt it.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Proton Authenticator 设置中的「导出」选项导出验证码。\n\n如果导出文件设置了密码，需要输入密码才能解密。"
+          }
+        }
+      }
+    },
+    "In Raivo settings, use “Export OTPs to ZIP archive”.\n\nUnzip the file and import the JSON file inside.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "使用 Raivo 设置中的「Export OTPs to ZIP archive」选项。\n\n解压 zip 文件后导入其中的 JSON 文件。"
+          }
+        }
+      }
+    },
+    "Incorrect password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码不正确"
+          }
+        }
+      }
+    },
+    "Incorrect Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码错误"
+          }
+        }
+      }
+    },
+    "Incorrect password. Check it and try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码错误，请检查后重试。"
+          }
+        }
+      }
+    },
+    "Incorrect password. Import failed.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码不正确，导入失败。"
+          }
+        }
+      }
+    },
+    "Initial counter: %lld": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初始计数：%lld"
+          }
+        }
+      }
+    },
+    "Invalid entry format": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "条目格式不对"
+          }
+        }
+      }
+    },
+    "Invalid HOTP counter: %lld": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HOTP 计数器无效：%lld"
+          }
+        }
+      }
+    },
+    "Invalid number of digits: %lld": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "位数无效：%lld"
+          }
+        }
+      }
+    },
+    "Invalid QR code: it isn’t a Google Authenticator transfer QR code.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "二维码无效：不是 Google Authenticator 的转移二维码。"
+          }
+        }
+      }
+    },
+    "Invalid secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无效密钥"
+          }
+        }
+      }
+    },
+    "Issuer": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发行方"
+          }
+        }
+      }
+    },
+    "Issuer (e.g. GitHub)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "发行方（如 GitHub）"
+          }
+        }
+      }
+    },
+    "Layout": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "布局"
+          }
+        }
+      }
+    },
+    "Locked": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已锁定"
+          }
+        }
+      }
+    },
+    "Missing account or secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "缺少账号或密钥"
+          }
+        }
+      }
+    },
+    "Most Used": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最常用"
+          }
+        }
+      }
+    },
+    "Next": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一个"
+          }
+        }
+      }
+    },
+    "Next code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下一个验证码"
+          }
+        }
+      }
+    },
+    "No Codes Yet": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "还没有验证码"
+          }
+        }
+      }
+    },
+    "No QR code found in the image.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图片中没有找到二维码。"
+          }
+        }
+      }
+    },
+    "Not enough memory to decrypt. Close other apps and try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解密所需内存不足，请关闭其他应用后重试。"
+          }
+        }
+      }
+    },
+    "Note": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "备注"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "好"
+          }
+        }
+      }
+    },
+    "One entry couldn’t be read: %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "有一个条目无法解析：%@"
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打开系统设置"
+          }
+        }
+      }
+    },
+    "Open Source Licenses": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开源许可"
+          }
+        }
+      }
+    },
+    "Parameters": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "参数"
+          }
+        }
+      }
+    },
+    "Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码"
+          }
+        }
+      }
+    },
+    "Period: %lld s": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "周期：%lld 秒"
+          }
+        }
+      }
+    },
+    "Pin": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "置顶"
+          }
+        }
+      }
+    },
+    "Pinned": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已置顶"
+          }
+        }
+      }
+    },
+    "Plain Text": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "纯文本"
+          }
+        }
+      }
+    },
+    "Please check your password and try again.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请检查您的密码并重试。"
+          }
+        }
+      }
+    },
+    "Please wait…": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请稍候…"
+          }
+        }
+      }
+    },
+    "Point Camera at QR Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "对准二维码"
+          }
+        }
+      }
+    },
+    "Received %lld of %lld QR codes. Scan or choose the next one.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已收到 %1$lld/%2$lld 张二维码，请继续扫描或选择下一张。"
+          }
+        }
+      }
+    },
+    "Recently Used": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最近使用"
+          }
+        }
+      }
+    },
+    "Scan a QR code or choose a QR code image.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请扫描二维码或选择二维码图片。"
+          }
+        }
+      }
+    },
+    "Scan QR Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "扫描二维码"
+          }
+        }
+      }
+    },
+    "Search": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "搜索"
+          }
+        }
+      }
+    },
+    "Secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥"
+          }
+        }
+      }
+    },
+    "Security": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安全"
+          }
+        }
+      }
+    },
+    "Select a file that contains a list of codes in this format:\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\nCodes can be separated by commas or line breaks.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请选择一个包含以下格式的代码列表的文件：\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\n代码可以用逗号或换行符分隔。"
+          }
+        }
+      }
+    },
+    "Select the encrypted JSON file exported from Ente.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择从 Ente 导出的 JSON 加密文件。"
+          }
+        }
+      }
+    },
+    "Set Password": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设置密码"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设置"
+          }
+        }
+      }
+    },
+    "Show Secret": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "显示密钥"
+          }
+        }
+      }
+    },
+    "simple-icons Brand Icons": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "simple-icons 品牌图标"
+          }
+        }
+      }
+    },
+    "Sort By": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "排序方式"
+          }
+        }
+      }
+    },
+    "Source Code": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "源代码"
+          }
+        }
+      }
+    },
+    "Steam": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Steam"
+          }
+        }
+      }
+    },
+    "swift-sodium / libsodium": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "swift-sodium / libsodium"
+          }
+        }
+      }
+    },
+    "Tags": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "标签"
+          }
+        }
+      }
+    },
+    "Tap + to scan a QR code, enter a code manually, or import one from Photos.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "点右下角 + 扫码、手动输入或从相册导入你的第一个两步验证码"
+          }
+        }
+      }
+    },
+    "Tap to copy the code. Touch and hold for more options.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "轻点复制验证码，长按查看更多操作"
+          }
+        }
+      }
+    },
+    "The decrypted 2FAS backup is invalid.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2FAS 备份解密后的内容无效。"
+          }
+        }
+      }
+    },
+    "The decrypted andOTP backup is invalid.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "andOTP 备份解密后的内容无效。"
+          }
+        }
+      }
+    },
+    "The decrypted vault is invalid.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码库解密后的内容无效。"
+          }
+        }
+      }
+    },
+    "The encrypted 2FAS backup has an invalid format.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2FAS 加密备份格式不对。"
+          }
+        }
+      }
+    },
+    "The file isn’t valid JSON.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件不是有效的 JSON。"
+          }
+        }
+      }
+    },
+    "The Google Authenticator export has invalid batch information.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Google Authenticator 导出的批次信息无效。"
+          }
+        }
+      }
+    },
+    "The OTP Auth backup is invalid.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 备份内容无效。"
+          }
+        }
+      }
+    },
+    "The OTP Auth export has an invalid encryption format.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 导出的加密格式不对。"
+          }
+        }
+      }
+    },
+    "The OTP Auth export is invalid.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OTP Auth 导出内容无效。"
+          }
+        }
+      }
+    },
+    "The password used to encrypt the export": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用来解密导出的密码"
+          }
+        }
+      }
+    },
+    "The passwords don’t match": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "两次输入的密码不一致"
+          }
+        }
+      }
+    },
+    "The QR code doesn’t contain a valid code.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "二维码内容不是有效的验证码格式。"
+          }
+        }
+      }
+    },
+    "The secret can’t be empty": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥不能为空"
+          }
+        }
+      }
+    },
+    "The secret can’t be parsed": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥无法解析"
+          }
+        }
+      }
+    },
+    "The secret contains invalid characters (it may have been damaged during sync or migration)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥包含非法字符（同步或迁移时可能损坏）"
+          }
+        }
+      }
+    },
+    "The secret is empty": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥为空"
+          }
+        }
+      }
+    },
+    "The secret isn’t valid Base32": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥不是有效的 Base32"
+          }
+        }
+      }
+    },
+    "The secret isn’t valid Base32 encoding": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密钥不是有效的 Base32 编码"
+          }
+        }
+      }
+    },
+    "The selected file isn’t a LastPass Authenticator JSON export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是 LastPass Authenticator 导出的 JSON。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t a Raivo JSON export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是 Raivo 导出的 JSON。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t a valid 2FAS Authenticator export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是有效的 2FAS Authenticator 导出。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t a valid OTP Auth export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是有效的 OTP Auth 导出。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t a valid Proton Authenticator export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是有效的 Proton Authenticator 导出文件。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t an Aegis vault export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是 Aegis 导出的密码库。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t an andOTP backup.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是 andOTP 备份。"
+          }
+        }
+      }
+    },
+    "The selected file isn’t an unencrypted Bitwarden JSON export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "所选文件不是未加密的 Bitwarden JSON 导出。"
+          }
+        }
+      }
+    },
+    "The vault has no entries.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "密码库里没有条目。"
+          }
+        }
+      }
+    },
+    "There are no codes to import in this file.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件中没有可导入的验证码。"
+          }
+        }
+      }
+    },
+    "These codes already exist. There’s nothing new to add.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这些验证码都已存在，没有新内容可添加。"
+          }
+        }
+      }
+    },
+    "Third-Party Components": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "第三方组件"
+          }
+        }
+      }
+    },
+    "This QR code belongs to a different Google Authenticator export.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "这张二维码属于另一次 Google Authenticator 导出。"
+          }
+        }
+      }
+    },
+    "This version of the 2FAS export isn’t supported yet (schemaVersion %lld).": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂不支持该版本的 2FAS 导出（schemaVersion %lld）。"
+          }
+        }
+      }
+    },
+    "This version of the OTP Auth export isn’t supported yet (%@).": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂不支持该版本的 OTP Auth 导出（%@）。"
+          }
+        }
+      }
+    },
+    "Time-based (TOTP)": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "基于时间 (TOTP)"
+          }
+        }
+      }
+    },
+    "Trademarks shown in icons belong to their respective owners and are used only to identify the corresponding services.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "图标中的商标归各自所有者，仅用于标识对应服务。"
+          }
+        }
+      }
+    },
+    "Try Again": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "重试"
+          }
+        }
+      }
+    },
+    "Type": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "类型"
+          }
+        }
+      }
+    },
+    "unknown": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未知"
+          }
+        }
+      }
+    },
+    "Unlock": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解锁"
+          }
+        }
+      }
+    },
+    "Unlock to view your codes": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解锁以查看你的验证码"
+          }
+        }
+      }
+    },
+    "Unpin": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "取消置顶"
+          }
+        }
+      }
+    },
+    "Unreadable Entry": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法解析的条目"
+          }
+        }
+      }
+    },
+    "Unsupported algorithm": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支持的算法"
+          }
+        }
+      }
+    },
+    "Unsupported code type": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支持的验证码类型"
+          }
+        }
+      }
+    },
+    "Unsupported code type: %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不支持的验证码类型：%@"
+          }
+        }
+      }
+    },
+    "Verify your identity to view your codes": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "验证身份后查看你的验证码"
+          }
+        }
+      }
+    },
+    "Version": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "版本"
+          }
+        }
+      }
+    },
+    "View Entry": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "查看条目"
+          }
+        }
+      }
+    },
+    "You can usually find it on the page where you turn on two-factor authentication. It looks like JBSW Y3DP EHPK 3PXP.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "通常在开启两步验证的页面可以找到，形如 JBSW Y3DP EHPK 3PXP"
+          }
+        }
+      }
+    },
+    "ZIP files aren’t supported yet. Unzip it first, then import the JSON file inside.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暂不支持 zip 文件，请先解压再导入其中的 JSON 文件。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

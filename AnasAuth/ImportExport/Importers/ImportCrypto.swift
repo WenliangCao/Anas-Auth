@@ -62,7 +62,7 @@ enum ImportCrypto {
     static func argon2id(password: String, salt: Data, opsLimit: Int, memLimit: Int, keyLength: Int) throws -> Data {
         try ensureSodium()
         guard salt.count == Int(crypto_pwhash_saltbytes()) else {
-            throw CryptoError.invalidInput("salt 长度应为 \(crypto_pwhash_saltbytes()) 字节")
+            throw CryptoError.invalidInput("salt must be \(crypto_pwhash_saltbytes()) bytes")
         }
         let passwordBytes = Array(password.utf8).map { CChar(bitPattern: $0) }
         let saltBytes = [UInt8](salt)
@@ -82,7 +82,7 @@ enum ImportCrypto {
 
     /// AES-GCM，密文末尾带 16 字节 tag
     static func aesGCMOpen(key: Data, nonce: Data, ciphertextAndTag: Data, aad: Data = Data()) throws -> Data {
-        guard ciphertextAndTag.count >= 16 else { throw CryptoError.invalidInput("密文过短") }
+        guard ciphertextAndTag.count >= 16 else { throw CryptoError.invalidInput("ciphertext is too short") }
         do {
             let box = try AES.GCM.SealedBox(
                 nonce: AES.GCM.Nonce(data: nonce),
@@ -98,7 +98,7 @@ enum ImportCrypto {
     /// AES-CBC + PKCS#7 填充；填充校验失败视为密码错误
     static func aesCBCDecrypt(_ data: Data, key: Data, iv: Data) throws -> Data {
         guard !data.isEmpty, data.count % kCCBlockSizeAES128 == 0 else {
-            throw CryptoError.invalidInput("密文长度不是 16 的倍数")
+            throw CryptoError.invalidInput("ciphertext length is not a multiple of 16")
         }
         var output = Data(count: data.count + kCCBlockSizeAES128)
         var outputLength = 0
@@ -129,7 +129,7 @@ enum ImportCrypto {
         try ensureSodium()
         guard key.count == Int(crypto_secretstream_xchacha20poly1305_keybytes()),
               header.count == Int(crypto_secretstream_xchacha20poly1305_headerbytes()) else {
-            throw CryptoError.invalidInput("密钥或 header 长度不对")
+            throw CryptoError.invalidInput("invalid key or header length")
         }
         var state = crypto_secretstream_xchacha20poly1305_state()
         guard crypto_secretstream_xchacha20poly1305_init_pull(&state, [UInt8](header), [UInt8](key)) == 0 else { throw CryptoError.authenticationFailed }

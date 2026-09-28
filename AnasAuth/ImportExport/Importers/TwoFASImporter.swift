@@ -6,13 +6,13 @@ import Foundation
 enum TwoFASImporter {
     static func decode(_ data: Data) throws -> [String: Any] {
         guard let json = try JSONInput.object(data) as? [String: Any] else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 2FAS Authenticator 导出。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid 2FAS Authenticator export."))
         }
         let version = ImportedOTP.integer(json["schemaVersion"]) ?? 0
         guard version == 3 || version == 4 else {
             throw version == 0
-                ? ImportProviderError.invalidFile("所选文件不是有效的 2FAS Authenticator 导出。")
-                : ImportProviderError.unsupportedVersion("暂不支持该版本的 2FAS 导出（schemaVersion \(version)）。")
+                ? ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid 2FAS Authenticator export."))
+                : ImportProviderError.unsupportedVersion(String(localized: "This version of the 2FAS export isn’t supported yet (schemaVersion \(version))."))
         }
         return json
     }
@@ -38,7 +38,7 @@ enum TwoFASImporter {
         return try services.map { service in
             try ImportEntry.parse(service) {
                 guard let service = service as? [String: Any],
-                      let otp = service["otp"] as? [String: Any] else { throw ImportFailure("条目格式不对") }
+                      let otp = service["otp"] as? [String: Any] else { throw ImportFailure(String(localized: "Invalid entry format")) }
                 let kind = JSONInput.string(otp["tokenType"]) ?? "TOTP"
                 var issuer = JSONInput.string(otp["issuer"]) ?? ""
                 if issuer.isEmpty { issuer = JSONInput.string(service["name"]) ?? "" }
@@ -71,7 +71,7 @@ enum TwoFASImporter {
               let ciphertext = Data(base64Encoded: parts[0]),
               let salt = Data(base64Encoded: parts[1]),
               let iv = Data(base64Encoded: parts[2]) else {
-            throw ImportProviderError.invalidFile("2FAS 加密备份格式不对。")
+            throw ImportProviderError.invalidFile(String(localized: "The encrypted 2FAS backup has an invalid format."))
         }
         let key = try ImportCrypto.pbkdf2(password: password, salt: salt, rounds: 10_000, keyLength: 32, prf: .sha256)
         let plaintext: Data
@@ -81,7 +81,7 @@ enum TwoFASImporter {
             throw ImportProviderError.incorrectPassword
         }
         guard let services = try JSONInput.object(plaintext) as? [Any] else {
-            throw ImportProviderError.invalidFile("2FAS 备份解密后的内容无效。")
+            throw ImportProviderError.invalidFile(String(localized: "The decrypted 2FAS backup is invalid."))
         }
         return services
     }

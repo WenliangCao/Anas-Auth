@@ -38,17 +38,17 @@ struct EditCodeView: View {
                 }
                 .listRowBackground(Color.clear)
 
-                Section("发行方") {
-                    TextField("发行方", text: $issuer)
+                Section("Issuer") {
+                    TextField("Issuer", text: $issuer)
                 }
 
                 Section {
                     HStack {
                         Group {
                             if showsSecret {
-                                TextField("密钥", text: $secret)
+                                TextField("Secret", text: $secret)
                             } else {
-                                SecureField("密钥", text: $secret)
+                                SecureField("Secret", text: $secret)
                             }
                         }
                         .textInputAutocapitalization(.characters)
@@ -63,46 +63,46 @@ struct EditCodeView: View {
                         }
                         .buttonStyle(.borderless)
                         .tint(.secondary)
-                        .accessibilityLabel(showsSecret ? "隐藏密钥" : "显示密钥")
+                        .accessibilityLabel(showsSecret ? "Hide Secret" : "Show Secret")
                     }
                 } header: {
-                    Text("密钥")
+                    Text("Secret")
                 } footer: {
                     if !isSecretValid {
-                        Text(secret.isEmpty ? "密钥不能为空" : "密钥不是有效的 Base32 编码")
+                        Text(secret.isEmpty ? "The secret can’t be empty" : "The secret isn’t valid Base32 encoding")
                             .foregroundStyle(.red)
                     }
                 }
 
-                Section("账号") {
-                    TextField("账号", text: $accountName)
+                Section("Account") {
+                    TextField("Account", text: $accountName)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                 }
 
-                Section("备注") {
-                    TextField("备注", text: $note, axis: .vertical)
+                Section("Note") {
+                    TextField("Note", text: $note, axis: .vertical)
                         .lineLimit(3...6)
                 }
 
-                Section("标签") {
+                Section("Tags") {
                     ForEach(tags, id: \.self) { tag in
                         Text(tag)
                     }
                     .onDelete { tags.remove(atOffsets: $0) }
-                    TextField("添加标签", text: $newTag)
+                    TextField("Add Tag", text: $newTag)
                         .submitLabel(.done)
                         .onSubmit(addTag)
                 }
             }
-            .navigationTitle("编辑")
+            .navigationTitle("Edit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") {
+                    Button("Done") {
                         save()
                         dismiss()
                     }
@@ -148,7 +148,7 @@ struct EditCodeView: View {
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity)
-        .accessibilityLabel("更换图标")
+        .accessibilityLabel("Change Icon")
     }
 
     /// 去掉首尾空格，忽略空值与重复

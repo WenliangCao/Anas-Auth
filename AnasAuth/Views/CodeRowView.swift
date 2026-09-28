@@ -42,7 +42,7 @@ struct CodeRowView: View {
         .opacity(isCopied ? 0.35 : 1)
         .animation(.snappy(duration: 0.25), value: isCopied)
         .accessibilityElement(children: .combine)
-        .accessibilityHint("轻点复制验证码，长按查看更多操作")
+        .accessibilityHint("Tap to copy the code. Touch and hold for more options.")
     }
 
     private var isCopied: Bool {
@@ -126,7 +126,7 @@ private struct CodePair: View {
                 trailingView
             }
         } else {
-            Text(CodeFormatter.invalidReason(entry: entry) ?? String(localized: "无效密钥"))
+            Text(CodeFormatter.invalidReason(entry: entry) ?? String(localized: "Invalid secret"))
                 .font(.subheadline)
                 .foregroundStyle(.red)
         }
@@ -135,7 +135,7 @@ private struct CodePair: View {
     @ViewBuilder
     private var trailingView: some View {
         VStack(alignment: .trailing, spacing: 2) {
-            Text("下一个")
+            Text("Next")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
             switch trailing {
@@ -155,7 +155,7 @@ private struct CodePair: View {
                         .foregroundStyle(.gray)
                 }
                 .buttonStyle(.borderless)
-                .accessibilityLabel("下一个验证码")
+                .accessibilityLabel("Next code")
             }
         }
     }
@@ -197,7 +197,7 @@ private struct PinnedCorner: View {
                 .rotationEffect(.degrees(45))
                 .padding(compact ? 4 : 6)
         }
-        .accessibilityLabel("已置顶")
+        .accessibilityLabel("Pinned")
     }
 
     private struct Triangle: Shape {
@@ -242,13 +242,13 @@ enum CodeFormatter {
         } catch let error as Base32Error {
             switch error {
             case .invalidCharacter:
-                return "密钥包含非法字符（同步或迁移时可能损坏）"
+                return String(localized: "The secret contains invalid characters (it may have been damaged during sync or migration)")
             }
         } catch {
-            return "密钥无法解析"
+            return String(localized: "The secret can’t be parsed")
         }
         // Base32 合法但 HMAC 失败：长度为 0
-        if entry.secret.isEmpty { return "密钥为空" }
+        if entry.secret.isEmpty { return String(localized: "The secret is empty") }
         return nil
     }
 }

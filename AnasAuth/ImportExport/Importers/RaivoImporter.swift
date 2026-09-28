@@ -4,11 +4,11 @@ import Foundation
 enum RaivoImporter {
     static func parse(_ data: Data) throws -> [OTPCode] {
         guard let items = try JSONInput.object(data) as? [Any] else {
-            throw ImportProviderError.invalidFile("所选文件不是 Raivo 导出的 JSON。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a Raivo JSON export."))
         }
         return try items.map { item in
             try ImportEntry.parse(item) {
-                guard let item = item as? [String: Any] else { throw ImportFailure("条目格式不对") }
+                guard let item = item as? [String: Any] else { throw ImportFailure(String(localized: "Invalid entry format")) }
                 return try ImportedOTP.make(
                     kind: JSONInput.string(item["kind"]) ?? "",
                     issuer: JSONInput.string(item["issuer"]) ?? "",

@@ -11,10 +11,10 @@ enum CodeSortKey: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .issuer: "发行方"
-        case .account: "账号"
-        case .mostFrequentlyUsed: "最常用"
-        case .recentlyUsed: "最近使用"
+        case .issuer: String(localized: "Issuer")
+        case .account: String(localized: "Account")
+        case .mostFrequentlyUsed: String(localized: "Most Used")
+        case .recentlyUsed: String(localized: "Recently Used")
         }
     }
 

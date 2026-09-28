@@ -371,8 +371,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AnasAuth/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Anas Auth";
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Anas Auth uses the camera to scan QR codes for adding codes.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Use Face ID to unlock your codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -406,8 +406,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AnasAuth/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Anas Auth";
-				INFOPLIST_KEY_NSCameraUsageDescription = "需要摄像头权限来扫描二维码添加验证码";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "使用 Face ID 解锁你的验证码";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Anas Auth uses the camera to scan QR codes for adding codes.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Use Face ID to unlock your codes.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

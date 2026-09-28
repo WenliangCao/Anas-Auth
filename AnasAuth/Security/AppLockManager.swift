@@ -46,7 +46,7 @@ final class AppLockManager {
         do {
             let success = try await context.evaluatePolicy(
                 .deviceOwnerAuthentication,
-                localizedReason: String(localized: "解锁以查看你的验证码")
+                localizedReason: String(localized: "Unlock to view your codes")
             )
             if success {
                 isLocked = false

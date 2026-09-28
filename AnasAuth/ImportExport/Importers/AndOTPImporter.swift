@@ -12,13 +12,13 @@ enum AndOTPImporter {
     static func decrypt(_ data: Data, password: String) throws -> [Any] {
         let bytes = [UInt8](data)
         guard bytes.count >= 4 + 12 + 12 + 16 else {
-            throw ImportProviderError.invalidFile("所选文件不是 andOTP 备份。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an andOTP backup."))
         }
         let iterations = bytes[0..<4].reduce(0) { ($0 << 8) | Int($1) }
         let salt = Data(bytes[4..<16])
         let iv = Data(bytes[16..<28])
         let ciphertext = Data(bytes[28...])
-        guard iterations > 0 else { throw ImportProviderError.invalidFile("所选文件不是 andOTP 备份。") }
+        guard iterations > 0 else { throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an andOTP backup.")) }
         let key = try ImportCrypto.pbkdf2(password: password, salt: salt, rounds: iterations, keyLength: 32, prf: .sha1)
         let plaintext: Data
         do {
@@ -27,7 +27,7 @@ enum AndOTPImporter {
             throw ImportProviderError.incorrectPassword
         }
         guard let entries = plainEntries(plaintext) else {
-            throw ImportProviderError.invalidFile("andOTP 备份解密后的内容无效。")
+            throw ImportProviderError.invalidFile(String(localized: "The decrypted andOTP backup is invalid."))
         }
         return entries
     }

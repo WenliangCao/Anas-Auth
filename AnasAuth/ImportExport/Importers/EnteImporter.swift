@@ -15,7 +15,7 @@ enum EnteImporter {
         }
         guard let json = try? JSONInput.object(Data(trimmed.utf8)) as? [String: Any],
               let items = json["items"] as? [Any] else {
-            throw ImportProviderError.invalidFile("无法解析选定的文件。")
+            throw ImportProviderError.invalidFile(String(localized: "Couldn’t parse the selected file."))
         }
         return items.compactMap { item in
             guard let item = item as? [String: Any], let rawData = item["rawData"] as? String else { return nil }
@@ -74,7 +74,7 @@ enum EnteImporter {
 
     static func decodeEncryptedExport(_ data: Data) throws -> EncryptedExport {
         guard let export = try? JSONDecoder().decode(EncryptedExport.self, from: data) else {
-            throw ImportProviderError.invalidFile("无法解析选定的文件。")
+            throw ImportProviderError.invalidFile(String(localized: "Couldn’t parse the selected file."))
         }
         return export
     }
@@ -84,7 +84,7 @@ enum EnteImporter {
         guard let salt = Data(base64Encoded: export.kdfParams.salt),
               let ciphertext = Data(base64Encoded: export.encryptedData),
               let header = Data(base64Encoded: export.encryptionNonce) else {
-            throw ImportProviderError.invalidFile("无法解析选定的文件。")
+            throw ImportProviderError.invalidFile(String(localized: "Couldn’t parse the selected file."))
         }
         let key = try ImportCrypto.argon2id(
             password: password,

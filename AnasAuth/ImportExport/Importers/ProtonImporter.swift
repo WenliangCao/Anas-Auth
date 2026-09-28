@@ -10,7 +10,7 @@ enum ProtonImporter {
     static func decode(_ data: Data) throws -> [String: Any] {
         guard let json = try? JSONInput.object(data) as? [String: Any],
               ImportedOTP.integer(json["version"]) == exportVersion else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 Proton Authenticator 导出文件。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid Proton Authenticator export."))
         }
         return json
     }
@@ -22,7 +22,7 @@ enum ProtonImporter {
     static func decrypt(_ export: [String: Any], password: String) throws -> [String: Any] {
         guard let salt = Data(base64Encoded: JSONInput.string(export["salt"]) ?? ""), salt.count == 16,
               let content = Data(base64Encoded: JSONInput.string(export["content"]) ?? ""), content.count > 12 else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 Proton Authenticator 导出文件。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid Proton Authenticator export."))
         }
         let key = try ImportCrypto.argon2id(
             password: password, salt: salt, opsLimit: 2, memLimit: 19 * 1024 * 1024, keyLength: 32
@@ -41,7 +41,7 @@ enum ProtonImporter {
     /// 只导入 Totp / Steam 条目，单条出错跳过（与 ente 一致）
     static func parse(_ export: [String: Any]) throws -> [OTPCode] {
         guard !isEncrypted(export), let entries = export["entries"] as? [Any] else {
-            throw ImportProviderError.invalidFile("所选文件不是有效的 Proton Authenticator 导出文件。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t a valid Proton Authenticator export."))
         }
         return entries.compactMap { entry -> OTPCode? in
             guard let entry = entry as? [String: Any],

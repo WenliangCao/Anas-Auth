@@ -11,7 +11,7 @@ struct TagFilterBar: View {
         ScrollView(.horizontal) {
             GlassContainer {
                 HStack(spacing: 8) {
-                    TagChip(title: "全部", isSelected: selectedTag == nil) {
+                    TagChip(title: String(localized: "All"), isSelected: selectedTag == nil) {
                         selectedTag = nil
                     }
                     ForEach(tags, id: \.self) { tag in

@@ -43,27 +43,27 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("安全") {
-                    Toggle("应用锁", isOn: $lockManager.isEnabled)
+                Section("Security") {
+                    Toggle("App Lock", isOn: $lockManager.isEnabled)
                 }
 
                 Section {
-                    Picker("布局", selection: $layout) {
+                    Picker("Layout", selection: $layout) {
                         ForEach(CodeLayout.allCases) { layout in
                             Text(layout.title).tag(layout)
                         }
                     }
                 } header: {
-                    Text("外观")
+                    Text("Appearance")
                 } footer: {
-                    Text("紧凑模式下卡片更矮、字号更小，一屏能看到更多验证码。")
+                    Text("Compact mode uses smaller cards and text, so more codes fit on screen.")
                 }
 
                 Section {
                     Button {
                         showingExportPasswordPrompt = true
                     } label: {
-                        Label("导出备份（\(entries.count) 条）", systemImage: "square.and.arrow.up")
+                        Label("Export Backup (\(entries.count))", systemImage: "square.and.arrow.up")
                     }
                     .foregroundStyle(.primary)
                     .disabled(entries.isEmpty)
@@ -71,37 +71,37 @@ struct SettingsView: View {
                     Button {
                         showingImporter = true
                     } label: {
-                        Label("从备份文件导入", systemImage: "square.and.arrow.down")
+                        Label("Import from Backup File", systemImage: "square.and.arrow.down")
                     }
                     .foregroundStyle(.primary)
 
                     NavigationLink {
                         ImportSourcesView()
                     } label: {
-                        Label("从其他应用导入", systemImage: "arrow.down.app")
+                        Label("Import from Other Apps", systemImage: "arrow.down.app")
                     }
                     .foregroundStyle(.primary)
                 } header: {
-                    Text("备份")
+                    Text("Backup")
                 } footer: {
-                    Text("加密备份的密码丢失后无法恢复。")
+                    Text("An encrypted backup can’t be restored if you lose its password.")
                 }
                 // 去掉强调色：按钮文字和图标都用正文色
                 .tint(.primary)
 
                 Section {
-                    LabeledContent("版本", value: appVersion)
-                    NavigationLink("开源许可") {
+                    LabeledContent("Version", value: appVersion)
+                    NavigationLink("Open Source Licenses") {
                         LicensesView()
                     }
                 } footer: {
-                    Text("Anas Auth 以 AGPL-3.0 许可开源。")
+                    Text("Anas Auth is open source under the AGPL-3.0 license.")
                 }
             }
-            .navigationTitle("设置")
+            .navigationTitle("Settings")
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") { dismiss() }
+                    Button("Done") { dismiss() }
                 }
             }
             .fileExporter(
@@ -136,8 +136,8 @@ struct SettingsView: View {
                     }
                 }
             }
-            .alert("导入结果", isPresented: showImportResult) {
-                Button("好") { importResultMessage = nil }
+            .alert("Import Result", isPresented: showImportResult) {
+                Button("OK") { importResultMessage = nil }
             } message: {
                 Text(importResultMessage ?? "")
             }
@@ -171,7 +171,7 @@ struct SettingsView: View {
             exportDocument = ExportDocument(data: data)
             showingExporter = true
         } catch {
-            importResultMessage = "导出失败：\(error.localizedDescription)"
+            importResultMessage = String(localized: "Export failed: \(error.localizedDescription)")
         }
     }
 
@@ -182,7 +182,7 @@ struct SettingsView: View {
             if accessing { url.stopAccessingSecurityScopedResource() }
         }
         guard let data = try? Data(contentsOf: url) else {
-            importResultMessage = "导入失败：无法读取文件。"
+            importResultMessage = String(localized: "Import failed: couldn’t read the file.")
             return
         }
         if ImportService.isEncryptedBackup(data) {
@@ -201,14 +201,14 @@ struct SettingsView: View {
                 modelContext.insert(CodeEntry(code: code))
             }
             if skipped > 0 {
-                importResultMessage = "成功导入 \(unique.count) 条，跳过 \(skipped) 条已存在的。"
+                importResultMessage = String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
             } else {
-                importResultMessage = "成功导入 \(unique.count) 条验证码。"
+                importResultMessage = String(localized: "Imported: \(unique.count).")
             }
         } catch BackupCrypto.CryptoError.wrongPassword {
-            importResultMessage = "密码不正确，导入失败。"
+            importResultMessage = String(localized: "Incorrect password. Import failed.")
         } catch {
-            importResultMessage = "导入失败：文件内容不是支持的格式。"
+            importResultMessage = String(localized: "Import failed: the file isn’t in a supported format.")
         }
     }
 }
@@ -230,36 +230,36 @@ private struct ExportPasswordView: View {
         NavigationStack {
             Form {
                 Section {
-                    SecureField("设置密码", text: $password)
-                    SecureField("再次输入密码", text: $confirmation)
+                    SecureField("Set Password", text: $password)
+                    SecureField("Confirm Password", text: $confirmation)
                     if !confirmation.isEmpty && !passwordsMatch {
-                        Text("两次输入的密码不一致")
+                        Text("The passwords don’t match")
                             .font(.caption)
                             .foregroundStyle(.red)
                     }
                 } header: {
-                    Text("加密备份")
+                    Text("Encrypt Backup")
                 } footer: {
-                    Text("密码丢失后无法恢复备份。")
+                    Text("If you lose the password, the backup can’t be restored.")
                 }
                 Section {
-                    Button("不加密，直接导出", role: .destructive) {
+                    Button("Export Without Encryption", role: .destructive) {
                         onCancel(password.isEmpty ? nil : "___skip___")
                         dismiss()
                     }
                 }
             }
-            .navigationTitle("导出备份")
+            .navigationTitle("Export Backup")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
+                    Button("Cancel") {
                         onCancel(nil)
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("加密导出") {
+                    Button("Export Encrypted") {
                         onEncrypt(password)
                         dismiss()
                     }
@@ -285,25 +285,25 @@ private struct ImportPasswordView: View {
         NavigationStack {
             Form {
                 Section {
-                    SecureField("备份密码", text: $password)
+                    SecureField("Backup Password", text: $password)
                     if wrongPassword {
-                        Text("密码不正确")
+                        Text("Incorrect password")
                             .font(.caption)
                             .foregroundStyle(.red)
                     }
                 }
             }
-            .navigationTitle("输入密码")
+            .navigationTitle("Enter Password")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
+                    Button("Cancel") {
                         onCancel()
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("导入") {
+                    Button("Import") {
                         // 先验证密码，错了留在本页提示
                         if (try? BackupCrypto.decrypt(data, password: password)) != nil {
                             onImport(password)

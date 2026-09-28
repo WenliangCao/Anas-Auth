@@ -23,7 +23,7 @@ struct IconPickerView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 12) {
                 if searchText.isEmpty {
-                    cell(title: "默认", isSelected: selection.isEmpty) {
+                    cell(title: String(localized: "Default"), isSelected: selection.isEmpty) {
                         IssuerIconView(issuer: issuer, iconID: "", size: 44)
                     } action: {
                         select("")
@@ -40,8 +40,8 @@ struct IconPickerView: View {
             .padding(16)
         }
         .background(Color(.systemGroupedBackground))
-        .navigationTitle("选择图标")
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "搜索")
+        .navigationTitle("Choose Icon")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
         .overlay {
             if icons.isEmpty {
                 ContentUnavailableView.search(text: searchText)

@@ -63,16 +63,16 @@ struct CodeListView: View {
             Group {
                 if entries.isEmpty {
                     ContentUnavailableView {
-                        Label("还没有验证码", systemImage: "lock.shield")
+                        Label("No Codes Yet", systemImage: "lock.shield")
                     } description: {
-                        Text("点右下角 + 扫码、手动输入或从相册导入你的第一个两步验证码")
+                        Text("Tap + to scan a QR code, enter a code manually, or import one from Photos.")
                     }
                 } else {
                     codeList
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchText, prompt: "搜索")
+            .searchable(text: $searchText, prompt: "Search")
             .toolbar { topBar }
             .modifier(BottomBar())
             .sheet(item: $entryToEdit) { entry in
@@ -90,21 +90,21 @@ struct CodeListView: View {
                 }
             }
             .alert(
-                "删除验证码",
+                "Delete Code",
                 isPresented: showDeleteConfirmation
             ) {
-                Button("删除", role: .destructive) {
+                Button("Delete", role: .destructive) {
                     if let entryToDelete {
                         delete(entryToDelete)
                     }
                     self.entryToDelete = nil
                 }
-                Button("取消", role: .cancel) {
+                Button("Cancel", role: .cancel) {
                     entryToDelete = nil
                 }
             } message: {
                 if let entry = entryToDelete {
-                    Text("确定删除 \(entry.displayName)？如果这是唯一的验证凭证，删除后可能无法登录该服务。此操作无法撤销。")
+                    Text("Delete \(entry.displayName)? If this is your only way to sign in, you may lose access to the account. This can’t be undone.")
                 }
             }
         }
@@ -119,15 +119,15 @@ struct CodeListView: View {
             } label: {
                 Image(systemName: "gearshape")
             }
-            .accessibilityLabel("设置")
+            .accessibilityLabel("Settings")
         }
         ToolbarItem(placement: .principal) {
-            Text("Anas Auth")
+            Text(verbatim: "Anas Auth")
                 .font(.title2.weight(.heavy))
         }
         ToolbarItem(placement: .topBarTrailing) {
             Menu {
-                Picker("排序方式", selection: $sortKey) {
+                Picker("Sort By", selection: $sortKey) {
                     ForEach(CodeSortKey.allCases) { key in
                         Text(key.title).tag(key)
                     }
@@ -135,7 +135,7 @@ struct CodeListView: View {
             } label: {
                 Image(systemName: "line.3.horizontal.decrease")
             }
-            .accessibilityLabel("排序方式")
+            .accessibilityLabel("Sort By")
         }
     }
 
@@ -151,14 +151,14 @@ struct CodeListView: View {
         HStack(spacing: 8) {
             Image(systemName: "doc.on.doc.fill")
                 .foregroundStyle(.secondary)
-            Text("已复制 \(code)")
+            Text("Copied \(code)")
                 .font(.subheadline.monospacedDigit())
                 .lineLimit(1)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(.regularMaterial, in: Capsule())
-        .accessibilityLabel("已复制验证码 \(code)")
+        .accessibilityLabel("Copied code \(code)")
     }
 
     /// 标签条 + 卡片网格（同 ente）：iPhone 单列，iPad 等宽屏自动多列。
@@ -205,24 +205,24 @@ struct CodeListView: View {
             Button {
                 togglePin(entry)
             } label: {
-                Label(entry.pinned ? "取消置顶" : "置顶",
+                Label(entry.pinned ? "Unpin" : "Pin",
                       systemImage: entry.pinned ? "pin.slash" : "pin")
             }
             Button {
                 entryToEdit = entry
             } label: {
-                Label("编辑", systemImage: "pencil")
+                Label("Edit", systemImage: "pencil")
             }
             Button {
                 copyCode(of: entry)
             } label: {
-                Label("复制验证码", systemImage: "doc.on.doc")
+                Label("Copy Code", systemImage: "doc.on.doc")
             }
             Divider()
             Button(role: .destructive) {
                 entryToDelete = entry
             } label: {
-                Label("删除", systemImage: "trash")
+                Label("Delete", systemImage: "trash")
             }
         }
     }

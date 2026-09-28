@@ -15,8 +15,8 @@ enum ImportProviderError: Error, Equatable, LocalizedError {
         switch self {
         case .invalidFile(let message): message
         case .unsupportedVersion(let message): message
-        case .incorrectPassword: "密码错误，请检查后重试。"
-        case .invalidEntry(_, let reason): "有一个条目无法解析：\(reason)"
+        case .incorrectPassword: String(localized: "Incorrect password. Check it and try again.")
+        case .invalidEntry(_, let reason): String(localized: "One entry couldn’t be read: \(reason)")
         }
     }
 }
@@ -48,18 +48,18 @@ enum ImportedOTP {
         case "totp": type = .totp
         case "hotp": type = .hotp
         case "steam" where allowSteam: type = .steam
-        default: throw ImportFailure("不支持的验证码类型：\(kind)")
+        default: throw ImportFailure(String(localized: "Unsupported code type: \(kind)"))
         }
 
         let sanitizedSecret = OTPAuthURLParser.sanitizeSecret(secret)
         guard !sanitizedSecret.isEmpty, (try? Base32.decode(sanitizedSecret)) != nil else {
-            throw ImportFailure("密钥不是有效的 Base32")
+            throw ImportFailure(String(localized: "The secret isn’t valid Base32"))
         }
 
         var parsedDigits = integer(digits) ?? 0
         if parsedDigits == 0 { parsedDigits = OTPGenerator.defaultDigits }
         guard (1...maxDigits).contains(parsedDigits) else {
-            throw ImportFailure("位数无效：\(parsedDigits)")
+            throw ImportFailure(String(localized: "Invalid number of digits: \(parsedDigits)"))
         }
         if type == .steam { parsedDigits = OTPGenerator.steamDigits }
 
@@ -67,7 +67,7 @@ enum ImportedOTP {
         if parsedPeriod <= 0 { parsedPeriod = OTPGenerator.defaultPeriod }
 
         let parsedCounter = integer(counter) ?? 0
-        guard parsedCounter >= 0 else { throw ImportFailure("HOTP 计数器无效：\(parsedCounter)") }
+        guard parsedCounter >= 0 else { throw ImportFailure(String(localized: "Invalid HOTP counter: \(parsedCounter)")) }
 
         return OTPCode(
             issuer: issuer,
@@ -137,7 +137,7 @@ enum JSONInput {
         do {
             return try JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
         } catch {
-            throw ImportProviderError.invalidFile("文件不是有效的 JSON。")
+            throw ImportProviderError.invalidFile(String(localized: "The file isn’t valid JSON."))
         }
     }
 

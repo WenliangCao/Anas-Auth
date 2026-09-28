@@ -18,8 +18,8 @@ enum ImportSource: String, CaseIterable, Identifiable, Sendable {
 
     var title: String {
         switch self {
-        case .plainText: "纯文本"
-        case .enteEncrypted: "Ente 加密导出"
+        case .plainText: String(localized: "Plain Text")
+        case .enteEncrypted: String(localized: "Ente Encrypted Export")
         case .twoFAS: "2FAS Authenticator"
         case .aegis: "Aegis Authenticator"
         case .andOTP: "andOTP"
@@ -36,36 +36,36 @@ enum ImportSource: String, CaseIterable, Identifiable, Sendable {
     var guide: String {
         switch self {
         case .plainText:
-            "请选择一个包含以下格式的代码列表的文件：\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\n代码可以用逗号或换行符分隔。"
+            String(localized: "Select a file that contains a list of codes in this format:\n\notpauth://totp/provider.com:you@email.com?secret=YOUR_SECRET\n\nCodes can be separated by commas or line breaks.")
         case .enteEncrypted:
-            "选择从 Ente 导出的 JSON 加密文件。"
+            String(localized: "Select the encrypted JSON file exported from Ente.")
         case .twoFAS:
-            "使用 2FAS 中的「设置 → 备份 → 导出」选项。\n\n如果备份已加密，需要输入密码来解密。"
+            String(localized: "In 2FAS, use “Settings → Backup → Export”.\n\nIf the backup is encrypted, you’ll need its password to decrypt it.")
         case .aegis:
-            "使用 Aegis 设置中的「导出密码库」选项。\n\n如果密码库已加密，需要输入密码库密码才能解密。"
+            String(localized: "In Aegis settings, use “Export the vault”.\n\nIf the vault is encrypted, you’ll need the vault password to decrypt it.")
         case .andOTP:
-            "使用 andOTP 设置中的「备份」选项导出备份。\n\n如果备份已加密，需要输入备份密码才能解密。"
+            String(localized: "In andOTP settings, use “Backup” to export a backup.\n\nIf the backup is encrypted, you’ll need the backup password to decrypt it.")
         case .bitwarden:
-            "使用 Bitwarden 工具中的「导出密码库」选项，导入未加密的 JSON 文件。"
+            String(localized: "In Bitwarden tools, use “Export vault”, then import the unencrypted JSON file.")
         case .googleAuthenticator:
-            "在 Google Authenticator 中使用「转移账号」把账号导出为二维码，然后扫描二维码或从图片导入。账号较多时会生成多张二维码，需要全部扫完。"
+            String(localized: "In Google Authenticator, use “Transfer accounts” to export your accounts as QR codes, then scan them or import them from images. Many accounts produce several QR codes; scan all of them.")
         case .proton:
-            "使用 Proton Authenticator 设置中的「导出」选项导出验证码。\n\n如果导出文件设置了密码，需要输入密码才能解密。"
+            String(localized: "In Proton Authenticator settings, use “Export”.\n\nIf the export is password-protected, you’ll need the password to decrypt it.")
         case .raivo:
-            "使用 Raivo 设置中的「Export OTPs to ZIP archive」选项。\n\n解压 zip 文件后导入其中的 JSON 文件。"
+            String(localized: "In Raivo settings, use “Export OTPs to ZIP archive”.\n\nUnzip the file and import the JSON file inside.")
         case .lastPass:
-            "使用 LastPass Authenticator 设置中的「转移账户」选项，然后点「将账户导出到文件」，导入下载的 JSON。"
+            String(localized: "In LastPass Authenticator settings, choose “Transfer accounts”, then “Export accounts to file”, and import the downloaded JSON.")
         case .otpAuth:
-            "从 OTP Auth 导出加密备份，然后选择 .otpauthdb 或 .otpauthdp 文件。也支持单账户的 .otpauth 文件。"
+            String(localized: "Export an encrypted backup from OTP Auth, then select the .otpauthdb or .otpauthdp file. Single-account .otpauth files are also supported.")
         }
     }
 
     var passwordPrompt: String {
         switch self {
-        case .aegis: "请输入 Aegis 密码库的密码"
-        case .twoFAS: "请输入密码以解密 2FAS 备份"
-        case .andOTP: "请输入密码以解密 andOTP 备份"
-        default: "用来解密导出的密码"
+        case .aegis: String(localized: "Enter the password for your Aegis vault")
+        case .twoFAS: String(localized: "Enter the password to decrypt the 2FAS backup")
+        case .andOTP: String(localized: "Enter the password to decrypt the andOTP backup")
+        default: String(localized: "The password used to encrypt the export")
         }
     }
 
@@ -111,7 +111,7 @@ enum ImportSource: String, CaseIterable, Identifiable, Sendable {
             return .codes(try ProtonImporter.parse(ProtonImporter.decrypt(export, password: password)))
         case .raivo:
             if fileName.lowercased().hasSuffix(".zip") {
-                throw ImportProviderError.invalidFile("暂不支持 zip 文件，请先解压再导入其中的 JSON 文件。")
+                throw ImportProviderError.invalidFile(String(localized: "ZIP files aren’t supported yet. Unzip it first, then import the JSON file inside."))
             }
             return .codes(try RaivoImporter.parse(data))
         case .lastPass:
@@ -121,13 +121,13 @@ enum ImportSource: String, CaseIterable, Identifiable, Sendable {
             return .codes(try OTPAuthAppImporter.parse(data, password: password))
         case .googleAuthenticator:
             // 走扫码 / 图片流程，不读文件
-            throw ImportProviderError.invalidFile("请扫描二维码或选择二维码图片。")
+            throw ImportProviderError.invalidFile(String(localized: "Scan a QR code or choose a QR code image."))
         }
     }
 
     private func text(_ data: Data) throws -> String {
         guard let text = String(data: data, encoding: .utf8) else {
-            throw ImportProviderError.invalidFile("无法解析选定的文件。")
+            throw ImportProviderError.invalidFile(String(localized: "Couldn’t parse the selected file."))
         }
         return text
     }

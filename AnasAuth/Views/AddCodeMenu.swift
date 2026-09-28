@@ -16,17 +16,17 @@ struct AddCodeMenu: View {
     var body: some View {
         Menu {
             // 相机不可用时 ScannerScreen 自带引导页
-            Button("扫描二维码", systemImage: "qrcode.viewfinder") {
+            Button("Scan QR Code", systemImage: "qrcode.viewfinder") {
                 showingScanner = true
             }
-            Button("手动输入", systemImage: "keyboard") {
+            Button("Enter Manually", systemImage: "keyboard") {
                 showingManualEntry = true
             }
-            Button("从相册导入", systemImage: "photo") {
+            Button("Import from Photos", systemImage: "photo") {
                 showingPhotoPicker = true
             }
         } label: {
-            Label("添加验证码", systemImage: "plus")
+            Label("Add Code", systemImage: "plus")
         }
         .fullScreenCover(isPresented: $showingScanner) {
             NavigationStack {
@@ -48,8 +48,8 @@ struct AddCodeMenu: View {
             pickedPhoto = nil
             Task { await importPhoto(item) }
         }
-        .alert("无法识别", isPresented: showErrorAlert) {
-            Button("好") { importError = nil }
+        .alert("Couldn’t Recognize", isPresented: showErrorAlert) {
+            Button("OK") { importError = nil }
         } message: {
             Text(importError ?? "")
         }
@@ -65,7 +65,7 @@ struct AddCodeMenu: View {
     private func importPhoto(_ item: PhotosPickerItem) async {
         guard let data = try? await item.loadTransferable(type: Data.self),
               let payload = QRImageDecoder.decode(imageData: data) else {
-            importError = "图片中没有找到二维码。"
+            importError = String(localized: "No QR code found in the image.")
             return
         }
         importPayload(payload)
@@ -81,10 +81,10 @@ struct AddCodeMenu: View {
                 modelContext.insert(CodeEntry(code: code))
             }
             if unique.isEmpty && skipped > 0 {
-                importError = "这些验证码都已存在，没有新内容可添加。"
+                importError = String(localized: "These codes already exist. There’s nothing new to add.")
             }
         } catch {
-            importError = "二维码内容不是有效的验证码格式。"
+            importError = String(localized: "The QR code doesn’t contain a valid code.")
         }
     }
 }

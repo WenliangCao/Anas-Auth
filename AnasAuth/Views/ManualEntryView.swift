@@ -30,61 +30,61 @@ struct ManualEntryView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("账号信息") {
-                    TextField("发行方（如 GitHub）", text: $issuer)
-                    TextField("账号名（如邮箱）", text: $accountName)
+                Section("Account Details") {
+                    TextField("Issuer (e.g. GitHub)", text: $issuer)
+                    TextField("Account (e.g. email)", text: $accountName)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                 }
 
                 Section {
-                    TextField("Base32 密钥", text: $secret)
+                    TextField("Base32 Secret", text: $secret)
                         .textInputAutocapitalization(.characters)
                         .autocorrectionDisabled()
                         .font(.body.monospaced())
                     if !secret.isEmpty && !isSecretValid {
-                        Text("密钥不是有效的 Base32 编码")
+                        Text("The secret isn’t valid Base32 encoding")
                             .font(.caption)
                             .foregroundStyle(.red)
                     }
                 } header: {
-                    Text("密钥")
+                    Text("Secret")
                 } footer: {
-                    Text("通常在开启两步验证的页面可以找到，形如 JBSW Y3DP EHPK 3PXP")
+                    Text("You can usually find it on the page where you turn on two-factor authentication. It looks like JBSW Y3DP EHPK 3PXP.")
                 }
 
-                Section("参数") {
-                    Picker("类型", selection: $type) {
-                        Text("基于时间 (TOTP)").tag(OTPType.totp)
-                        Text("基于计数器 (HOTP)").tag(OTPType.hotp)
+                Section("Parameters") {
+                    Picker("Type", selection: $type) {
+                        Text("Time-based (TOTP)").tag(OTPType.totp)
+                        Text("Counter-based (HOTP)").tag(OTPType.hotp)
                         Text("Steam").tag(OTPType.steam)
                     }
                     if type != .steam {
-                        Picker("算法", selection: $algorithm) {
+                        Picker("Algorithm", selection: $algorithm) {
                             ForEach(OTPAlgorithm.allCases, id: \.self) { algorithm in
                                 Text(algorithm.displayName).tag(algorithm)
                             }
                         }
-                        Picker("位数", selection: $digits) {
-                            Text("6 位").tag(6)
-                            Text("7 位").tag(7)
-                            Text("8 位").tag(8)
+                        Picker("Digits", selection: $digits) {
+                            Text("6 digits").tag(6)
+                            Text("7 digits").tag(7)
+                            Text("8 digits").tag(8)
                         }
                         if type == .totp {
-                            Stepper("周期：\(period) 秒", value: $period, in: 5...300, step: 5)
+                            Stepper("Period: \(period) s", value: $period, in: 5...300, step: 5)
                         } else {
-                            Stepper("初始计数：\(counter)", value: $counter, in: 0...9999)
+                            Stepper("Initial counter: \(counter)", value: $counter, in: 0...9999)
                         }
                     }
                 }
             }
-            .navigationTitle("手动添加")
+            .navigationTitle("Add Manually")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("添加") { save() }
+                    Button("Add") { save() }
                         .disabled(!canSave)
                 }
             }

@@ -5,11 +5,11 @@ struct LockedView: View {
 
     var body: some View {
         ContentUnavailableView {
-            Label("已锁定", systemImage: "lock.fill")
+            Label("Locked", systemImage: "lock.fill")
         } description: {
-            Text("验证身份后查看你的验证码")
+            Text("Verify your identity to view your codes")
         } actions: {
-            Button("解锁") {
+            Button("Unlock") {
                 Task { await unlock() }
             }
             .glassButtonStyle()

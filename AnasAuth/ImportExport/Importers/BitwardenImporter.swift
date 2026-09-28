@@ -6,7 +6,7 @@ enum BitwardenImporter {
     static func parse(_ data: Data) throws -> [OTPCode] {
         guard let json = try JSONInput.object(data) as? [String: Any],
               let items = json["items"] as? [Any] else {
-            throw ImportProviderError.invalidFile("所选文件不是未加密的 Bitwarden JSON 导出。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an unencrypted Bitwarden JSON export."))
         }
         var folderNames: [String: String] = [:]
         for folder in json["folders"] as? [[String: Any]] ?? [] {

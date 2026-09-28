@@ -12,7 +12,7 @@ struct ImportSourcesView: View {
             Button(source.title) { selectedSource = source }
                 .foregroundStyle(.primary)
         }
-        .navigationTitle("从其他应用导入")
+        .navigationTitle("Import from Other Apps")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $selectedSource) { source in
             ImportGuideView(source: source)
@@ -49,11 +49,11 @@ private struct ImportGuideView: View {
         var title: String {
             switch self {
             case .password: ""
-            case .incorrectPassword: "密码错误"
-            case .failure, .invalidEntry: "导入失败"
-            case .entryDetail: "无法解析的条目"
+            case .incorrectPassword: String(localized: "Incorrect Password")
+            case .failure, .invalidEntry: String(localized: "Import Failed")
+            case .entryDetail: String(localized: "Unreadable Entry")
             case .confirmGoogle: "Google Authenticator"
-            case .finished: "导入完成"
+            case .finished: String(localized: "Import Complete")
             }
         }
     }
@@ -67,7 +67,7 @@ private struct ImportGuideView: View {
                         .textSelection(.enabled)
                     if source == .googleAuthenticator, googleTracker.expectedCount > 0 {
                         Label(
-                            "已收到 \(googleTracker.receivedCount)/\(googleTracker.expectedCount) 张二维码，请继续扫描或选择下一张。",
+                            "Received \(googleTracker.receivedCount) of \(googleTracker.expectedCount) QR codes. Scan or choose the next one.",
                             systemImage: "qrcode"
                         )
                         .font(.subheadline)
@@ -81,12 +81,12 @@ private struct ImportGuideView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
+                    Button("Cancel") { dismiss() }
                 }
             }
             .overlay {
                 if isWorking {
-                    ProgressView("请稍候…")
+                    ProgressView("Please wait…")
                         .padding(24)
                         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                 }
@@ -127,12 +127,12 @@ private struct ImportGuideView: View {
     private var actions: some View {
         VStack(spacing: 10) {
             if source == .googleAuthenticator {
-                Button("扫描二维码") { showingScanner = true }
+                Button("Scan QR Code") { showingScanner = true }
                     .glassButtonStyle()
-                Button("选择图片") { showingPhotoPicker = true }
+                Button("Choose Image") { showingPhotoPicker = true }
                     .glassButtonStyle()
             } else {
-                Button("选择文件") { showingFilePicker = true }
+                Button("Choose File") { showingFilePicker = true }
                     .glassButtonStyle()
             }
         }
@@ -149,23 +149,23 @@ private struct ImportGuideView: View {
     private func alertActions(_ alert: ImportAlert) -> some View {
         switch alert {
         case .password:
-            SecureField("密码", text: $password)
-            Button("导入") { runPendingFile(password: password) }
-            Button("取消", role: .cancel) { pendingFile = nil }
+            SecureField("Password", text: $password)
+            Button("Import") { runPendingFile(password: password) }
+            Button("Cancel", role: .cancel) { pendingFile = nil }
         case .incorrectPassword:
             // 与 ente 一致：密码错了继续让用户重试
-            Button("重试") { askPassword() }
-            Button("取消", role: .cancel) { pendingFile = nil }
+            Button("Try Again") { askPassword() }
+            Button("Cancel", role: .cancel) { pendingFile = nil }
         case .invalidEntry(_, let entry):
-            Button("查看条目") { present(.entryDetail(entry)) }
-            Button("好", role: .cancel) {}
+            Button("View Entry") { present(.entryDetail(entry)) }
+            Button("OK", role: .cancel) {}
         case .confirmGoogle(let codes):
-            Button("导入") { save(codes) }
-            Button("取消", role: .cancel) {}
+            Button("Import") { save(codes) }
+            Button("Cancel", role: .cancel) {}
         case .finished:
-            Button("好") { dismiss() }
+            Button("OK") { dismiss() }
         case .failure, .entryDetail:
-            Button("好", role: .cancel) {}
+            Button("OK", role: .cancel) {}
         }
     }
 
@@ -173,11 +173,11 @@ private struct ImportGuideView: View {
     private func alertMessage(_ alert: ImportAlert) -> some View {
         switch alert {
         case .password: Text(source.passwordPrompt)
-        case .incorrectPassword: Text("请检查您的密码并重试。")
+        case .incorrectPassword: Text("Please check your password and try again.")
         case .failure(let message): Text(message)
         case .invalidEntry(let reason, _): Text(reason)
         case .entryDetail(let entry): Text(entry)
-        case .confirmGoogle(let codes): Text("要从 Google Authenticator 导入 \(codes.count) 个验证码吗？")
+        case .confirmGoogle(let codes): Text("Codes found in Google Authenticator: \(codes.count). Import them?")
         case .finished(let message): Text(message)
         }
     }
@@ -203,7 +203,7 @@ private struct ImportGuideView: View {
         let accessing = url.startAccessingSecurityScopedResource()
         defer { if accessing { url.stopAccessingSecurityScopedResource() } }
         guard let data = try? Data(contentsOf: url) else {
-            present(.failure("无法读取所选文件。"))
+            present(.failure(String(localized: "Couldn’t read the selected file.")))
             return
         }
         pendingFile = (data, url.lastPathComponent)
@@ -241,13 +241,13 @@ private struct ImportGuideView: View {
 
     private func show(_ error: Error) {
         if case .invalidEntry(let entry, let reason) = error as? ImportProviderError {
-            present(.invalidEntry(reason: "有一个条目无法解析：\(reason)", entry: entry))
+            present(.invalidEntry(reason: String(localized: "One entry couldn’t be read: \(reason)"), entry: entry))
         } else if let error = error as? LocalizedError, let message = error.errorDescription {
             present(.failure(message))
         } else if case ImportCrypto.CryptoError.kdfFailed = error {
-            present(.failure("解密所需内存不足，请关闭其他应用后重试。"))
+            present(.failure(String(localized: "Not enough memory to decrypt. Close other apps and try again.")))
         } else {
-            present(.failure("无法解析选定的文件。"))
+            present(.failure(String(localized: "Couldn’t parse the selected file.")))
         }
     }
 
@@ -266,14 +266,14 @@ private struct ImportGuideView: View {
 
     private func handleGooglePayloads(_ payloads: [String]) {
         guard !payloads.isEmpty else {
-            present(.failure("图片中没有找到二维码。"))
+            present(.failure(String(localized: "No QR code found in the image.")))
             return
         }
         for payload in payloads {
             guard payload.hasPrefix("otpauth-migration://"),
                   let migration = try? GoogleMigrationParser.parseMigration(payload),
                   !migration.codes.isEmpty else {
-                present(.failure("二维码无效：不是 Google Authenticator 的转移二维码。"))
+                present(.failure(String(localized: "Invalid QR code: it isn’t a Google Authenticator transfer QR code.")))
                 return
             }
             do {
@@ -293,7 +293,7 @@ private struct ImportGuideView: View {
 
     private func save(_ codes: [OTPCode]) {
         guard !codes.isEmpty else {
-            present(.failure("文件中没有可导入的验证码。"))
+            present(.failure(String(localized: "There are no codes to import in this file.")))
             return
         }
         let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
@@ -303,8 +303,8 @@ private struct ImportGuideView: View {
         }
         try? modelContext.save()
         let summary = skipped > 0
-            ? "已导入 \(unique.count) 个验证码，跳过 \(skipped) 个已存在的。"
-            : "已导入 \(unique.count) 个验证码。"
+            ? String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
+            : String(localized: "Imported: \(unique.count).")
         present(.finished(summary))
     }
 }

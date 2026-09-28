@@ -7,7 +7,7 @@ enum AegisImporter {
     static func decode(_ data: Data) throws -> [String: Any] {
         guard let json = try JSONInput.object(data) as? [String: Any],
               json["header"] is [String: Any] else {
-            throw ImportProviderError.invalidFile("所选文件不是 Aegis 导出的密码库。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an Aegis vault export."))
         }
         return json
     }
@@ -22,7 +22,7 @@ enum AegisImporter {
             db = try decrypt(vault, password: password ?? "")
         } else {
             guard let plainDB = vault["db"] as? [String: Any] else {
-                throw ImportProviderError.invalidFile("所选文件不是 Aegis 导出的密码库。")
+                throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an Aegis vault export."))
             }
             db = plainDB
         }
@@ -37,12 +37,12 @@ enum AegisImporter {
             }
         }
         guard let entries = db["entries"] as? [Any] else {
-            throw ImportProviderError.invalidFile("密码库里没有条目。")
+            throw ImportProviderError.invalidFile(String(localized: "The vault has no entries."))
         }
         return try entries.map { entry in
             try ImportEntry.parse(entry) {
                 guard let entry = entry as? [String: Any],
-                      let info = entry["info"] as? [String: Any] else { throw ImportFailure("条目格式不对") }
+                      let info = entry["info"] as? [String: Any] else { throw ImportFailure(String(localized: "Invalid entry format")) }
                 let groupIDs = entry["groups"] as? [String] ?? []
                 return try ImportedOTP.make(
                     kind: JSONInput.string(entry["type"]) ?? "",
@@ -68,7 +68,7 @@ enum AegisImporter {
               let dbNonce = Data(hexString: JSONInput.string(params["nonce"]) ?? ""),
               let dbTag = Data(hexString: JSONInput.string(params["tag"]) ?? ""),
               let db = Data(base64Encoded: JSONInput.string(vault["db"]) ?? "") else {
-            throw ImportProviderError.invalidFile("所选文件不是 Aegis 导出的密码库。")
+            throw ImportProviderError.invalidFile(String(localized: "The selected file isn’t an Aegis vault export."))
         }
         // type 1 = 密码 slot（其余是生物识别等，无法在别的设备上解开）
         var masterKey: Data?
@@ -91,7 +91,7 @@ enum AegisImporter {
         guard let masterKey else { throw ImportProviderError.incorrectPassword }
         let plaintext = try ImportCrypto.aesGCMOpen(key: masterKey, nonce: dbNonce, ciphertextAndTag: db + dbTag)
         guard let decoded = try JSONInput.object(plaintext) as? [String: Any] else {
-            throw ImportProviderError.invalidFile("密码库解密后的内容无效。")
+            throw ImportProviderError.invalidFile(String(localized: "The decrypted vault is invalid."))
         }
         return decoded
     }

@@ -119,22 +119,22 @@ struct ScannerScreen: View {
                 deniedView
             }
         }
-        .navigationTitle("对准二维码")
+        .navigationTitle("Point Camera at QR Code")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("取消") { onCancel() }
+                Button("Cancel") { onCancel() }
             }
         }
     }
 
     private var deniedView: some View {
         ContentUnavailableView {
-            Label("无法访问相机", systemImage: "camera.badge.ellipsis")
+            Label("Camera Unavailable", systemImage: "camera.badge.ellipsis")
         } description: {
-            Text("请到系统设置中允许 Anas Auth 使用相机，然后返回重试。")
+            Text("Allow Anas Auth to use the camera in Settings, then come back and try again.")
         } actions: {
-            Button("打开系统设置") {
+            Button("Open Settings") {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }

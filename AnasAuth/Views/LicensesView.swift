@@ -10,40 +10,42 @@ struct LicensesView: View {
     var body: some View {
         Form {
             Section {
-                Text("Copyright © 2026 WenliangCao")
-                Link("源代码", destination: Self.repositoryURL)
-                Link("GNU AGPL-3.0 许可证全文", destination: Self.licenseURL)
+                Text(verbatim: "Copyright © 2026 WenliangCao")
+                Link("Source Code", destination: Self.repositoryURL)
+                Link("Full Text of the GNU AGPL-3.0", destination: Self.licenseURL)
             } header: {
-                Text("Anas Auth")
+                Text(verbatim: "Anas Auth")
             } footer: {
-                Text("Anas Auth 是自由软件：你可以依据 GNU Affero 通用公共许可证第 3 版（AGPL-3.0）的条款使用、修改和再分发它。本程序不提供任何担保，详见许可证全文。本项目与 ente 无隶属关系。")
+                Text("Anas Auth is free software: you can use, modify and redistribute it under the terms of the GNU Affero General Public License version 3 (AGPL-3.0). It comes with no warranty; see the license for details. This project is not affiliated with ente.")
             }
 
             Section {
-                component("ente 社区品牌图标", license: "AGPL-3.0")
-                component("导入格式解析（参照 ente 实现）", license: "AGPL-3.0")
-                component("simple-icons 品牌图标", license: "CC0-1.0")
+                component("ente Community Brand Icons", license: "AGPL-3.0")
+                component("Import Formats (Ported from ente)", license: "AGPL-3.0")
+                component("simple-icons Brand Icons", license: "CC0-1.0")
                 component("swift-sodium / libsodium", license: "ISC")
-                Link("完整第三方声明", destination: Self.noticesURL)
+                Link("Full Third-Party Notices", destination: Self.noticesURL)
             } header: {
-                Text("第三方组件")
+                Text("Third-Party Components")
             } footer: {
-                Text("图标中的商标归各自所有者，仅用于标识对应服务。")
+                Text("Trademarks shown in icons belong to their respective owners and are used only to identify the corresponding services.")
             }
 
-            Section("swift-sodium / libsodium（ISC）") {
+            Section {
                 Text(Self.iscNotice)
                     .font(.caption.monospaced())
                     .foregroundStyle(.secondary)
+            } header: {
+                Text(verbatim: "swift-sodium / libsodium (ISC)")
             }
         }
-        .navigationTitle("开源许可")
+        .navigationTitle("Open Source Licenses")
         .navigationBarTitleDisplayMode(.inline)
         .tint(.primary)
     }
 
-    private func component(_ name: String, license: String) -> some View {
-        LabeledContent(name, value: license)
+    private func component(_ name: LocalizedStringKey, license: String) -> some View {
+        LabeledContent(name) { Text(verbatim: license) }
     }
 
     /// swift-sodium 0.11.0 LICENSE 原文（内含的 libsodium 同为 Frank Denis 的 ISC 许可）

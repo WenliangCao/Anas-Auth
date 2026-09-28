@@ -132,8 +132,8 @@ struct GoogleMigrationTracker {
 
         var errorDescription: String? {
             switch self {
-            case .differentExport: "这张二维码属于另一次 Google Authenticator 导出。"
-            case .invalidBatch: "Google Authenticator 导出的批次信息无效。"
+            case .differentExport: String(localized: "This QR code belongs to a different Google Authenticator export.")
+            case .invalidBatch: String(localized: "The Google Authenticator export has invalid batch information.")
             }
         }
     }

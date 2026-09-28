@@ -9,8 +9,8 @@ enum CodeLayout: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .standard: "默认"
-        case .compact: "紧凑"
+        case .standard: String(localized: "Default")
+        case .compact: String(localized: "Compact")
         }
     }
 }
