@@ -12,6 +12,7 @@ struct AddCodeMenu: View {
     @State private var showingPhotoPicker = false
     @State private var pickedPhoto: PhotosPickerItem?
     @State private var importError: String?
+    @State private var saveError: String?
 
     var body: some View {
         Menu {
@@ -53,6 +54,18 @@ struct AddCodeMenu: View {
         } message: {
             Text(importError ?? "")
         }
+        .alert("Couldn’t Save", isPresented: showSaveErrorAlert) {
+            Button("OK") { saveError = nil }
+        } message: {
+            Text(saveError ?? "")
+        }
+    }
+
+    private var showSaveErrorAlert: Binding<Bool> {
+        Binding(
+            get: { saveError != nil },
+            set: { if !$0 { saveError = nil } }
+        )
     }
 
     private var showErrorAlert: Binding<Bool> {
@@ -75,18 +88,17 @@ struct AddCodeMenu: View {
 
     /// 扫码与相册共用：兼容 otpauth:// 单条与 otpauth-migration:// 批量迁移
     private func importPayload(_ payload: String) {
+        guard let codes = try? ImportService.importCodes(from: payload) else {
+            importError = String(localized: "The QR code doesn’t contain a valid code.")
+            return
+        }
         do {
-            let codes = try ImportService.importCodes(from: payload)
-            let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
-            let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
-            for code in unique {
-                modelContext.insert(CodeEntry(code: code))
-            }
-            if unique.isEmpty && skipped > 0 {
+            let (added, skipped) = try modelContext.addCodes(codes)
+            if added == 0 && skipped > 0 {
                 importError = String(localized: "These codes already exist. There’s nothing new to add.")
             }
         } catch {
-            importError = String(localized: "The QR code doesn’t contain a valid code.")
+            saveError = CodeStore.saveFailureMessage(error)
         }
     }
 }

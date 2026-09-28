@@ -14,6 +14,7 @@ struct ManualEntryView: View {
     @State private var digits = OTPGenerator.defaultDigits
     @State private var period = OTPGenerator.defaultPeriod
     @State private var counter = 0
+    @State private var saveError: String?
 
     private var sanitizedSecret: String {
         OTPAuthURLParser.sanitizeSecret(secret)
@@ -88,6 +89,11 @@ struct ManualEntryView: View {
                         .disabled(!canSave)
                 }
             }
+            .alert("Couldn’t Save", isPresented: showSaveErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(saveError ?? "")
+            }
             .onChange(of: type) { _, newType in
                 if newType == .steam {
                     digits = OTPGenerator.steamDigits
@@ -96,6 +102,10 @@ struct ManualEntryView: View {
                 }
             }
         }
+    }
+
+    private var showSaveErrorAlert: Binding<Bool> {
+        Binding(get: { saveError != nil }, set: { if !$0 { saveError = nil } })
     }
 
     private func save() {
@@ -110,6 +120,11 @@ struct ManualEntryView: View {
             type: type
         )
         modelContext.insert(CodeEntry(code: code))
-        dismiss()
+        do {
+            try modelContext.saveOrRollback()
+            dismiss()
+        } catch {
+            saveError = CodeStore.saveFailureMessage(error)
+        }
     }
 }

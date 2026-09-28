@@ -625,6 +625,22 @@
         }
       }
     },
+    "Couldn’t Save": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法保存"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法儲存"
+          }
+        }
+      }
+    },
     "Counter-based (HOTP)": {
       "localizations": {
         "zh-Hans": {
@@ -3085,6 +3101,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "通常在開啟兩步驟驗證的頁面可以找到，形如 JBSW Y3DP EHPK 3PXP"
+          }
+        }
+      }
+    },
+    "Your changes couldn’t be saved: %@": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更改未能保存：%@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "變更未能儲存：%@"
           }
         }
       }

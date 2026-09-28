@@ -26,6 +26,20 @@ struct CodeStoreTests {
         #expect(fetched.isEmpty)
     }
 
+    /// 新增走去重并立即保存，重复条目只计入跳过
+    @MainActor
+    @Test func addCodesDedupesAndSaves() throws {
+        let container = try CodeStore.makeContainer(inMemoryOnly: true)
+        let context = ModelContext(container)
+        let github = OTPCode(issuer: "GitHub", accountName: "alice", secret: "JBSWY3DPEHPK3PXP")
+        let gitlab = OTPCode(issuer: "GitLab", accountName: "alice", secret: "GEZDGNBVGY3TQOJQ")
+
+        #expect(try context.addCodes([github]) == (added: 1, skipped: 0))
+        #expect(try context.addCodes([github, gitlab, gitlab]) == (added: 1, skipped: 2))
+        #expect(!context.hasChanges)
+        #expect(try context.fetchCount(FetchDescriptor<CodeEntry>()) == 2)
+    }
+
     @MainActor
     @Test func mappingRoundTripPreservesAllFields() throws {
         let original = OTPCode(

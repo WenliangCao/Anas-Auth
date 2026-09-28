@@ -303,15 +303,14 @@ private struct ImportGuideView: View {
             present(.failure(String(localized: "There are no codes to import in this file.")))
             return
         }
-        let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
-        let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
-        for code in unique {
-            modelContext.insert(CodeEntry(code: code))
+        do {
+            let (added, skipped) = try modelContext.addCodes(codes)
+            let summary = skipped > 0
+                ? String(localized: "Imported: \(added). Skipped (already added): \(skipped).")
+                : String(localized: "Imported: \(added).")
+            present(.finished(summary))
+        } catch {
+            present(.failure(CodeStore.saveFailureMessage(error)))
         }
-        try? modelContext.save()
-        let summary = skipped > 0
-            ? String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
-            : String(localized: "Imported: \(unique.count).")
-        present(.finished(summary))
     }
 }

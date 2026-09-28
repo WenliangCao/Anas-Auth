@@ -242,14 +242,14 @@ struct SettingsView: View {
         }.value
         switch result {
         case .success(let codes):
-            let existing = (try? modelContext.fetch(FetchDescriptor<CodeEntry>())) ?? []
-            let (unique, skipped) = ImportService.filteringExisting(codes, in: existing)
-            for code in unique {
-                modelContext.insert(CodeEntry(code: code))
+            do {
+                let (added, skipped) = try modelContext.addCodes(codes)
+                return skipped > 0
+                    ? String(localized: "Imported: \(added). Skipped (already added): \(skipped).")
+                    : String(localized: "Imported: \(added).")
+            } catch {
+                return CodeStore.saveFailureMessage(error)
             }
-            return skipped > 0
-                ? String(localized: "Imported: \(unique.count). Skipped (already added): \(skipped).")
-                : String(localized: "Imported: \(unique.count).")
         case .failure(BackupCrypto.CryptoError.wrongPassword):
             return nil
         case .failure(ImportCrypto.CryptoError.kdfFailed):

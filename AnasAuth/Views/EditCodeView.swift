@@ -22,6 +22,7 @@ struct EditCodeView: View {
     @State private var showsSecret = false
     @State private var showingIconPicker = false
     @State private var didLoad = false
+    @State private var saveError: String?
 
     private var sanitizedSecret: String {
         OTPAuthURLParser.sanitizeSecret(secret)
@@ -103,12 +104,14 @@ struct EditCodeView: View {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") {
-                        save()
-                        dismiss()
-                    }
+                    Button("Done") { save() }
                     .disabled(!isSecretValid)
                 }
+            }
+            .alert("Couldn’t Save", isPresented: showSaveErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(saveError ?? "")
             }
             .navigationDestination(isPresented: $showingIconPicker) {
                 IconPickerView(issuer: issuer, selection: $iconID)
@@ -153,6 +156,10 @@ struct EditCodeView: View {
         .accessibilityLabel("Change Icon")
     }
 
+    private var showSaveErrorAlert: Binding<Bool> {
+        Binding(get: { saveError != nil }, set: { if !$0 { saveError = nil } })
+    }
+
     /// 去掉首尾空格，忽略空值与重复
     private func addTag() {
         let tag = newTag.trimmingCharacters(in: .whitespaces)
@@ -169,6 +176,12 @@ struct EditCodeView: View {
         entry.note = note
         entry.tags = tags
         entry.iconID = iconID
-        try? modelContext.save()
+        // 失败时库已回滚，编辑副本还在，用户可以重试
+        do {
+            try modelContext.saveOrRollback()
+            dismiss()
+        } catch {
+            saveError = CodeStore.saveFailureMessage(error)
+        }
     }
 }
