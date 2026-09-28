@@ -18,7 +18,7 @@ enum BackupCrypto {
     private static let saltLength = 16
     /// 解密时参数上限：防止构造的文件要求离谱的内存或时间
     private static let maxOpsLimit: UInt32 = 10
-    private static let maxMemLimitKiB: UInt32 = 1024 * 1024
+    private static let maxMemLimitKiB: UInt32 = 256 * 1024
 
     enum CryptoError: Error, Equatable {
         case wrongPassword

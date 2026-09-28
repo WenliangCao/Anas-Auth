@@ -16,6 +16,29 @@ struct ImportersTests {
         #expect(key == Data(hexString: ImportFixtures.argon2Proton))
     }
 
+    /// KDF 参数来自导入文件：超出上限直接拒绝，不去分配内存或长时间计算
+    @Test func kdfRejectsParametersOutOfRange() {
+        let salt16 = Data(count: 16)
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.argon2id(password: "p", salt: salt16, opsLimit: 1, memLimit: 2 * 1024 * 1024 * 1024, keyLength: 32)
+        }
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.argon2id(password: "p", salt: salt16, opsLimit: 100, memLimit: 1024 * 1024 * 1024, keyLength: 32)
+        }
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.argon2id(password: "p", salt: salt16, opsLimit: -1, memLimit: 64 * 1024, keyLength: 32)
+        }
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.scrypt(password: "p", salt: salt16, n: 1 << 30, r: 8, p: 1, keyLength: 32)
+        }
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.scrypt(password: "p", salt: salt16, n: 1 << 15, r: 8, p: 1 << 20, keyLength: 32)
+        }
+        #expect(throws: ImportCrypto.CryptoError.self) {
+            try ImportCrypto.pbkdf2(password: "p", salt: salt16, rounds: 50_000_000, keyLength: 32, prf: .sha1)
+        }
+    }
+
     // MARK: - ente
 
     @Test func entePlainTextFixture() throws {
@@ -141,6 +164,12 @@ struct ImportersTests {
         #expect(AndOTPImporter.plainEntries(file) == nil)
         #expect(try AndOTPImporter.parse(AndOTPImporter.decrypt(file, password: "test")).count == 2)
         #expect(throws: ImportProviderError.incorrectPassword) { try AndOTPImporter.decrypt(file, password: "nope") }
+    }
+
+    @Test func andOTPRejectsHugeIterationCount() throws {
+        var file = try #require(Data(base64Encoded: ImportFixtures.andOTPEncrypted))
+        file.replaceSubrange(0..<4, with: [0xFF, 0xFF, 0xFF, 0xFF])
+        #expect(throws: ImportCrypto.CryptoError.self) { try AndOTPImporter.decrypt(file, password: "test") }
     }
 
     // MARK: - Proton

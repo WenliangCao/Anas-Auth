@@ -2,6 +2,7 @@ import Clibsodium
 import CommonCrypto
 import CryptoKit
 import Foundation
+import os
 
 /// 解密其他 App 导出文件所需的密码学原语。
 /// 系统自带的（PBKDF2、AES、SHA、HMAC）用 CommonCrypto / CryptoKit；
@@ -25,9 +26,27 @@ enum ImportCrypto {
         }
     }
 
+    // MARK: - 参数上限
+
+    /// KDF 参数都写在导入文件里，必须限幅：否则构造的文件能让 App 分配数 GB 内存或算上几小时
+    enum Limits {
+        /// andOTP 用 14～16 万次，其余来源固定 1 万次
+        static let maxPBKDF2Rounds = 1_000_000
+        /// scrypt 内存约 128·N·r 字节（Aegis 默认 N=2^15、r=8，即 32 MiB）
+        static let maxScryptMemory: UInt64 = 256 * 1024 * 1024
+        /// scrypt 计算量 N·r·p（Aegis 默认的 16 倍）
+        static let maxScryptWork: UInt64 = 1 << 22
+        /// ente 最高档：1 GiB 内存 × 4 次；内存不够时 ente 减半内存、加倍次数，乘积不变
+        static let maxArgon2Memory = 1024 * 1024 * 1024
+        static let maxArgon2Work = 4 * maxArgon2Memory
+    }
+
     // MARK: - 密钥派生
 
     static func pbkdf2(password: String, salt: Data, rounds: Int, keyLength: Int, prf: PRF) throws -> Data {
+        guard (1...Limits.maxPBKDF2Rounds).contains(rounds) else {
+            throw CryptoError.invalidInput("PBKDF2 rounds out of range")
+        }
         let passwordBytes = Array(password.utf8)
         var key = Data(count: keyLength)
         let status = key.withUnsafeMutableBytes { keyBuffer in
@@ -47,6 +66,11 @@ enum ImportCrypto {
 
     /// 通用 scrypt（Aegis 使用 N=32768, r=8, p=1）
     static func scrypt(password: String, salt: Data, n: UInt64, r: UInt32, p: UInt32, keyLength: Int) throws -> Data {
+        guard n > 1, n & (n - 1) == 0, r > 0, p > 0,
+              n <= Limits.maxScryptMemory / 128 / UInt64(r),
+              n * UInt64(r) * UInt64(p) <= Limits.maxScryptWork else {
+            throw CryptoError.invalidInput("scrypt parameters out of range")
+        }
         try ensureSodium()
         let passwordBytes = Array(password.utf8)
         let saltBytes = [UInt8](salt)
@@ -64,6 +88,15 @@ enum ImportCrypto {
         guard salt.count == Int(crypto_pwhash_saltbytes()) else {
             throw CryptoError.invalidInput("salt must be \(crypto_pwhash_saltbytes()) bytes")
         }
+        guard opsLimit >= 1, (8 * 1024...Limits.maxArgon2Memory).contains(memLimit),
+              opsLimit <= Limits.maxArgon2Work / memLimit else {
+            throw CryptoError.invalidInput("Argon2 parameters out of range")
+        }
+        // 内存不够时 iOS 会直接杀掉进程而不是让分配失败，提前按可用内存拒绝（模拟器上返回 0，跳过）
+        let available = os_proc_available_memory()
+        if available > 0, memLimit + 64 * 1024 * 1024 > available {
+            throw CryptoError.kdfFailed
+        }
         let passwordBytes = Array(password.utf8).map { CChar(bitPattern: $0) }
         let saltBytes = [UInt8](salt)
         var key = [UInt8](repeating: 0, count: keyLength)
@@ -73,7 +106,7 @@ enum ImportCrypto {
             saltBytes, UInt64(opsLimit), memLimit,
             crypto_pwhash_ALG_ARGON2ID13
         )
-        // 非 0 通常是内存不足（ente 的导出可能用到 1 GiB）
+        // 非 0 通常是内存不足
         guard status == 0 else { throw CryptoError.kdfFailed }
         return Data(key)
     }

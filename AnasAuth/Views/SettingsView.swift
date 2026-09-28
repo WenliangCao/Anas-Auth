@@ -214,18 +214,18 @@ struct SettingsView: View {
 
     private func handleImport(_ result: Result<[URL], Error>) {
         guard case .success(let urls) = result, let url = urls.first else { return }
-        let accessing = url.startAccessingSecurityScopedResource()
-        defer {
-            if accessing { url.stopAccessingSecurityScopedResource() }
-        }
-        guard let data = try? Data(contentsOf: url) else {
-            importResultMessage = String(localized: "Import failed: couldn’t read the file.")
-            return
-        }
-        if ImportService.isEncryptedBackup(data) {
-            importPasswordQuery = ImportPasswordQuery(data: data)
-        } else {
-            Task { importResultMessage = await importBackup(data, password: nil) }
+        Task {
+            let read = await Task.detached { Result { try ImportService.readFile(at: url) } }.value
+            switch read {
+            case .success(let data) where ImportService.isEncryptedBackup(data):
+                importPasswordQuery = ImportPasswordQuery(data: data)
+            case .success(let data):
+                importResultMessage = await importBackup(data, password: nil)
+            case .failure(ImportError.fileTooLarge):
+                importResultMessage = String(localized: "Import failed: the file is too large.")
+            case .failure:
+                importResultMessage = String(localized: "Import failed: couldn’t read the file.")
+            }
         }
     }
 

@@ -200,14 +200,20 @@ private struct ImportGuideView: View {
 
     private func handlePickedFile(_ result: Result<URL, Error>) {
         guard case .success(let url) = result else { return }
-        let accessing = url.startAccessingSecurityScopedResource()
-        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
-        guard let data = try? Data(contentsOf: url) else {
-            present(.failure(String(localized: "Couldn’t read the selected file.")))
-            return
+        isWorking = true
+        Task {
+            let read = await Task.detached { Result { try ImportService.readFile(at: url) } }.value
+            isWorking = false
+            switch read {
+            case .success(let data):
+                pendingFile = (data, url.lastPathComponent)
+                runPendingFile(password: nil)
+            case .failure(ImportError.fileTooLarge):
+                present(.failure(String(localized: "The selected file is too large.")))
+            case .failure:
+                present(.failure(String(localized: "Couldn’t read the selected file.")))
+            }
         }
-        pendingFile = (data, url.lastPathComponent)
-        runPendingFile(password: nil)
     }
 
     private func runPendingFile(password: String?) {
@@ -256,8 +262,9 @@ private struct ImportGuideView: View {
     private func handleGoogleImages(_ items: [PhotosPickerItem]) async {
         var payloads: [String] = []
         for item in items {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let payload = QRImageDecoder.decode(imageData: data) {
+            guard let data = try? await item.loadTransferable(type: Data.self) else { continue }
+            // 大图识别要几百毫秒，放到后台
+            if let payload = await Task.detached(operation: { QRImageDecoder.decode(imageData: data) }).value {
                 payloads.append(payload)
             }
         }

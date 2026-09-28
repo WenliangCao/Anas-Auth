@@ -63,8 +63,10 @@ struct AddCodeMenu: View {
     }
 
     private func importPhoto(_ item: PhotosPickerItem) async {
-        guard let data = try? await item.loadTransferable(type: Data.self),
-              let payload = QRImageDecoder.decode(imageData: data) else {
+        let data = try? await item.loadTransferable(type: Data.self)
+        // 大图识别要几百毫秒，放到后台
+        let payload = await Task.detached { data.flatMap(QRImageDecoder.decode(imageData:)) }.value
+        guard let payload else {
             importError = String(localized: "No QR code found in the image.")
             return
         }

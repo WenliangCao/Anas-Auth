@@ -4,6 +4,7 @@ enum ImportError: Error {
     case emptyInput
     case noCodesFound
     case malformedJSON
+    case fileTooLarge
 }
 
 extension OTPCode {
@@ -25,6 +26,21 @@ extension CodeEntry {
 /// 3. 一行一个 otpauth:// URL 的纯文本
 /// 4. 加密备份文件内容（AUTHENCRYPTED magic 开头）
 enum ImportService {
+    /// 导入文件大小上限：验证码导出通常只有几十 KB，超大文件多半是选错了，直接拒绝以免读爆内存
+    static let maxFileSize = 10 * 1024 * 1024
+
+    /// 读取用户选中的文件（先查大小再读），会阻塞，调用方放在后台执行
+    static func readFile(at url: URL) throws -> Data {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        if let size = try url.resourceValues(forKeys: [.fileSizeKey]).fileSize, size > maxFileSize {
+            throw ImportError.fileTooLarge
+        }
+        let data = try Data(contentsOf: url)
+        guard data.count <= maxFileSize else { throw ImportError.fileTooLarge }
+        return data
+    }
+
     static func importCodes(from text: String) throws -> [OTPCode] {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { throw ImportError.emptyInput }
