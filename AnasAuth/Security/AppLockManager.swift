@@ -1,5 +1,5 @@
-import Foundation
 import LocalAuthentication
+import UIKit
 
 /// Face ID / 触控 ID / 设备密码锁。状态存 UserDefaults，
 /// 锁本身不存任何密钥——只是个"进门闸机"。
@@ -10,11 +10,8 @@ final class AppLockManager {
 
     private let defaultsKey = "appLockEnabled"
 
-    var isEnabled: Bool {
-        didSet {
-            UserDefaults.standard.set(isEnabled, forKey: defaultsKey)
-            isLocked = isEnabled
-        }
+    private(set) var isEnabled: Bool {
+        didSet { UserDefaults.standard.set(isEnabled, forKey: defaultsKey) }
     }
 
     private(set) var isLocked: Bool
@@ -29,6 +26,23 @@ final class AppLockManager {
         self.isLocked = enabled
     }
 
+    /// 设备设了锁屏密码才能用 App 锁；否则系统验证必然失败，开了会把用户锁在外面
+    static var isDevicePasscodeSet: Bool {
+        LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+    }
+
+    /// 开启前先验证一次机主身份；验证通过才开启，但不立即上锁（切到后台时才锁）
+    func enable() async {
+        guard !isEnabled,
+              await authenticate(reason: String(localized: "Verify your identity to turn on App Lock")) else { return }
+        isEnabled = true
+    }
+
+    func disable() {
+        isEnabled = false
+        isLocked = false
+    }
+
     func lock() {
         isAuthenticating = false
         if isEnabled {
@@ -41,23 +55,41 @@ final class AppLockManager {
             isLocked = false
             return
         }
-        let context = LAContext()
-        isAuthenticating = true
-        do {
-            let success = try await context.evaluatePolicy(
-                .deviceOwnerAuthentication,
-                localizedReason: String(localized: "Unlock to view your codes")
-            )
-            if success {
-                isLocked = false
-            }
-        } catch {
-            // 用户取消或验证失败：保持锁定
+        var error: NSError?
+        if !LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error),
+           error?.code == LAError.passcodeNotSet.rawValue {
+            // 开锁后用户关掉了设备密码：已无从验证，放行而不是永久锁死
+            isLocked = false
+            return
+        }
+        if await authenticate(reason: String(localized: "Unlock to view your codes")) {
+            isLocked = false
         }
     }
 
     /// 回到 active 时由界面调用：验证面板已完全收起
     func authenticationDidEnd() {
         isAuthenticating = false
+    }
+
+    /// 弹系统验证面板；正在验证时不重复弹（如自动解锁与点按钮同时触发）
+    private func authenticate(reason: String) async -> Bool {
+        guard !isAuthenticating else { return false }
+        isAuthenticating = true
+        defer {
+            // 面板没弹出就失败时 App 一直是 active，收不到"回到 active"，要在这里复位
+            if UIApplication.shared.applicationState == .active {
+                isAuthenticating = false
+            }
+        }
+        do {
+            return try await LAContext().evaluatePolicy(
+                .deviceOwnerAuthentication,
+                localizedReason: reason
+            )
+        } catch {
+            // 用户取消或验证失败
+            return false
+        }
     }
 }

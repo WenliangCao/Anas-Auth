@@ -2033,6 +2033,22 @@
         }
       }
     },
+    "Set a Device Passcode": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "请先设置锁屏密码"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請先設定鎖定密碼"
+          }
+        }
+      }
+    },
     "Set Password": {
       "localizations": {
         "zh-Hans": {
@@ -2753,6 +2769,22 @@
         }
       }
     },
+    "To use App Lock, first set a passcode in the Settings app under Face ID & Passcode.": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要使用应用锁，请先在“设置”App 的“面容 ID 与密码”中设置锁屏密码。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "要使用 App 鎖定，請先在「設定」App 的「Face ID 與密碼」中設定鎖定密碼。"
+          }
+        }
+      }
+    },
     "Trademarks shown in icons belong to their respective owners and are used only to identify the corresponding services.": {
       "localizations": {
         "zh-Hans": {
@@ -2925,6 +2957,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "不支援的驗證碼類型：%@"
+          }
+        }
+      }
+    },
+    "Verify your identity to turn on App Lock": {
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "验证身份以开启应用锁"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "驗證身分以開啟 App 鎖定"
           }
         }
       }

@@ -33,6 +33,7 @@ struct SettingsView: View {
     @State private var showingImporter = false
     @State private var importResultMessage: String?
     @State private var importPasswordQuery: ImportPasswordQuery?
+    @State private var showingPasscodeRequired = false
 
     /// 待导入文件的内容与是否加密
     private struct ImportPasswordQuery: Identifiable {
@@ -44,7 +45,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section("Security") {
-                    Toggle("App Lock", isOn: $lockManager.isEnabled)
+                    Toggle("App Lock", isOn: appLockBinding)
                 }
 
                 Section {
@@ -136,6 +137,11 @@ struct SettingsView: View {
                     }
                 }
             }
+            .alert("Set a Device Passcode", isPresented: $showingPasscodeRequired) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("To use App Lock, first set a passcode in the Settings app under Face ID & Passcode.")
+            }
             .alert("Import Result", isPresented: showImportResult) {
                 Button("OK") { importResultMessage = nil }
             } message: {
@@ -150,6 +156,22 @@ struct SettingsView: View {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         return "\(version) (\(build))"
+    }
+
+    /// 开启要先验证身份（设备没设密码则提示去设置），关闭直接关
+    private var appLockBinding: Binding<Bool> {
+        Binding(
+            get: { lockManager.isEnabled },
+            set: { isOn in
+                if !isOn {
+                    lockManager.disable()
+                } else if AppLockManager.isDevicePasscodeSet {
+                    Task { await lockManager.enable() }
+                } else {
+                    showingPasscodeRequired = true
+                }
+            }
+        )
     }
 
     private var showImportResult: Binding<Bool> {
