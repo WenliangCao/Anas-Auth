@@ -21,6 +21,12 @@ We love ente Auth: it is open source, well designed and respects its users. ente
 - Tags, pinning, several sort orders, search, and a compact layout
 - Brand icons: ente's community icons plus [simple-icons](https://simpleicons.org), matched by issuer name the same way ente does it
 
+## Support and privacy
+
+[Support / 技术支持](https://wenliangcao.github.io/Anas-Auth/) · [Privacy Policy / 隐私政策](https://wenliangcao.github.io/Anas-Auth/privacy.html)
+
+The bilingual website is published with GitHub Pages from `docs/` on `main`, using GitHub's default Markdown rendering. Edit `docs/index.md` for support information and `docs/privacy.md` for the policy; `PRIVACY.md` links to this single policy source.
+
 ## Relationship to ente
 
 Anas Auth is an independent project. It is **not affiliated with or endorsed by ente**. "ente" is a trademark of its owners.

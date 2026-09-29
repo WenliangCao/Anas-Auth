@@ -48,9 +48,9 @@ Anas Auth is an independent project inspired by Ente Auth and is not affiliated 
 
 ## URLs
 
-- Support URL: https://github.com/WenliangCao/Anas-Auth/issues
+- Support URL: https://wenliangcao.github.io/Anas-Auth/
 - Marketing URL (optional): https://github.com/WenliangCao/Anas-Auth
-- Privacy Policy URL: https://github.com/WenliangCao/Anas-Auth/blob/main/PRIVACY.md
+- Privacy Policy URL: https://wenliangcao.github.io/Anas-Auth/privacy.html
 
 ## Other App Store Connect answers
 

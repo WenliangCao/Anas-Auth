@@ -48,6 +48,6 @@ Anas Auth 是受 Ente Auth 启发的独立项目，与 Ente 没有隶属关系�
 
 ## 网址
 
-- 技术支持网址：https://github.com/WenliangCao/Anas-Auth/issues
+- 技术支持网址：https://wenliangcao.github.io/Anas-Auth/
 - 营销网址（可选）：https://github.com/WenliangCao/Anas-Auth
-- 隐私政策网址：https://github.com/WenliangCao/Anas-Auth/blob/main/PRIVACY.md
+- 隐私政策网址：https://wenliangcao.github.io/Anas-Auth/privacy.html
